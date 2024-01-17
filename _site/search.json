@@ -1,10 +1,73 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "ISSS608-VAA",
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",
+    "title": "Take-home_Ex01",
     "section": "",
-    "text": "Welcome to ISSS608 Visual Analytics and Applications homepage. In this website, you will find my coursework prepared for this course."
+    "text": "Let’s find out."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#setting-the-scene",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#setting-the-scene",
+    "title": "Take-home_Ex01",
+    "section": "1.1 Setting the Scene",
+    "text": "1.1 Setting the Scene\nOECD education director Andreas Schleicher shared in a BBC article that “Singapore managed to achieve excellence without wide differences between children from wealthy and disadvantaged families.” (2016) Furthermore, several Singapore’s Minister for Education also started an “every school a good school” slogan. The general public, however, strongly belief that there are still disparities that exist, especially between the elite schools and neighborhood school, between students from families with higher socioeconomic status and those with relatively lower socioeconomic status and immigration and non-immigration families."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#the-task",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#the-task",
+    "title": "Take-home_Ex01",
+    "section": "1.2 The Task",
+    "text": "1.2 The Task\nThe 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.\nIn this take-home exercise, you are required to use appropriate Exploratory Data Analysis (EDA) methods and ggplot2 functions to reveal:\n\nthe distribution of Singapore students’ performance in mathematics, reading, and science, and\nthe relationship between these performances with schools, gender and socioeconomic status of the students.\n\nLimit your submission to not more than five EDA visualisation."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#load-r-packages",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#load-r-packages",
+    "title": "Take-home_Ex01",
+    "section": "2.1 Load R packages",
+    "text": "2.1 Load R packages\nWe begin by loading the required R packages using the pacman::p_load() function from the pacman package.\n\npacman::p_load(tidyverse, haven)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#load-data",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#load-data",
+    "title": "Take-home_Ex01",
+    "section": "2.2 Load Data",
+    "text": "2.2 Load Data\nThe data we are using can be found from the PISA 2022 Database. The database contains full set of responses from individual students, principals, and parents. In this task, we will only be looking at the students questionaire data file. In particular, we are only interested in the data of students from Singapore.\nIn the following code chunk, the data set is first loaded into the environment, and filtered to only rows which country code is “SGP” before saving the data as a RData file for further use.\n\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\nstu_qqq_SG &lt;- stu_qqq %&gt;% filter(CNT == \"SGP\")\nwrite_rds(stu_qqq_SG, \"data/stu_qqq_SG.rds\")\n\n\nstu_qqq_SG &lt;- read_rds(\"data/stu_qqq_SG.rds\")"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#check-for-duplicates",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#check-for-duplicates",
+    "title": "Take-home_Ex01",
+    "section": "3.1 Check for duplicates",
+    "text": "3.1 Check for duplicates\nThe code below uses the duplicated function to return a list of boolean values where TRUE indicates a duplicated entry. By summing the list, should there be any TRUE values, the result would be greater than 1. In this case, the sum is 0 which means there are no duplicated values.\n\nsum(duplicated(stu_qqq_SG$CNTSTUID))\n\n\ndf &lt;- data.frame(row.names = stu_qqq_SG$CNTSTUID)\n\n\ndf$math_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"MATH\")) %&gt;% rowMeans()\ndf$read_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"READ\")) %&gt;% rowMeans()\ndf$scie_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"SCIE\")) %&gt;% rowMeans()\ndf$sch_id &lt;- select(stu_qqq_SG, CNTSCHID)\ndf$gender &lt;- select(stu_qqq_SG, ST004D01T)\ndf$common_needs &lt;- select(stu_qqq_SG, contains(\"ST250Q\")) %&gt;% mutate_all(~replace(., is.na(.), 0)) %&gt;% mutate(across(contains(\"ST250Q\"), function(x) (x-2)*-1)) %&gt;% rowSums()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "title": "In-class Exercise 1: Now You See It!",
+    "section": "",
+    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
+    "title": "In-class Exercise 1: Now You See It!",
+    "section": "",
+    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#importing-pisa-data",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#importing-pisa-data",
+    "title": "In-class Exercise 1: Now You See It!",
+    "section": "Importing PISA data",
+    "text": "Importing PISA data\nThe code chunk below uses ‘read_sas()’ of haven to import PISA data into R environment.\n\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\n\n\nstu_qqq_SG &lt;- stu_qqq %&gt;% filter(CNT == \"SGP\")\n\n\nwrite_rds(stu_qqq_SG,\n          \"data/stu_qqq_SG.rds\")\n\n\nstu_qqq_SG &lt;- read_rds(\"data/stu_qqq_SG.rds\")"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
@@ -28,31 +91,10 @@
     "text": "exam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ISSS608-VAA",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
-    "title": "In-class Exercise 1: Now You See It!",
-    "section": "",
-    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
-    "title": "In-class Exercise 1: Now You See It!",
-    "section": "",
-    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#importing-pisa-data",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#importing-pisa-data",
-    "title": "In-class Exercise 1: Now You See It!",
-    "section": "Importing PISA data",
-    "text": "Importing PISA data\nThe code chunk below uses ‘read_sas()’ of haven to import PISA data into R environment.\n\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\n\n\nstu_qqq_SG &lt;- stu_qqq %&gt;% filter(CNT == \"SGP\")\n\n\nwrite_rds(stu_qqq_SG,\n          \"data/stu_qqq_SG.rds\")\n\n\nstu_qqq_SG &lt;- read_rds(\"data/stu_qqq_SG.rds\")"
+    "text": "Welcome to ISSS608 Visual Analytics and Applications homepage. In this website, you will find my coursework prepared for this course."
   }
 ]
