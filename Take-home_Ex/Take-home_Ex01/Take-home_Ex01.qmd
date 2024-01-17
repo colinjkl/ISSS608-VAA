@@ -1,0 +1,87 @@
+---
+title: "Take-home_Ex01"
+date: "January 15, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: False
+  echo: true
+  warning: false
+editor: visual
+---
+
+# "Every School a Good School" Myth or Fact?
+
+[Let's find out.]{.underline}
+
+# 1. Overview
+
+## 1.1 Setting the Scene
+
+OECD education director Andreas Schleicher shared in a BBC article that “Singapore managed to achieve excellence without wide differences between children from wealthy and disadvantaged families.” (2016) Furthermore, several Singapore’s Minister for Education also started an “every school a good school” slogan. The general public, however, strongly belief that there are still disparities that exist, especially between the elite schools and neighborhood school, between students from families with higher socioeconomic status and those with relatively lower socioeconomic status and immigration and non-immigration families.
+
+## 1.2 The Task
+
+The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.
+
+In this take-home exercise, you are required to use appropriate **Exploratory Data Analysis (EDA)** methods and **ggplot2** functions to reveal:
+
+-   the distribution of Singapore students’ performance in mathematics, reading, and science, and
+
+-   the relationship between these performances with schools, gender and socioeconomic status of the students.
+
+Limit your submission to not more than **five** EDA visualisation.
+
+# 2. Setting up
+
+## 2.1 Load R packages
+
+We begin by loading the required R packages using the `pacman::p_load()` function from the `pacman` package.
+
+```{r}
+pacman::p_load(tidyverse, haven)
+```
+
+## 2.2 Load Data
+
+The data we are using can be found from the [PISA 2022 Database](https://www.oecd.org/pisa/data/2022database/). The database contains full set of responses from individual students, principals, and parents. In this task, we will only be looking at the students questionaire data file. In particular, we are only interested in the data of students from Singapore.
+
+In the following code chunk, the data set is first loaded into the environment, and filtered to only rows which country code is "SGP" before saving the data as a RData file for further use.
+
+```{r}
+#| eval: false
+stu_qqq <- read_sas("data/cy08msp_stu_qqq.sas7bdat")
+stu_qqq_SG <- stu_qqq %>% filter(CNT == "SGP")
+write_rds(stu_qqq_SG, "data/stu_qqq_SG.rds")
+```
+
+```{r}
+stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
+```
+
+# 3. Data Wrangling
+
+## 3.1 Check for duplicates
+
+The code below uses the duplicated function to return a list of boolean values where TRUE indicates a duplicated entry. By summing the list, should there be any TRUE values, the result would be greater than 1. In this case, the sum is 0 which means there are no duplicated values.
+
+```{r}
+sum(duplicated(stu_qqq_SG$CNTSTUID))
+```
+
+```{r}
+df <- data.frame(row.names = stu_qqq_SG$CNTSTUID)
+
+```
+
+```{r}
+df$math_grades <- select(stu_qqq_SG, contains("PV")&contains("MATH")) %>% rowMeans()
+df$read_grades <- select(stu_qqq_SG, contains("PV")&contains("READ")) %>% rowMeans()
+df$scie_grades <- select(stu_qqq_SG, contains("PV")&contains("SCIE")) %>% rowMeans()
+df$sch_id <- select(stu_qqq_SG, CNTSCHID)
+df$gender <- select(stu_qqq_SG, ST004D01T)
+df$common_needs <- select(stu_qqq_SG, contains("ST250Q")) %>% mutate_all(~replace(., is.na(.), 0)) %>% mutate(across(contains("ST250Q"), function(x) (x-2)*-1)) %>% rowSums()
+```
+
+```{r}
+
+```
