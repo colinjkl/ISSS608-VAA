@@ -25,7 +25,7 @@
     "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#load-r-packages",
     "title": "Take-home_Ex01",
     "section": "2.1 Load R packages",
-    "text": "2.1 Load R packages\nWe begin by loading the required R packages using the pacman::p_load() function from the pacman package.\n\npacman::p_load(tidyverse, haven)"
+    "text": "2.1 Load R packages\nWe begin by loading the required R packages using the pacman::p_load() function from the pacman package.\n\npacman::p_load(tidyverse, haven, ggplot2, gridExtra, ggpubr)"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#load-data",
@@ -39,7 +39,42 @@
     "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#check-for-duplicates",
     "title": "Take-home_Ex01",
     "section": "3.1 Check for duplicates",
-    "text": "3.1 Check for duplicates\nThe code below uses the duplicated function to return a list of boolean values where TRUE indicates a duplicated entry. By summing the list, should there be any TRUE values, the result would be greater than 1. In this case, the sum is 0 which means there are no duplicated values.\n\nsum(duplicated(stu_qqq_SG$CNTSTUID))\n\n\ndf &lt;- data.frame(row.names = stu_qqq_SG$CNTSTUID)\n\n\ndf$math_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"MATH\")) %&gt;% rowMeans()\ndf$read_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"READ\")) %&gt;% rowMeans()\ndf$scie_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"SCIE\")) %&gt;% rowMeans()\ndf$sch_id &lt;- select(stu_qqq_SG, CNTSCHID)\ndf$gender &lt;- select(stu_qqq_SG, ST004D01T)\ndf$common_needs &lt;- select(stu_qqq_SG, contains(\"ST250Q\")) %&gt;% mutate_all(~replace(., is.na(.), 0)) %&gt;% mutate(across(contains(\"ST250Q\"), function(x) (x-2)*-1)) %&gt;% rowSums()"
+    "text": "3.1 Check for duplicates\nThe code below uses the duplicated function to return a list of boolean values where TRUE indicates a duplicated entry. By summing the list, should there be any TRUE values, the result would be greater than 1. In this case, the sum is 0 which means there are no duplicated values.\n\nsum(duplicated(stu_qqq_SG$CNTSTUID))\n\n[1] 0"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#school-and-gender",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#school-and-gender",
+    "title": "Take-home_Ex01",
+    "section": "3.2 School and Gender",
+    "text": "3.2 School and Gender\nTo begin the analysis, we will be creating a new dataframe to store aggregated information that we require.\nThe code below first creates a new dataframe with the student’s ID as the row index. Following that, we add in the respective school ID and gender for each student using the select function. As gender is represented by 1 for Male and 2 for Female, we can re-map these values using the map() and if_else() function.\n\ndf &lt;- data.frame(stu_id = stu_qqq_SG$CNTSTUID)\n\n\ndf$sch_id &lt;- stu_qqq_SG$CNTSCHID\ndf$gender &lt;- stu_qqq_SG$ST004D01T %&gt;% factor(levels = c(1,2), labels = c(\"Male\",\"Female\"))"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#finding-students-grades",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#finding-students-grades",
+    "title": "Take-home_Ex01",
+    "section": "3.3 Finding students’ grades",
+    "text": "3.3 Finding students’ grades\nFor students grades, we will be looking at Plausible values provided in the data set. For each subject (Math, Reading, Science), there are 10 Plausible values given. These values are sampled from the likely distribution of the student’s grade. For visualization purposes, we will take the average of the Plausible values as a representative of that subject’s grade.\nThe code below first creates a new dataframe with the student’s ID as the row index.\nThen, it uses the select function to filter the columns in stu_qqq_SG containing the 10 PVs for each subject, before applying the rowMeans() function to get the average PV and assigning it as a new column in the newly created dataframe.\n\ndf$math_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"MATH\")) %&gt;% rowMeans() %&gt;% as.numeric()\ndf$read_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"READ\")) %&gt;% rowMeans() %&gt;% as.numeric()\ndf$scie_grades &lt;- select(stu_qqq_SG, contains(\"PV\")&contains(\"SCIE\")) %&gt;% rowMeans() %&gt;% as.numeric()\ndf$combined_grades &lt;- df$math_grades + df$read_grades + df$scie_grades"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#common-needs",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#common-needs",
+    "title": "Take-home_Ex01",
+    "section": "3.4 Common needs",
+    "text": "3.4 Common needs\nDomestic helpers, one’s own room, personal mobile phone are some of the things that most students in Singapore enjoy nowadays. Although not essential for survival, we do believe that these factors contribute substantially to a conducive environment for studying.\nThe data set contains a set of boolean responses indicating if student have or not have a common need. Treating True values as 1 and False as 0, we can sum up the set of responses to obtain a total score. A higher total score would mean that more common needs are fulfilled for that student, while a low total score suggests otherwise. A large assumption here is that the common needs are equally important, and therefore able to be summed up.\n\ndf$common_needs &lt;- select(stu_qqq_SG, contains(\"ST250Q\")) %&gt;% mutate_all(~replace(., is.na(.), 0)) %&gt;% mutate(across(contains(\"ST250Q\"), function(x) (x-2)*-1)) %&gt;% rowSums() %&gt;% factor()"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#gender-vs-grades",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#gender-vs-grades",
+    "title": "Take-home_Ex01",
+    "section": "4.1 Gender vs Grades?",
+    "text": "4.1 Gender vs Grades?\n\ng1 &lt;- ggplot(df, aes(x=math_grades, fill=gender)) + geom_density(alpha=.3)\ng2 &lt;- ggplot(df, aes(x=read_grades, fill=gender)) + geom_density(alpha=.3)\ng3 &lt;- ggplot(df, aes(x=scie_grades, fill=gender)) + geom_density(alpha=.3)\nggarrange(g1, g2, g3, nrow=3, ncol=1, common.legend = TRUE, legend = \"bottom\")"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#common-needs-vs-grades",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#common-needs-vs-grades",
+    "title": "Take-home_Ex01",
+    "section": "4.2 Common needs vs Grades",
+    "text": "4.2 Common needs vs Grades\n\nggplot(df, aes(x=common_needs, y=combined_grades)) + geom_boxplot()"
   },
   {
     "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",

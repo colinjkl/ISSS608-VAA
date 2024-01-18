@@ -3,7 +3,7 @@ title: "Take-home_Ex01"
 date: "January 18, 2024"
 date-modified: "last-modified"
 execute: 
-  eval: False
+  eval: true
   echo: true
   warning: false
 editor: visual
@@ -38,7 +38,7 @@ Limit your submission to not more than **five** EDA visualisation.
 We begin by loading the required R packages using the `pacman::p_load()` function from the `pacman` package.
 
 ```{r}
-pacman::p_load(tidyverse, haven)
+pacman::p_load(tidyverse, haven, ggplot2, gridExtra, ggpubr)
 ```
 
 ## 2.2 Load Data
@@ -68,20 +68,60 @@ The code below uses the duplicated function to return a list of boolean values w
 sum(duplicated(stu_qqq_SG$CNTSTUID))
 ```
 
-```{r}
-df <- data.frame(row.names = stu_qqq_SG$CNTSTUID)
+## 3.2 School and Gender
 
+To begin the analysis, we will be creating a new dataframe to store aggregated information that we require.
+
+The code below first creates a new dataframe with the student's ID as the row index. Following that, we add in the respective school ID and gender for each student using the select function. As gender is represented by 1 for Male and 2 for Female, we can re-map these values using the map() and if_else() function.
+
+```{r}
+df <- data.frame(stu_id = stu_qqq_SG$CNTSTUID)
 ```
 
 ```{r}
-df$math_grades <- select(stu_qqq_SG, contains("PV")&contains("MATH")) %>% rowMeans()
-df$read_grades <- select(stu_qqq_SG, contains("PV")&contains("READ")) %>% rowMeans()
-df$scie_grades <- select(stu_qqq_SG, contains("PV")&contains("SCIE")) %>% rowMeans()
-df$sch_id <- select(stu_qqq_SG, CNTSCHID)
-df$gender <- select(stu_qqq_SG, ST004D01T)
-df$common_needs <- select(stu_qqq_SG, contains("ST250Q")) %>% mutate_all(~replace(., is.na(.), 0)) %>% mutate(across(contains("ST250Q"), function(x) (x-2)*-1)) %>% rowSums()
+df$sch_id <- stu_qqq_SG$CNTSCHID
+df$gender <- stu_qqq_SG$ST004D01T %>% factor(levels = c(1,2), labels = c("Male","Female"))
 ```
 
+## 3.3 Finding students' grades
+
+For students grades, we will be looking at Plausible values provided in the data set. For each subject (Math, Reading, Science), there are 10 Plausible values given. These values are sampled from the likely distribution of the student's grade. For visualization purposes, we will take the average of the Plausible values as a representative of that subject's grade.
+
+The code below first creates a new dataframe with the student's ID as the row index.
+
+Then, it uses the select function to filter the columns in stu_qqq_SG containing the 10 PVs for each subject, before applying the rowMeans() function to get the average PV and assigning it as a new column in the newly created dataframe.
+
 ```{r}
+df$math_grades <- select(stu_qqq_SG, contains("PV")&contains("MATH")) %>% rowMeans() %>% as.numeric()
+df$read_grades <- select(stu_qqq_SG, contains("PV")&contains("READ")) %>% rowMeans() %>% as.numeric()
+df$scie_grades <- select(stu_qqq_SG, contains("PV")&contains("SCIE")) %>% rowMeans() %>% as.numeric()
+df$combined_grades <- df$math_grades + df$read_grades + df$scie_grades
+```
+
+## 3.4 Common needs
+
+Domestic helpers, one's own room, personal mobile phone are some of the things that most students in Singapore enjoy nowadays. Although not essential for survival, we do believe that these factors contribute substantially to a conducive environment for studying.
+
+The data set contains a set of boolean responses indicating if student have or not have a common need. Treating True values as 1 and False as 0, we can sum up the set of responses to obtain a total score. A higher total score would mean that more common needs are fulfilled for that student, while a low total score suggests otherwise. A large assumption here is that the common needs are equally important, and therefore able to be summed up.
+
+```{r}
+df$common_needs <- select(stu_qqq_SG, contains("ST250Q")) %>% mutate_all(~replace(., is.na(.), 0)) %>% mutate(across(contains("ST250Q"), function(x) (x-2)*-1)) %>% rowSums() %>% factor()
+```
+
+# 4. EDA
+
+## 4.1 Gender vs Grades?
+
+```{r}
+g1 <- ggplot(df, aes(x=math_grades, fill=gender)) + geom_density(alpha=.3)
+g2 <- ggplot(df, aes(x=read_grades, fill=gender)) + geom_density(alpha=.3)
+g3 <- ggplot(df, aes(x=scie_grades, fill=gender)) + geom_density(alpha=.3)
+ggarrange(g1, g2, g3, nrow=3, ncol=1, common.legend = TRUE, legend = "bottom")
+
+```
+## 4.2 Common needs vs Grades
+
+```{r}
+ggplot(df, aes(x=common_needs, y=combined_grades)) + geom_boxplot()
 
 ```
