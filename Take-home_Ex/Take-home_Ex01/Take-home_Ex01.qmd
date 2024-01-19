@@ -38,7 +38,7 @@ Limit your submission to not more than **five** EDA visualisation.
 We begin by loading the required R packages using the `pacman::p_load()` function from the `pacman` package.
 
 ```{r}
-pacman::p_load(tidyverse, haven, ggplot2, gridExtra, ggpubr)
+pacman::p_load(tidyverse, haven, ggplot2, ggpubr)
 ```
 
 ## 2.2 Load Data
@@ -80,7 +80,7 @@ df <- data.frame(stu_id = stu_qqq_SG$CNTSTUID)
 
 ```{r}
 df$sch_id <- stu_qqq_SG$CNTSCHID
-df$gender <- stu_qqq_SG$ST004D01T %>% factor(levels = c(1,2), labels = c("Male","Female"))
+df$gender <- stu_qqq_SG$ST004D01T %>% factor(levels = c(1,2), labels = c("Female","Male"))
 ```
 
 ## 3.3 Finding students' grades
@@ -105,7 +105,19 @@ Domestic helpers, one's own room, personal mobile phone are some of the things t
 The data set contains a set of boolean responses indicating if student have or not have a common need. Treating True values as 1 and False as 0, we can sum up the set of responses to obtain a total score. A higher total score would mean that more common needs are fulfilled for that student, while a low total score suggests otherwise. A large assumption here is that the common needs are equally important, and therefore able to be summed up.
 
 ```{r}
-df$common_needs <- select(stu_qqq_SG, contains("ST250Q")) %>% mutate_all(~replace(., is.na(.), 0)) %>% mutate(across(contains("ST250Q"), function(x) (x-2)*-1)) %>% rowSums() %>% factor()
+df$common_needs <- select(stu_qqq_SG, contains("ST250Q")) %>% mutate(across(contains("ST250Q"), function(x) x%%2)) %>% rowSums() %>% factor()
+# %>% mutate_all(~replace(., is.na(.), 0))
+```
+
+```{r}
+df$luxury_items <- select(stu_qqq_SG, contains("ST251Q")) %>% 
+  select(-contains("03") & -contains("04")) %>% 
+  mutate(across(contains("ST251Q"), function(x) if_else(x>1, 1, 0)))
+```
+
+```{r}
+
+
 ```
 
 # 4. EDA
@@ -122,6 +134,6 @@ ggarrange(g1, g2, g3, nrow=3, ncol=1, common.legend = TRUE, legend = "bottom")
 ## 4.2 Common needs vs Grades
 
 ```{r}
-ggplot(df, aes(x=common_needs, y=combined_grades)) + geom_boxplot()
+ggplot(na.omit(df), aes(x=common_needs, y=combined_grades)) + geom_boxplot()
 
 ```
