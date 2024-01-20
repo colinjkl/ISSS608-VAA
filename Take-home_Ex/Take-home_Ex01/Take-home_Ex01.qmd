@@ -23,13 +23,12 @@ OECD education director Andreas Schleicher shared in a BBC article that “Singa
 
 The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.
 
-In this take-home exercise, you are required to use appropriate **Exploratory Data Analysis (EDA)** methods and **ggplot2** functions to reveal:
+In this exercise, we will use appropriate **Exploratory Data Analysis (EDA)** methods and **ggplot2** functions to reveal:
 
 -   the distribution of Singapore students’ performance in mathematics, reading, and science, and
 
 -   the relationship between these performances with schools, gender and socioeconomic status of the students.
 
-Limit your submission to not more than **five** EDA visualisation.
 
 # 2. Setting up
 
@@ -38,7 +37,7 @@ Limit your submission to not more than **five** EDA visualisation.
 We begin by loading the required R packages using the `pacman::p_load()` function from the `pacman` package.
 
 ```{r}
-pacman::p_load(tidyverse, haven, ggplot2, ggpubr)
+pacman::p_load(tidyverse, haven, ggplot2, ggpubr, ggthemes)
 ```
 
 ## 2.2 Load Data
@@ -58,28 +57,37 @@ write_rds(stu_qqq_SG, "data/stu_qqq_SG.rds")
 stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 ```
 
+
 # 3. Data Wrangling
 
-## 3.1 Check for duplicates
+In this section, we will filter out the data that we will be using for the EDA, and perform the required formatting and calculations. These data are:
 
-The code below uses the duplicated function to return a list of boolean values where TRUE indicates a duplicated entry. By summing the list, should there be any TRUE values, the result would be greater than 1. In this case, the sum is 0 which means there are no duplicated values.
+-   School
+-   Gender
+-   Grades
+-   Socio-Economic status
+
+To begin, let's create a data frame to store these data, with student ID as its initial column.
 
 ```{r}
-sum(duplicated(stu_qqq_SG$CNTSTUID))
+df <- data.frame(stu_id = stu_qqq_SG$CNTSTUID)
 ```
 
-## 3.2 School and Gender
+## 3.1 Schools
+
+Schools are represented by their respective IDs in the data set. We will convert them to factor as schools are nominal data.
+
+```{r}
+df$sch_id <- stu_qqq_SG$CNTSCHID %>% factor()
+```
+
+## 3.2 Gender
 
 To begin the analysis, we will be creating a new dataframe to store aggregated information that we require.
 
 The code below first creates a new dataframe with the student's ID as the row index. Following that, we add in the respective school ID and gender for each student using the select function. As gender is represented by 1 for Male and 2 for Female, we can re-map these values using the map() and if_else() function.
 
 ```{r}
-df <- data.frame(stu_id = stu_qqq_SG$CNTSTUID)
-```
-
-```{r}
-df$sch_id <- stu_qqq_SG$CNTSCHID
 df$gender <- stu_qqq_SG$ST004D01T %>% factor(levels = c(1,2), labels = c("Female","Male"))
 ```
 
@@ -105,20 +113,12 @@ Domestic helpers, one's own room, personal mobile phone are some of the things t
 The data set contains a set of boolean responses indicating if student have or not have a common need. Treating True values as 1 and False as 0, we can sum up the set of responses to obtain a total score. A higher total score would mean that more common needs are fulfilled for that student, while a low total score suggests otherwise. A large assumption here is that the common needs are equally important, and therefore able to be summed up.
 
 ```{r}
-df$common_needs <- select(stu_qqq_SG, contains("ST250Q")) %>% mutate(across(contains("ST250Q"), function(x) x%%2)) %>% rowSums() %>% factor()
-# %>% mutate_all(~replace(., is.na(.), 0))
+df$escs <- stu_qqq_SG$ESCS
+df$hisei <- stu_qqq_SG$HISEI
+df$paredint <- stu_qqq_SG$PAREDINT
+df$homepos <- stu_qqq_SG$HOMEPOS
 ```
 
-```{r}
-df$luxury_items <- select(stu_qqq_SG, contains("ST251Q")) %>% 
-  select(-contains("03") & -contains("04")) %>% 
-  mutate(across(contains("ST251Q"), function(x) if_else(x>1, 1, 0)))
-```
-
-```{r}
-
-
-```
 
 # 4. EDA
 
