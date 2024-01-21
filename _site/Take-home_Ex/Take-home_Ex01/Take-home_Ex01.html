@@ -188,16 +188,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">3. Data Wrangling</a>
   <ul class="collapse">
-  <li><a href="#check-for-duplicates" id="toc-check-for-duplicates" class="nav-link" data-scroll-target="#check-for-duplicates">3.1 Check for duplicates</a></li>
-  <li><a href="#school-and-gender" id="toc-school-and-gender" class="nav-link" data-scroll-target="#school-and-gender">3.2 School and Gender</a></li>
-  <li><a href="#finding-students-grades" id="toc-finding-students-grades" class="nav-link" data-scroll-target="#finding-students-grades">3.3 Finding students’ grades</a></li>
-  <li><a href="#common-needs" id="toc-common-needs" class="nav-link" data-scroll-target="#common-needs">3.4 Common needs</a></li>
+  <li><a href="#schools" id="toc-schools" class="nav-link" data-scroll-target="#schools">3.1 Schools</a></li>
+  <li><a href="#gender" id="toc-gender" class="nav-link" data-scroll-target="#gender">3.2 Gender</a></li>
+  <li><a href="#students-grades" id="toc-students-grades" class="nav-link" data-scroll-target="#students-grades">3.3 Students’ grades</a></li>
+  <li><a href="#schools-1" id="toc-schools-1" class="nav-link" data-scroll-target="#schools-1">3.4 Schools</a></li>
+  <li><a href="#socioeconomic-status" id="toc-socioeconomic-status" class="nav-link" data-scroll-target="#socioeconomic-status">3.5 Socioeconomic Status</a></li>
   </ul></li>
   <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">4. EDA</a>
   <ul class="collapse">
-  <li><a href="#gender-vs-grades" id="toc-gender-vs-grades" class="nav-link" data-scroll-target="#gender-vs-grades">4.1 Gender vs Grades?</a></li>
-  <li><a href="#common-needs-vs-grades" id="toc-common-needs-vs-grades" class="nav-link" data-scroll-target="#common-needs-vs-grades">4.2 Common needs vs Grades</a></li>
+  <li><a href="#distribution-of-grades" id="toc-distribution-of-grades" class="nav-link" data-scroll-target="#distribution-of-grades">4.1 Distribution of Grades</a></li>
+  <li><a href="#performance-of-students-by-gender" id="toc-performance-of-students-by-gender" class="nav-link" data-scroll-target="#performance-of-students-by-gender">4.2 Performance of Students by Gender</a></li>
+  <li><a href="#socioeconomic-status-impact-on-students-grades" id="toc-socioeconomic-status-impact-on-students-grades" class="nav-link" data-scroll-target="#socioeconomic-status-impact-on-students-grades">4.3 Socioeconomic status impact on students’ grades</a></li>
+  <li><a href="#socioeconomic-status-impact-on-students-grades-part-2" id="toc-socioeconomic-status-impact-on-students-grades-part-2" class="nav-link" data-scroll-target="#socioeconomic-status-impact-on-students-grades-part-2">4.4 Socioeconomic status impact on students’ grades (Part 2)</a></li>
+  <li><a href="#schools-vs-escs" id="toc-schools-vs-escs" class="nav-link" data-scroll-target="#schools-vs-escs">4.5 Schools vs ESCS</a></li>
   </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">5. Conclusion</a></li>
   </ul>
 </nav>
     </div>
@@ -224,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 18, 2024</p>
+      <p class="date-modified">January 21, 2024</p>
     </div>
   </div>
     
@@ -236,6 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="every-school-a-good-school-myth-or-fact" class="level1">
 <h1>“Every School a Good School” Myth or Fact?</h1>
 <p><u>Let’s find out.</u></p>
+<p><img src="book-with-green-board-background.jpg" class="img-fluid"></p>
 </section>
 <section id="overview" class="level1">
 <h1>1. Overview</h1>
@@ -246,12 +252,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="the-task" class="level2">
 <h2 class="anchored" data-anchor-id="the-task">1.2 The Task</h2>
 <p>The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.</p>
-<p>In this take-home exercise, you are required to use appropriate <strong>Exploratory Data Analysis (EDA)</strong> methods and <strong>ggplot2</strong> functions to reveal:</p>
+<p>In this exercise, we will use appropriate <strong>Exploratory Data Analysis (EDA)</strong> methods and <strong>ggplot2</strong> functions to reveal:</p>
 <ul>
 <li><p>the distribution of Singapore students’ performance in mathematics, reading, and science, and</p></li>
 <li><p>the relationship between these performances with schools, gender and socioeconomic status of the students.</p></li>
 </ul>
-<p>Limit your submission to not more than <strong>five</strong> EDA visualisation.</p>
 </section>
 </section>
 <section id="setting-up" class="level1">
@@ -260,12 +265,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="load-r-packages">2.1 Load R packages</h2>
 <p>We begin by loading the required R packages using the <code>pacman::p_load()</code> function from the <code>pacman</code> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, haven, ggplot2, gridExtra, ggpubr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, haven, ggplot2, patchwork, ggthemes, ggridges, ggdist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">2.2 Load Data</h2>
-<p>The data we are using can be found from the <a href="https://www.oecd.org/pisa/data/2022database/">PISA 2022 Database</a>. The database contains full set of responses from individual students, principals, and parents. In this task, we will only be looking at the students questionaire data file. In particular, we are only interested in the data of students from Singapore.</p>
+<p>The data we are using can be found from the <a href="https://www.oecd.org/pisa/data/2022database/">PISA 2022 Database</a>. The database contains full set of responses from individual students, principals, and parents. In this task, we will only be looking at the students questionnaire data file. In particular, we are only interested in the data of students from Singapore.</p>
 <p>In the following code chunk, the data set is first loaded into the environment, and filtered to only rows which country code is “SGP” before saving the data as a RData file for further use.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stu_qqq <span class="ot">&lt;-</span> <span class="fu">read_sas</span>(<span class="st">"data/cy08msp_stu_qqq.sas7bdat"</span>)</span>
@@ -279,74 +284,518 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="data-wrangling" class="level1">
 <h1>3. Data Wrangling</h1>
-<section id="check-for-duplicates" class="level2">
-<h2 class="anchored" data-anchor-id="check-for-duplicates">3.1 Check for duplicates</h2>
-<p>The code below uses the duplicated function to return a list of boolean values where TRUE indicates a duplicated entry. By summing the list, should there be any TRUE values, the result would be greater than 1. In this case, the sum is 0 which means there are no duplicated values.</p>
+<p>In this section, we will filter out the data that we will be using for the EDA, and perform the required formatting and calculations. These data are:</p>
+<ul>
+<li>School</li>
+<li>Gender</li>
+<li>Grades</li>
+<li>Socioeconomic status</li>
+</ul>
+<p>To begin, let’s create a data frame to store these data, with student ID as its initial column.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">duplicated</span>(stu_qqq_SG<span class="sc">$</span>CNTSTUID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new data frame with student id as the initial column</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">stu_id =</span> stu_qqq_SG<span class="sc">$</span>CNTSTUID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="schools" class="level2">
+<h2 class="anchored" data-anchor-id="schools">3.1 Schools</h2>
+<p>Schools are represented by their respective IDs in the data set. We will convert them to factor as schools are nominal data.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign school ids as factor</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sch_id <span class="ot">&lt;-</span> stu_qqq_SG<span class="sc">$</span>CNTSCHID <span class="sc">%&gt;%</span> <span class="fu">factor</span>()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Show summary</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sch_id) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">length</span>(sch_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
+<pre><code># A tibble: 164 × 2
+   sch_id   Count
+   &lt;fct&gt;    &lt;int&gt;
+ 1 70200001    55
+ 2 70200002    38
+ 3 70200003    36
+ 4 70200004    56
+ 5 70200005    38
+ 6 70200006    36
+ 7 70200007    38
+ 8 70200008    38
+ 9 70200009    36
+10 70200010    36
+# ℹ 154 more rows</code></pre>
 </div>
 </div>
 </section>
-<section id="school-and-gender" class="level2">
-<h2 class="anchored" data-anchor-id="school-and-gender">3.2 School and Gender</h2>
-<p>To begin the analysis, we will be creating a new dataframe to store aggregated information that we require.</p>
-<p>The code below first creates a new dataframe with the student’s ID as the row index. Following that, we add in the respective school ID and gender for each student using the select function. As gender is represented by 1 for Male and 2 for Female, we can re-map these values using the map() and if_else() function.</p>
+<section id="gender" class="level2">
+<h2 class="anchored" data-anchor-id="gender">3.2 Gender</h2>
+<p>Gender can be found directly in the data set. It is represented as 1 for Female and 2 for Male. Once again, we will convert them to factor and re-map them to Female and Male respectively.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">stu_id =</span> stu_qqq_SG<span class="sc">$</span>CNTSTUID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign gender as factor and map them to Female and Male respectively</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>gender <span class="ot">&lt;-</span> stu_qqq_SG<span class="sc">$</span>ST004D01T <span class="sc">%&gt;%</span> <span class="fu">factor</span>(<span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Female"</span>,<span class="st">"Male"</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Show summary</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">length</span>(gender))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  gender Count
+  &lt;fct&gt;  &lt;int&gt;
+1 Female  3248
+2 Male    3358</code></pre>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sch_id <span class="ot">&lt;-</span> stu_qqq_SG<span class="sc">$</span>CNTSCHID</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>gender <span class="ot">&lt;-</span> stu_qqq_SG<span class="sc">$</span>ST004D01T <span class="sc">%&gt;%</span> <span class="fu">factor</span>(<span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="finding-students-grades" class="level2">
-<h2 class="anchored" data-anchor-id="finding-students-grades">3.3 Finding students’ grades</h2>
+<section id="students-grades" class="level2">
+<h2 class="anchored" data-anchor-id="students-grades">3.3 Students’ grades</h2>
 <p>For students grades, we will be looking at Plausible values provided in the data set. For each subject (Math, Reading, Science), there are 10 Plausible values given. These values are sampled from the likely distribution of the student’s grade. For visualization purposes, we will take the average of the Plausible values as a representative of that subject’s grade.</p>
-<p>The code below first creates a new dataframe with the student’s ID as the row index.</p>
-<p>Then, it uses the select function to filter the columns in stu_qqq_SG containing the 10 PVs for each subject, before applying the rowMeans() function to get the average PV and assigning it as a new column in the newly created dataframe.</p>
+<p>We will also create a combined_grades column which is simply the sum of all 3 grades to represent the holistic performance of the student in all 3 subjects.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>math_grades <span class="ot">&lt;-</span> <span class="fu">select</span>(stu_qqq_SG, <span class="fu">contains</span>(<span class="st">"PV"</span>)<span class="sc">&amp;</span><span class="fu">contains</span>(<span class="st">"MATH"</span>)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>() <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>read_grades <span class="ot">&lt;-</span> <span class="fu">select</span>(stu_qqq_SG, <span class="fu">contains</span>(<span class="st">"PV"</span>)<span class="sc">&amp;</span><span class="fu">contains</span>(<span class="st">"READ"</span>)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>() <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>scie_grades <span class="ot">&lt;-</span> <span class="fu">select</span>(stu_qqq_SG, <span class="fu">contains</span>(<span class="st">"PV"</span>)<span class="sc">&amp;</span><span class="fu">contains</span>(<span class="st">"SCIE"</span>)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>() <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>combined_grades <span class="ot">&lt;-</span> df<span class="sc">$</span>math_grades <span class="sc">+</span> df<span class="sc">$</span>read_grades <span class="sc">+</span> df<span class="sc">$</span>scie_grades</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns with "PV" and "MATH" in name, and take their average</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>math_grades <span class="ot">&lt;-</span> <span class="fu">select</span>(stu_qqq_SG, <span class="fu">contains</span>(<span class="st">"PV"</span>)<span class="sc">&amp;</span><span class="fu">contains</span>(<span class="st">"MATH"</span>)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>() <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns with "PV" and "READ" in name, and take their average</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>read_grades <span class="ot">&lt;-</span> <span class="fu">select</span>(stu_qqq_SG, <span class="fu">contains</span>(<span class="st">"PV"</span>)<span class="sc">&amp;</span><span class="fu">contains</span>(<span class="st">"READ"</span>)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>() <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns with "PV" and "SCIE" in name, and take their average</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>science_grades <span class="ot">&lt;-</span> <span class="fu">select</span>(stu_qqq_SG, <span class="fu">contains</span>(<span class="st">"PV"</span>)<span class="sc">&amp;</span><span class="fu">contains</span>(<span class="st">"SCIE"</span>)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>() <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum up the previous three grade columns </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>combined_grades <span class="ot">&lt;-</span> df<span class="sc">$</span>math_grades <span class="sc">+</span> df<span class="sc">$</span>read_grades <span class="sc">+</span> df<span class="sc">$</span>science_grades</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Show summary</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"math_grades"</span>, <span class="st">"read_grades"</span>, <span class="st">"science_grades"</span>, <span class="st">"combined_grades"</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df[cols])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  math_grades     read_grades    science_grades  combined_grades 
+ Min.   :262.6   Min.   :158.6   Min.   :242.0   Min.   : 680.9  
+ 1st Qu.:506.2   1st Qu.:477.4   1st Qu.:498.9   1st Qu.:1483.9  
+ Median :582.4   Median :553.6   Median :571.2   Median :1708.5  
+ Mean   :574.0   Mean   :542.5   Mean   :561.0   Mean   :1677.4  
+ 3rd Qu.:648.4   3rd Qu.:616.1   3rd Qu.:629.3   3rd Qu.:1888.5  
+ Max.   :842.7   Max.   :797.6   Max.   :801.9   Max.   :2369.7  </code></pre>
+</div>
 </div>
 </section>
-<section id="common-needs" class="level2">
-<h2 class="anchored" data-anchor-id="common-needs">3.4 Common needs</h2>
-<p>Domestic helpers, one’s own room, personal mobile phone are some of the things that most students in Singapore enjoy nowadays. Although not essential for survival, we do believe that these factors contribute substantially to a conducive environment for studying.</p>
-<p>The data set contains a set of boolean responses indicating if student have or not have a common need. Treating True values as 1 and False as 0, we can sum up the set of responses to obtain a total score. A higher total score would mean that more common needs are fulfilled for that student, while a low total score suggests otherwise. A large assumption here is that the common needs are equally important, and therefore able to be summed up.</p>
+<section id="schools-1" class="level2">
+<h2 class="anchored" data-anchor-id="schools-1">3.4 Schools</h2>
+<p>As schools are identified only by id, it is difficult to make meaningful analysis based on other demographic factors individually. As such, we can group schools according to their students’ average combined grades. For our analysis, we will rank the schools according to their average combined grades of students’, and then create groups for school which produces the top 1-10th, 11-20th … 91-100th percentile of students.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>common_needs <span class="ot">&lt;-</span> <span class="fu">select</span>(stu_qqq_SG, <span class="fu">contains</span>(<span class="st">"ST250Q"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate_all</span>(<span class="sc">~</span><span class="fu">replace</span>(., <span class="fu">is.na</span>(.), <span class="dv">0</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">contains</span>(<span class="st">"ST250Q"</span>), <span class="cf">function</span>(x) (x<span class="dv">-2</span>)<span class="sc">*-</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span> <span class="fu">rowSums</span>() <span class="sc">%&gt;%</span> <span class="fu">factor</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Group by Schools and find average</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(sch_id) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">average_student_grades =</span> <span class="fu">mean</span>(combined_grades))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank and group schools according to the percentile of their average student grades</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sch_rank <span class="ot">&lt;-</span> <span class="fu">ntile</span>(<span class="fu">desc</span>(df<span class="sc">$</span>average_student_grades), <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">as.factor</span>()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show summary</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df[, <span class="fu">c</span>(<span class="st">"sch_id"</span>,<span class="st">"average_student_grades"</span>, <span class="st">"sch_rank"</span>)], <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+# Groups:   sch_id [10]
+   sch_id   average_student_grades sch_rank
+   &lt;fct&gt;                     &lt;dbl&gt; &lt;fct&gt;   
+ 1 70200052                  1764. 3       
+ 2 70200134                  1529. 9       
+ 3 70200112                  1718. 3       
+ 4 70200004                  1484. 9       
+ 5 70200152                  1434. 10      
+ 6 70200043                  1641. 6       
+ 7 70200049                  1631. 6       
+ 8 70200107                  1585. 7       
+ 9 70200012                  1921. 2       
+10 70200061                  1671. 5       </code></pre>
+</div>
+</div>
+</section>
+<section id="socioeconomic-status" class="level2">
+<h2 class="anchored" data-anchor-id="socioeconomic-status">3.5 Socioeconomic Status</h2>
+<p>Socioeconomic status is represented by the PISA index of Economic, Social, and Cultural Status (ESCS). It is the composite score of 3 other indicators, namely:</p>
+<ul>
+<li><p>HISEI - Highest parental occupation status</p></li>
+<li><p>PAREDINT - Highest parental education</p></li>
+<li><p>HOMEPOS - Home possessions</p></li>
+</ul>
+<p>To gain a more granular insight into Socioeconomic status on Grades, we will look into ESCS as well as its 3 components separately.</p>
+<p>Similarly, we will also create groupings based on percentile ranking of ESCS scores.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign ESCS as numeric</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>escs <span class="ot">&lt;-</span> stu_qqq_SG<span class="sc">$</span>ESCS <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign HISEI as numeric</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>hisei <span class="ot">&lt;-</span> stu_qqq_SG<span class="sc">$</span>HISEI <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign PAREDINT as factor</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>paredint <span class="ot">&lt;-</span> stu_qqq_SG<span class="sc">$</span>PAREDINT <span class="sc">%&gt;%</span> <span class="fu">as.factor</span>()</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign HOMEPOS as numeric</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>homepos <span class="ot">&lt;-</span> stu_qqq_SG<span class="sc">$</span>HOMEPOS <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank and group students according to the percentile of their ESCS</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>escs_rank <span class="ot">&lt;-</span> <span class="fu">ntile</span>(<span class="fu">desc</span>(df<span class="sc">$</span>escs), <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">as.factor</span>()</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Show summary</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df[, <span class="fu">c</span>(<span class="st">"hisei"</span>,<span class="st">"paredint"</span>,<span class="st">"homepos"</span>,<span class="st">"escs"</span>, <span class="st">"escs_rank"</span>)], <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 5
+   hisei paredint homepos    escs escs_rank
+   &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;    
+ 1  30.3 16        0.752   0.184  7        
+ 2  77.1 14.5      0.784   0.826  4        
+ 3  17   12        0.0666 -1.04   10       
+ 4  43.3 12       -0.93   -0.961  10       
+ 5  75.5 14.5     -0.895   0.0856 7        
+ 6  57.6 16       -0.599   0.127  7        
+ 7  70.3 12        0.0975 -0.0154 7        
+ 8  80.8 16        0.799   1.16   2        
+ 9  65.1 16        2.23    1.47   1        
+10  56.4 16        0.384   0.520  5        </code></pre>
+</div>
 </div>
 </section>
 </section>
 <section id="eda" class="level1">
 <h1>4. EDA</h1>
-<section id="gender-vs-grades" class="level2">
-<h2 class="anchored" data-anchor-id="gender-vs-grades">4.1 Gender vs Grades?</h2>
+<section id="distribution-of-grades" class="level2">
+<h2 class="anchored" data-anchor-id="distribution-of-grades">4.1 Distribution of Grades</h2>
+<p>We begin the analysis by plotting the distribution of the three subjects: Math, Reading, and Science. On average, students perform better in Math and Science as compared to Reading.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>math_grades, <span class="at">fill=</span>gender)) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">alpha=</span>.<span class="dv">3</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>read_grades, <span class="at">fill=</span>gender)) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">alpha=</span>.<span class="dv">3</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>scie_grades, <span class="at">fill=</span>gender)) <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">alpha=</span>.<span class="dv">3</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(g1, g2, g3, <span class="at">nrow=</span><span class="dv">3</span>, <span class="at">ncol=</span><span class="dv">1</span>, <span class="at">common.legend =</span> <span class="cn">TRUE</span>, <span class="at">legend =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="common-needs-vs-grades" class="level2">
-<h2 class="anchored" data-anchor-id="common-needs-vs-grades">4.2 Common needs vs Grades</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>common_needs, <span class="at">y=</span>combined_grades)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create density plot for Math Grades with Mean line</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>g01 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df)) <span class="sc">+</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha=</span>.<span class="dv">7</span>, <span class="fu">aes</span>(<span class="at">x=</span>math_grades),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">200</span>, <span class="dv">900</span>) <span class="sc">+</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Math"</span>) <span class="sc">+</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span> </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(df<span class="sc">$</span>math_grades),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">colour =</span> <span class="st">"lightcoral"</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>, </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">mean</span>(df<span class="sc">$</span>math_grades) <span class="sc">-</span> <span class="dv">70</span>, </span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fl">0.004</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Mean: "</span>, <span class="fu">round</span>(<span class="fu">mean</span>(df<span class="sc">$</span>math_grades),<span class="dv">2</span>)),</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"lightcoral"</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontface =</span> <span class="dv">2</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Create density plot for Reading Grades with Mean line</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>g02 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df)) <span class="sc">+</span> </span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha=</span>.<span class="dv">7</span>, <span class="fu">aes</span>(<span class="at">x=</span>read_grades),</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">200</span>, <span class="dv">900</span>) <span class="sc">+</span> </span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Reading"</span>) <span class="sc">+</span> </span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span> </span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(df<span class="sc">$</span>read_grades),</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">colour =</span> <span class="st">"lightcoral"</span>,</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>, </span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">mean</span>(df<span class="sc">$</span>read_grades) <span class="sc">-</span> <span class="dv">70</span>, </span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fl">0.004</span>,</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Mean: "</span>, <span class="fu">round</span>(<span class="fu">mean</span>(df<span class="sc">$</span>read_grades),<span class="dv">2</span>)),</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"lightcoral"</span>,</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontface =</span> <span class="dv">2</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create density plot for Science Grades with Mean line</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>g03 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df)) <span class="sc">+</span> </span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha=</span>.<span class="dv">7</span>, <span class="fu">aes</span>(<span class="at">x=</span>science_grades),</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">200</span>, <span class="dv">900</span>) <span class="sc">+</span> </span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Science"</span>) <span class="sc">+</span> </span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) <span class="sc">+</span> </span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(df<span class="sc">$</span>science_grades),</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>             <span class="at">colour =</span> <span class="st">"lightcoral"</span>,</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>, </span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">mean</span>(df<span class="sc">$</span>science_grades) <span class="sc">-</span> <span class="dv">70</span>, </span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fl">0.004</span>,</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Mean: "</span>, <span class="fu">round</span>(<span class="fu">mean</span>(df<span class="sc">$</span>science_grades),<span class="dv">2</span>)),</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"lightcoral"</span>,</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontface =</span> <span class="dv">2</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Patchwork plots together</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> g01 <span class="sc">/</span> g02 <span class="sc">/</span> g03</span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure layout and title</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> p0 <span class="sc">+</span> </span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span> </span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Grades"</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot with theme</span></span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>p0 <span class="sc">&amp;</span> <span class="fu">theme_tufte</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-
-
 </section>
+<section id="performance-of-students-by-gender" class="level2">
+<h2 class="anchored" data-anchor-id="performance-of-students-by-gender">4.2 Performance of Students by Gender</h2>
+<p>Next, we analyse the grades of students based on gender.</p>
+<p>Though marginally, male students perform better than female students in Math and Science, but poorer in Reading on average. It is also noted that female students have a smaller variance across all subjects.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boxplot for Math Grades</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>g11 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>gender, <span class="at">y=</span>math_grades, <span class="at">fill=</span>gender)) <span class="sc">+</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">200</span>, <span class="dv">900</span>) <span class="sc">+</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Gender"</span>) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Math"</span>) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Male"</span> <span class="ot">=</span> <span class="st">"lightblue"</span>,<span class="st">"Female"</span> <span class="ot">=</span> <span class="st">"lightcoral"</span>))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boxplot for Reading Grades</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>g12 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>gender, <span class="at">y=</span>read_grades, <span class="at">fill=</span>gender)) <span class="sc">+</span> </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">200</span>, <span class="dv">900</span>) <span class="sc">+</span> </span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Gender"</span>) <span class="sc">+</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Reading"</span>) <span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Male"</span> <span class="ot">=</span> <span class="st">"lightblue"</span>,<span class="st">"Female"</span> <span class="ot">=</span> <span class="st">"lightcoral"</span>))</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boxplot for Science Grades</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>g13 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>gender, <span class="at">y=</span>science_grades, <span class="at">fill=</span>gender)) <span class="sc">+</span> </span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">200</span>, <span class="dv">900</span>) <span class="sc">+</span> </span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Gender"</span>) <span class="sc">+</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Science"</span>) <span class="sc">+</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Male"</span> <span class="ot">=</span> <span class="st">"lightblue"</span>,<span class="st">"Female"</span> <span class="ot">=</span> <span class="st">"lightcoral"</span>))</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Patchwork the 3 plots together</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> g11 <span class="sc">+</span> g12 <span class="sc">+</span> g13</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure layout and title</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> p1 <span class="sc">+</span> </span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">axis_titles =</span> <span class="st">"collect"</span>,</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>              <span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span> </span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Grade distribution by Gender"</span>,</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Does gender affect a student's grade?"</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot with theme</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">&amp;</span> <span class="fu">theme_tufte</span>() <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>                           <span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="socioeconomic-status-impact-on-students-grades" class="level2">
+<h2 class="anchored" data-anchor-id="socioeconomic-status-impact-on-students-grades">4.3 Socioeconomic status impact on students’ grades</h2>
+<p>Next, we study the relations between socioeconomic status and grades.</p>
+<p>For the most parts, we observe that higher ESCS scores does lead to better results across all subjects. However, the same can not be said for the students belonging to the highest portion of ESCS as the trend starts to dip downwards at the end.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define axis limits</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>grades_min <span class="ot">&lt;-</span> <span class="dv">150</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>grades_max <span class="ot">&lt;-</span> <span class="dv">850</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>escs_min <span class="ot">&lt;-</span> <span class="fu">min</span>(df<span class="sc">$</span>escs)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>escs_max <span class="ot">&lt;-</span> <span class="fu">max</span>(df<span class="sc">$</span>escs)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatter plot for ESCS on Combined Grades</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>g21 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df), <span class="fu">aes</span>(<span class="at">x=</span>escs, <span class="at">y=</span>combined_grades)) <span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">"lightcoral"</span>) <span class="sc">+</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(escs_min, escs_max) <span class="sc">+</span> </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"ESCS"</span>) <span class="sc">+</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Combined Grades"</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a scatter plot for ESCS on Math Grades</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>g22 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df), <span class="fu">aes</span>(<span class="at">x=</span>escs, <span class="at">y=</span>math_grades)) <span class="sc">+</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>,<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">"lightcoral"</span>) <span class="sc">+</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(escs_min, escs_max) <span class="sc">+</span> </span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(grades_min, grades_max) <span class="sc">+</span> </span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"ESCS"</span>) <span class="sc">+</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Math"</span>)</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a scatter plot for ESCS on Reading Grades</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>g23 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df), <span class="fu">aes</span>(<span class="at">x=</span>escs, <span class="at">y=</span>read_grades)) <span class="sc">+</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>,<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">"lightcoral"</span>) <span class="sc">+</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(escs_min, escs_max) <span class="sc">+</span> </span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(grades_min, grades_max) <span class="sc">+</span> </span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"ESCS"</span>) <span class="sc">+</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Reading"</span>)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a scatter plot for ESCS on Reading Grades</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>g24 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df), <span class="fu">aes</span>(<span class="at">x=</span>escs, <span class="at">y=</span>science_grades)) <span class="sc">+</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>,<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">"lightcoral"</span>) <span class="sc">+</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(escs_min, escs_max) <span class="sc">+</span> </span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(grades_min, grades_max) <span class="sc">+</span> </span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"ESCS"</span>) <span class="sc">+</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Science"</span>)</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Patchwork plots together</span></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> g21 <span class="sc">|</span> (g22 <span class="sc">/</span> g23 <span class="sc">/</span> g24) <span class="sc">+</span> </span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">axes =</span> <span class="st">"collect"</span>)</span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure layout and title</span></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> p2 <span class="sc">+</span> </span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Grades by ESCS"</span>,</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Does socieconomic status affect a student's grade?"</span></span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot with theme</span></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>p2 <span class="sc">&amp;</span> <span class="fu">theme_tufte</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="socioeconomic-status-impact-on-students-grades-part-2" class="level2">
+<h2 class="anchored" data-anchor-id="socioeconomic-status-impact-on-students-grades-part-2">4.4 Socioeconomic status impact on students’ grades (Part 2)</h2>
+<p>Now, we take a more granular look into the components of ESCS; namely:</p>
+<ul>
+<li><p>HISEI - Highest parental occupation status</p></li>
+<li><p>PAREDINT - Highest parental education</p></li>
+<li><p>HOMEPOS - Home possessions</p></li>
+</ul>
+<p>From here, we learn that the dip towards the end is largely attributed to home possessions. Highest parental occupation status (HISEI) and highest parental education (PAREDINT) shows a mainly increasing trend.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define axis limits</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>grades_min <span class="ot">&lt;-</span> <span class="fu">min</span>(df<span class="sc">$</span>combined_grades)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>grades_max <span class="ot">&lt;-</span> <span class="fu">max</span>(df<span class="sc">$</span>combined_grades)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>hisei_min <span class="ot">&lt;-</span> <span class="fu">min</span>(df<span class="sc">$</span>hisei)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>hisei_max <span class="ot">&lt;-</span> <span class="fu">max</span>(df<span class="sc">$</span>hisei)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>homepos_min <span class="ot">&lt;-</span> <span class="fu">min</span>(df<span class="sc">$</span>homepos)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>homepos_max <span class="ot">&lt;-</span> <span class="fu">max</span>(df<span class="sc">$</span>homepos)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatter plot for HISEI on Combined Grades</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>g31 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df), <span class="fu">aes</span>(<span class="at">x=</span>hisei, <span class="at">y=</span>combined_grades)) <span class="sc">+</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">"lightcoral"</span>) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(hisei_min, hisei_max) <span class="sc">+</span> </span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(grades_min, grades_max) <span class="sc">+</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Combined Grades"</span>) <span class="sc">+</span> </span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"HISEI"</span>)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatter plot for PAREDINT on Combined Grades</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>g32 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df), <span class="fu">aes</span>(<span class="at">x=</span>paredint, <span class="at">y=</span>combined_grades)) <span class="sc">+</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Combined Grades"</span>) <span class="sc">+</span> </span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"PAREDINT"</span>)</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatter plot for HISEI on Combined Grades</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>g33 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df), <span class="fu">aes</span>(<span class="at">x=</span>homepos, <span class="at">y=</span>combined_grades)) <span class="sc">+</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">"lightcoral"</span>) <span class="sc">+</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(homepos_min, homepos_max) <span class="sc">+</span> </span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(grades_min, grades_max) <span class="sc">+</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Combined Grades"</span>) <span class="sc">+</span> </span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"HOMEPOS"</span>)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Patchwork the plots together</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> g31 <span class="sc">+</span> g32 <span class="sc">+</span> g33 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">axes =</span> <span class="st">"collect"</span>)</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure layout and title</span></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> p3 <span class="sc">+</span> </span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Grades by HISEI, PAREDINT, and HOMEPOS"</span>,</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Examining ESCS by its components"</span></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot with theme</span></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>p3 <span class="sc">&amp;</span> <span class="fu">theme_tufte</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="schools-vs-escs" class="level2">
+<h2 class="anchored" data-anchor-id="schools-vs-escs">4.5 Schools vs ESCS</h2>
+<p>Finally, we take a look at schools against ESCS.</p>
+<p>In the heatmap below, we easily observe that better performing schools are dominated by students belonging to higher ESCS brackets, and poorer performing schools by students in lower ESCS brackets. This suggests a strong correlation between the two factors which undermines any causation between grades, schools, and socioeconomic status as we are unable to accurately conclude if it is the school, or the ESCS that had more impact on the students’ grades.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 2d bin plot for ESCS ranks and School ranks</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>g51 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">na.omit</span>(df), <span class="fu">aes</span>(<span class="at">x=</span>escs_rank, <span class="at">y=</span>sch_rank)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bin_2d</span>() <span class="sc">+</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">low =</span> <span class="st">"lightcyan"</span>, <span class="at">high =</span> <span class="st">"lightcoral"</span>) <span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"ESCS Percentile Groups"</span>) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"School Percentile Groups"</span>) <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels=</span><span class="fu">c</span>(</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"1 - 10"</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"11 - 20"</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"21 - 30"</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"31 - 40"</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"5"</span> <span class="ot">=</span> <span class="st">"41 - 50"</span>,</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"6"</span> <span class="ot">=</span> <span class="st">"51 - 60"</span>,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"7"</span> <span class="ot">=</span> <span class="st">"61 - 70"</span>,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"8"</span> <span class="ot">=</span> <span class="st">"71 - 80"</span>,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"9"</span> <span class="ot">=</span> <span class="st">"81 - 90"</span>,</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"91 - 100"</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">labels=</span><span class="fu">c</span>(</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"1 - 10"</span>,</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"11 - 20"</span>,</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"21 - 30"</span>,</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"31 - 40"</span>,</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"5"</span> <span class="ot">=</span> <span class="st">"41 - 50"</span>,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"6"</span> <span class="ot">=</span> <span class="st">"51 - 60"</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"7"</span> <span class="ot">=</span> <span class="st">"61 - 70"</span>,</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"8"</span> <span class="ot">=</span> <span class="st">"71 - 80"</span>,</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"9"</span> <span class="ot">=</span> <span class="st">"81 - 90"</span>,</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"91 - 100"</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span> </span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Schools by ESCS"</span>,</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Count of Students by School and ESCS Rankings"</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot with theme</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>g51 <span class="sc">&amp;</span> <span class="fu">theme_tufte</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>5. Conclusion</h1>
+<p>Our task was to find relations between students’ grades and gender, schools, and socioeconomic status.</p>
+<p>Gender had little impact on student’s performance. Male students showed slightly stronger proficiency in Math and Science, while female students had less variance in their scores.</p>
+<p>On socioeconomic status, we found that higher ESCS did lead to better grades, but only up to a certain point. Additionally, we derive that this is mainly attributed to home possessions (HOMEPOS). Perhaps there exist a maximum threshold such that any more home possessions would not result in a more conducive study environment for students.</p>
+<p>Consequently, we also found strong correlation between top performing schools and wealthier students. This begs the question: Is it the school that produces students with better grades which hence attracts wealthier students to join (by purchasing residences closer to these schools), or is it that students of higher socioeconomic status tend to gather in certain schools (due to reputation and prestige) causing those schools to produce students with better grades?</p>
+<p>To find out more, we have to employ modelling techniques such as interactive variables or fixed effects. until then, we are unable to give a satisfactory answer.</p>
+
+
 </section>
 
 </main> <!-- /main -->

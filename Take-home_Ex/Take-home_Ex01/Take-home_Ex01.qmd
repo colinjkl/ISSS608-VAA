@@ -13,6 +13,8 @@ editor: visual
 
 [Let's find out.]{.underline}
 
+![](book-with-green-board-background.jpg)
+
 # 1. Overview
 
 ## 1.1 Setting the Scene
@@ -29,7 +31,6 @@ In this exercise, we will use appropriate **Exploratory Data Analysis (EDA)** me
 
 -   the relationship between these performances with schools, gender and socioeconomic status of the students.
 
-
 # 2. Setting up
 
 ## 2.1 Load R packages
@@ -37,12 +38,12 @@ In this exercise, we will use appropriate **Exploratory Data Analysis (EDA)** me
 We begin by loading the required R packages using the `pacman::p_load()` function from the `pacman` package.
 
 ```{r}
-pacman::p_load(tidyverse, haven, ggplot2, ggpubr, ggthemes)
+pacman::p_load(tidyverse, haven, ggplot2, patchwork, ggthemes, ggridges, ggdist)
 ```
 
 ## 2.2 Load Data
 
-The data we are using can be found from the [PISA 2022 Database](https://www.oecd.org/pisa/data/2022database/). The database contains full set of responses from individual students, principals, and parents. In this task, we will only be looking at the students questionaire data file. In particular, we are only interested in the data of students from Singapore.
+The data we are using can be found from the [PISA 2022 Database](https://www.oecd.org/pisa/data/2022database/). The database contains full set of responses from individual students, principals, and parents. In this task, we will only be looking at the students questionnaire data file. In particular, we are only interested in the data of students from Singapore.
 
 In the following code chunk, the data set is first loaded into the environment, and filtered to only rows which country code is "SGP" before saving the data as a RData file for further use.
 
@@ -57,7 +58,6 @@ write_rds(stu_qqq_SG, "data/stu_qqq_SG.rds")
 stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 ```
 
-
 # 3. Data Wrangling
 
 In this section, we will filter out the data that we will be using for the EDA, and perform the required formatting and calculations. These data are:
@@ -65,11 +65,15 @@ In this section, we will filter out the data that we will be using for the EDA, 
 -   School
 -   Gender
 -   Grades
--   Socio-Economic status
+-   Socioeconomic status
 
 To begin, let's create a data frame to store these data, with student ID as its initial column.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create new data frame with student id as the initial column
 df <- data.frame(stu_id = stu_qqq_SG$CNTSTUID)
 ```
 
@@ -78,62 +82,439 @@ df <- data.frame(stu_id = stu_qqq_SG$CNTSTUID)
 Schools are represented by their respective IDs in the data set. We will convert them to factor as schools are nominal data.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Assign school ids as factor
 df$sch_id <- stu_qqq_SG$CNTSCHID %>% factor()
+
+# Show summary
+df %>% 
+  group_by(sch_id) %>%
+  summarise(Count = length(sch_id))
 ```
 
 ## 3.2 Gender
 
-To begin the analysis, we will be creating a new dataframe to store aggregated information that we require.
-
-The code below first creates a new dataframe with the student's ID as the row index. Following that, we add in the respective school ID and gender for each student using the select function. As gender is represented by 1 for Male and 2 for Female, we can re-map these values using the map() and if_else() function.
+Gender can be found directly in the data set. It is represented as 1 for Female and 2 for Male. Once again, we will convert them to factor and re-map them to Female and Male respectively.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Assign gender as factor and map them to Female and Male respectively
 df$gender <- stu_qqq_SG$ST004D01T %>% factor(levels = c(1,2), labels = c("Female","Male"))
+
+# Show summary
+df %>% 
+  group_by(gender) %>%
+  summarise(Count = length(gender))
 ```
 
-## 3.3 Finding students' grades
+## 3.3 Students' grades
 
 For students grades, we will be looking at Plausible values provided in the data set. For each subject (Math, Reading, Science), there are 10 Plausible values given. These values are sampled from the likely distribution of the student's grade. For visualization purposes, we will take the average of the Plausible values as a representative of that subject's grade.
 
-The code below first creates a new dataframe with the student's ID as the row index.
-
-Then, it uses the select function to filter the columns in stu_qqq_SG containing the 10 PVs for each subject, before applying the rowMeans() function to get the average PV and assigning it as a new column in the newly created dataframe.
+We will also create a combined_grades column which is simply the sum of all 3 grades to represent the holistic performance of the student in all 3 subjects.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Select columns with "PV" and "MATH" in name, and take their average
 df$math_grades <- select(stu_qqq_SG, contains("PV")&contains("MATH")) %>% rowMeans() %>% as.numeric()
+
+# Select columns with "PV" and "READ" in name, and take their average
 df$read_grades <- select(stu_qqq_SG, contains("PV")&contains("READ")) %>% rowMeans() %>% as.numeric()
-df$scie_grades <- select(stu_qqq_SG, contains("PV")&contains("SCIE")) %>% rowMeans() %>% as.numeric()
-df$combined_grades <- df$math_grades + df$read_grades + df$scie_grades
+
+# Select columns with "PV" and "SCIE" in name, and take their average
+df$science_grades <- select(stu_qqq_SG, contains("PV")&contains("SCIE")) %>% rowMeans() %>% as.numeric()
+
+# Sum up the previous three grade columns 
+df$combined_grades <- df$math_grades + df$read_grades + df$science_grades
+
+# Show summary
+cols = c("math_grades", "read_grades", "science_grades", "combined_grades")
+summary(df[cols])
 ```
 
-## 3.4 Common needs
+## 3.4 Schools
 
-Domestic helpers, one's own room, personal mobile phone are some of the things that most students in Singapore enjoy nowadays. Although not essential for survival, we do believe that these factors contribute substantially to a conducive environment for studying.
-
-The data set contains a set of boolean responses indicating if student have or not have a common need. Treating True values as 1 and False as 0, we can sum up the set of responses to obtain a total score. A higher total score would mean that more common needs are fulfilled for that student, while a low total score suggests otherwise. A large assumption here is that the common needs are equally important, and therefore able to be summed up.
+As schools are identified only by id, it is difficult to make meaningful analysis based on other demographic factors individually. As such, we can group schools according to their students' average combined grades. For our analysis, we will rank the schools according to their average combined grades of students', and then create groups for school which produces the top 1-10th, 11-20th ... 91-100th percentile of students.
 
 ```{r}
-df$escs <- stu_qqq_SG$ESCS
-df$hisei <- stu_qqq_SG$HISEI
-df$paredint <- stu_qqq_SG$PAREDINT
-df$homepos <- stu_qqq_SG$HOMEPOS
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Group by Schools and find average
+df <- df %>% group_by(sch_id) %>% mutate(average_student_grades = mean(combined_grades))
+
+# Rank and group schools according to the percentile of their average student grades
+df$sch_rank <- ntile(desc(df$average_student_grades), n = 10) %>% as.factor()
+
+# Show summary
+head(df[, c("sch_id","average_student_grades", "sch_rank")], 10)
 ```
 
+## 3.5 Socioeconomic Status
+
+Socioeconomic status is represented by the PISA index of Economic, Social, and Cultural Status (ESCS). It is the composite score of 3 other indicators, namely:
+
+-   HISEI - Highest parental occupation status
+
+-   PAREDINT - Highest parental education
+
+-   HOMEPOS - Home possessions
+
+To gain a more granular insight into Socioeconomic status on Grades, we will look into ESCS as well as its 3 components separately.
+
+Similarly, we will also create groupings based on percentile ranking of ESCS scores.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Assign ESCS as numeric
+df$escs <- stu_qqq_SG$ESCS %>% as.numeric()
+
+# Assign HISEI as numeric
+df$hisei <- stu_qqq_SG$HISEI %>% as.numeric()
+
+# Assign PAREDINT as factor
+df$paredint <- stu_qqq_SG$PAREDINT %>% as.factor()
+
+# Assign HOMEPOS as numeric
+df$homepos <- stu_qqq_SG$HOMEPOS %>% as.numeric()
+
+# Rank and group students according to the percentile of their ESCS
+df$escs_rank <- ntile(desc(df$escs), n = 10) %>% as.factor()
+
+# Show summary
+head(df[, c("hisei","paredint","homepos","escs", "escs_rank")], 10)
+```
 
 # 4. EDA
 
-## 4.1 Gender vs Grades?
+## 4.1 Distribution of Grades
 
-```{r}
-g1 <- ggplot(df, aes(x=math_grades, fill=gender)) + geom_density(alpha=.3)
-g2 <- ggplot(df, aes(x=read_grades, fill=gender)) + geom_density(alpha=.3)
-g3 <- ggplot(df, aes(x=scie_grades, fill=gender)) + geom_density(alpha=.3)
-ggarrange(g1, g2, g3, nrow=3, ncol=1, common.legend = TRUE, legend = "bottom")
+We begin the analysis by plotting the distribution of the three subjects: Math, Reading, and Science. On average, students perform better in Math and Science as compared to Reading.
+
+```{r, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create density plot for Math Grades with Mean line
+g01 <- ggplot(na.omit(df)) + 
+  geom_density(alpha=.7, aes(x=math_grades),
+               fill = "lightblue") +
+  xlim(200, 900) + 
+  xlab("Math") + 
+  ylab("Density") + 
+  geom_vline(xintercept = mean(df$math_grades),
+             colour = "lightcoral",
+             linetype = "dashed") +
+  annotate(
+    geom = "text", 
+    x = mean(df$math_grades) - 70, 
+    y = 0.004,
+    label = paste0("Mean: ", round(mean(df$math_grades),2)),
+    color = "lightcoral",
+    fontface = 2
+  )
+
+# Create density plot for Reading Grades with Mean line
+g02 <- ggplot(na.omit(df)) + 
+  geom_density(alpha=.7, aes(x=read_grades),
+               fill = "lightblue") +
+  xlim(200, 900) + 
+  xlab("Reading") + 
+  ylab("Density") + 
+  geom_vline(xintercept = mean(df$read_grades),
+             colour = "lightcoral",
+             linetype = "dashed") +
+  annotate(
+    geom = "text", 
+    x = mean(df$read_grades) - 70, 
+    y = 0.004,
+    label = paste0("Mean: ", round(mean(df$read_grades),2)),
+    color = "lightcoral",
+    fontface = 2
+  )
+
+# Create density plot for Science Grades with Mean line
+g03 <- ggplot(na.omit(df)) + 
+  geom_density(alpha=.7, aes(x=science_grades),
+               fill = "lightblue") +
+  xlim(200, 900) + 
+  xlab("Science") + 
+  ylab("Density") + 
+  geom_vline(xintercept = mean(df$science_grades),
+             colour = "lightcoral",
+             linetype = "dashed") +
+  annotate(
+    geom = "text", 
+    x = mean(df$science_grades) - 70, 
+    y = 0.004,
+    label = paste0("Mean: ", round(mean(df$science_grades),2)),
+    color = "lightcoral",
+    fontface = 2
+  )
+
+# Patchwork plots together
+p0 <- g01 / g02 / g03
+
+# Configure layout and title
+p0 <- p0 + 
+  plot_layout(guides = "collect") + 
+  plot_annotation(
+    title = "Distribution of Grades"
+  )
+
+# Plot with theme
+p0 & theme_tufte()
+```
+
+## 4.2 Performance of Students by Gender
+
+Next, we analyse the grades of students based on gender.
+
+Though marginally, male students perform better than female students in Math and Science, but poorer in Reading on average. It is also noted that female students have a smaller variance across all subjects.
+
+```{r, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create boxplot for Math Grades
+g11 <- ggplot(df, aes(x=gender, y=math_grades, fill=gender)) + 
+  geom_boxplot() + 
+  ylim(200, 900) + 
+  xlab("Gender") +
+  ylab("Math") +
+  scale_fill_manual(values = c("Male" = "lightblue","Female" = "lightcoral"))
+
+# Create boxplot for Reading Grades
+g12 <- ggplot(df, aes(x=gender, y=read_grades, fill=gender)) + 
+  geom_boxplot() + 
+  ylim(200, 900) + 
+  xlab("Gender") +
+  ylab("Reading") +
+  scale_fill_manual(values = c("Male" = "lightblue","Female" = "lightcoral"))
+
+# Create boxplot for Science Grades
+g13 <- ggplot(df, aes(x=gender, y=science_grades, fill=gender)) + 
+  geom_boxplot() + 
+  ylim(200, 900) + 
+  xlab("Gender") +
+  ylab("Science") +
+  scale_fill_manual(values = c("Male" = "lightblue","Female" = "lightcoral"))
+
+# Patchwork the 3 plots together
+p1 <- g11 + g12 + g13
+
+# Configure layout and title
+p1 <- p1 + 
+  plot_layout(axis_titles = "collect",
+              guides = "collect") + 
+  plot_annotation(
+    title = "Grade distribution by Gender",
+    subtitle = "Does gender affect a student's grade?"
+  )
+
+# Plot with theme
+p1 & theme_tufte() & theme(legend.position = "bottom",
+                           legend.title = element_blank())
+  
 
 ```
-## 4.2 Common needs vs Grades
 
-```{r}
-ggplot(na.omit(df), aes(x=common_needs, y=combined_grades)) + geom_boxplot()
+## 4.3 Socioeconomic status impact on students' grades
 
+Next, we study the relations between socioeconomic status and grades.
+
+For the most parts, we observe that higher ESCS scores does lead to better results across all subjects. However, the same can not be said for the students belonging to the highest portion of ESCS as the trend starts to dip downwards at the end.
+
+```{r, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+# Define axis limits
+grades_min <- 150
+grades_max <- 850
+escs_min <- min(df$escs)
+escs_max <- max(df$escs)
+
+# Create scatter plot for ESCS on Combined Grades
+g21 <- ggplot(na.omit(df), aes(x=escs, y=combined_grades)) +
+  geom_point(size = 0.5, alpha = 0.2) + 
+  geom_smooth(color = "lightcoral") +
+  xlim(escs_min, escs_max) + 
+  xlab("ESCS") +
+  ylab("Combined Grades")
+
+# Create a scatter plot for ESCS on Math Grades
+g22 <- ggplot(na.omit(df), aes(x=escs, y=math_grades)) +
+  geom_point(size = 0.5,alpha = 0.2) +
+  geom_smooth(color = "lightcoral") +
+  xlim(escs_min, escs_max) + 
+  ylim(grades_min, grades_max) + 
+  xlab("ESCS") +
+  ylab("Math")
+
+# Create a scatter plot for ESCS on Reading Grades
+g23 <- ggplot(na.omit(df), aes(x=escs, y=read_grades)) +
+  geom_point(size = 0.5,alpha = 0.2) +
+  geom_smooth(color = "lightcoral") +
+  xlim(escs_min, escs_max) + 
+  ylim(grades_min, grades_max) + 
+  xlab("ESCS") +
+  ylab("Reading")
+
+
+# Create a scatter plot for ESCS on Reading Grades
+g24 <- ggplot(na.omit(df), aes(x=escs, y=science_grades)) +
+  geom_point(size = 0.5,alpha = 0.2) +
+  geom_smooth(color = "lightcoral") +
+  xlim(escs_min, escs_max) + 
+  ylim(grades_min, grades_max) + 
+  xlab("ESCS") +
+  ylab("Science")
+
+
+# Patchwork plots together
+p2 <- g21 | (g22 / g23 / g24) + 
+  plot_layout(axes = "collect")
+
+# Configure layout and title
+p2 <- p2 + 
+  plot_annotation(
+    title = "Grades by ESCS",
+    subtitle = "Does socieconomic status affect a student's grade?"
+  )
+
+# Plot with theme
+p2 & theme_tufte()
 ```
+
+## 4.4 Socioeconomic status impact on students' grades (Part 2)
+
+Now, we take a more granular look into the components of ESCS; namely:
+
+-   HISEI - Highest parental occupation status
+
+-   PAREDINT - Highest parental education
+
+-   HOMEPOS - Home possessions
+
+From here, we learn that the dip towards the end is largely attributed to home possessions. Highest parental occupation status (HISEI) and highest parental education (PAREDINT) shows a mainly increasing trend.
+
+```{r, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Define axis limits
+grades_min <- min(df$combined_grades)
+grades_max <- max(df$combined_grades)
+hisei_min <- min(df$hisei)
+hisei_max <- max(df$hisei)
+homepos_min <- min(df$homepos)
+homepos_max <- max(df$homepos)
+
+# Create scatter plot for HISEI on Combined Grades
+g31 <- ggplot(na.omit(df), aes(x=hisei, y=combined_grades)) +
+  geom_point(size = 0.5, alpha = 0.2) + 
+  geom_smooth(color = "lightcoral") +
+  xlim(hisei_min, hisei_max) + 
+  ylim(grades_min, grades_max) +
+  ylab("Combined Grades") + 
+  xlab("HISEI")
+
+# Create scatter plot for PAREDINT on Combined Grades
+g32 <- ggplot(na.omit(df), aes(x=paredint, y=combined_grades)) +
+  geom_boxplot() +
+  ylab("Combined Grades") + 
+  xlab("PAREDINT")
+
+# Create scatter plot for HISEI on Combined Grades
+g33 <- ggplot(na.omit(df), aes(x=homepos, y=combined_grades)) +
+  geom_point(size = 0.5, alpha = 0.2) + 
+  geom_smooth(color = "lightcoral") +
+  xlim(homepos_min, homepos_max) + 
+  ylim(grades_min, grades_max) +
+  ylab("Combined Grades") + 
+  xlab("HOMEPOS")
+
+# Patchwork the plots together
+p3 <- g31 + g32 + g33 + plot_layout(axes = "collect")
+
+# Configure layout and title
+p3 <- p3 + 
+  plot_annotation(
+    title = "Grades by HISEI, PAREDINT, and HOMEPOS",
+    subtitle = "Examining ESCS by its components"
+  )
+
+# Plot with theme
+p3 & theme_tufte()
+```
+
+## 4.5 Schools vs ESCS
+
+Finally, we take a look at schools against ESCS.
+
+In the heatmap below, we easily observe that better performing schools are dominated by students belonging to higher ESCS brackets, and poorer performing schools by students in lower ESCS brackets. This suggests a strong correlation between the two factors which undermines any causation between grades, schools, and socioeconomic status as we are unable to accurately conclude if it is the school, or the ESCS that had more impact on the students' grades.
+
+```{r, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create 2d bin plot for ESCS ranks and School ranks
+g51 <- ggplot(na.omit(df), aes(x=escs_rank, y=sch_rank)) +
+  geom_bin_2d() + 
+  scale_fill_continuous(low = "lightcyan", high = "lightcoral") +
+  xlab("ESCS Percentile Groups") +
+  ylab("School Percentile Groups") +
+  scale_x_discrete(labels=c(
+    "1" = "1 - 10",
+    "2" = "11 - 20",
+    "3" = "21 - 30",
+    "4" = "31 - 40",
+    "5" = "41 - 50",
+    "6" = "51 - 60",
+    "7" = "61 - 70",
+    "8" = "71 - 80",
+    "9" = "81 - 90",
+    "10" = "91 - 100"
+  )) +
+  scale_y_discrete(labels=c(
+    "1" = "1 - 10",
+    "2" = "11 - 20",
+    "3" = "21 - 30",
+    "4" = "31 - 40",
+    "5" = "41 - 50",
+    "6" = "51 - 60",
+    "7" = "61 - 70",
+    "8" = "71 - 80",
+    "9" = "81 - 90",
+    "10" = "91 - 100"
+  )) + 
+  plot_annotation(
+    title = "Schools by ESCS",
+    subtitle = "Count of Students by School and ESCS Rankings"
+  )
+
+# Plot with theme
+g51 & theme_tufte()
+```
+
+# 5. Conclusion
+
+Our task was to find relations between students' grades and gender, schools, and socioeconomic status.
+
+Gender had little impact on student's performance. Male students showed slightly stronger proficiency in Math and Science, while female students had less variance in their scores.
+
+On socioeconomic status, we found that higher ESCS did lead to better grades, but only up to a certain point. Additionally, we derive that this is mainly attributed to home possessions (HOMEPOS). Perhaps there exist a maximum threshold such that any more home possessions would not result in a more conducive study environment for students.
+
+Consequently, we also found strong correlation between top performing schools and wealthier students. This begs the question: Is it the school that produces students with better grades which hence attracts wealthier students to join (by purchasing residences closer to these schools), or is it that students of higher socioeconomic status tend to gather in certain schools (due to reputation and prestige) causing those schools to produce students with better grades?
+
+To find out more, we have to employ modelling techniques such as interactive variables or fixed effects. until then, we are unable to give a satisfactory answer.
