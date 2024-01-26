@@ -51,7 +51,7 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 We will be using a curated set of variables for our analysis. The variables and their descriptions are listed in the table below.
 
 | Variable      | Description                                                      | Data Type   |
-|---------------|------------------------------------------------------------------|-------------|
+|--------------|---------------------------------------------|--------------|
 | CNTSCHID      | The unique School's ID                                           | Categorical |
 | CNTSTUID      | The unique student's ID                                          | Categorical |
 | Math_Score    | Average PV scores for Math                                       | Numerical   |
@@ -151,6 +151,24 @@ plot4 <- ggplot(data = PV, aes(x = Total_Score)) +
 plot1 + plot2 + plot3 + plot4
 ```
 
+Clarity
+
+-   x-axis label "count" is not meaningful and should be replaced with something more informative
+
+-   axes limits are not aligned and can be misleading, especially for the charts showing Math, Reading, and Science scores
+
+-   the plot layout of 2x2 is not ideal given that the chart for Total_Score is fundamentally different from the other 3. I would use a layout where easy comparison can be made for Math, Reading, and Science, while using the Total_Score chart to give a "summary" feel
+
+Aesthetics
+
+-   Soft grid lines are not distracting
+
+-   the "\_" in the y-axis label appears unprofessional
+
+-   The colour choice is neat and simple
+
+-   The repetition of "Distribution" in each chart's title is unnecessary, and can be mentioned in the plot title instead
+
 ## 3.2 Student Performance by Gender
 
 The following code generates density plots to compare the distribution of academic performance between students of different genders, providing a comprehensive understanding of the gender differences in academic achievement.
@@ -203,6 +221,8 @@ combined_plots <- plot1 + plot2 + plot3 + plot4 +
 combined_plots
 ```
 
+This visualization is very similar to the previous, and have the same points for clarity and aesthetics. Therefore, I'll skip straight to the remade visualization.
+
 ## 3.3 Student Performance by School
 
 The following code draws box plots showing the distribution of school average scores in each subject, with text labels identifying the four highest-scoring schools and the two lowest-scoring schools in each subject.
@@ -230,6 +250,20 @@ ggplot(School_Avg_Scores_long, aes(x = Subject, y = Score, fill = Subject)) +
   theme(text = element_text(size = 10),
         plot.title = element_text(hjust = 0.5))
 ```
+
+Clarity
+
+-   Lack of y-axis label
+
+-   annotations are cluttered and difficult to read. It seems like the intention was to highlight the best and worst performing schools for Avg_Score, as well as their position on Math, Reading, and Science respectively. In this case, I would only single out one school for best and one school for worst, and use a different colour to highlight their position on each boxplot.
+
+Aesthetics
+
+-   Soft grid lines are not distracting
+
+-   the "\_" in the y-axis label appears unprofessional
+
+-   The colour choice is neat and simple
 
 ## 3.4 Student Performance by Musical Instrument
 
@@ -279,6 +313,22 @@ combined_plot <- plot_math + plot_reading + plot_science + plot_total
 combined_plot
 ```
 
+Clarity
+
+-   Lack of x and y axis labels
+
+-   Choice of scatter plot is confusing and not meaningful. It does not clearly show the distribution of grades and number of students at each x-axis tick.
+
+-   The geom_smooth line makes little sense due to the nature of how the scatter points look like. (we can't really tell that the line is going through the mean)
+
+Aesthetics
+
+-   Soft grid lines are not distracting
+
+-   The colour choice is neat and simple
+
+-   The repetition of "by Musical Instruments" in each chart's title is unnecessary, and can be mentioned in the plot title instead
+
 ## 3.5 Student Performance by Own Room
 
 The following code plots box-and-line graphs to compare student performance in maths, reading, science and overall scores by whether or not they had the room to themselves.
@@ -322,3 +372,23 @@ p4 <- ggplot(data = PV, aes(x = Total_Score , y = Own_Room)) +
 combined_plot<- p1 + p2 + p3 + p4
 combined_plot
 ```
+
+Clarity
+
+-   Clarity
+
+    -   Title is not informative, and does not make sense with y-axis labels "Yes" and "No". Could re-phrase "Private Space" into more commonly used words such as "own room"
+
+    -   x-axis limits are not aligned and can be misleading, especially for the charts showing Math, Reading, and Science scores
+
+    -   the plot layout of 2x2 is not ideal given that the chart for Total Score is fundamentally different from the other 3. I would use a layout where easy comparison can be made for Math, Reading, and Science, while using the Total_Score chart to give a "summary" feel
+
+    -   Showing results for NA is unnecessary as it does not really reveal any useful information
+
+    Aesthetics
+
+    -   Soft grid lines are not distracting
+
+    -   Different colour fill could be used to contrast the results of "Yes" and "No"
+
+    -   The repetition of "by Private Space" in each chart's title is unnecessary, and can be mentioned in the plot title instead
