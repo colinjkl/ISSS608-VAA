@@ -51,7 +51,7 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 We will be using a curated set of variables for our analysis. The variables and their descriptions are listed in the table below.
 
 | Variable      | Description                                                      | Data Type   |
-|----------------|-----------------------------------------|----------------|
+|--------------|---------------------------------------------|--------------|
 | CNTSCHID      | The unique School's ID                                           | Categorical |
 | CNTSTUID      | The unique student's ID                                          | Categorical |
 | Math_Score    | Average PV scores for Math                                       | Numerical   |
@@ -75,11 +75,12 @@ PV <- stu_qqq_SG %>%
     Reading_Score = rowMeans(select(., contains("PV")&contains("READ")), na.rm = TRUE),
     Science_Score = rowMeans(select(., contains("PV")&contains("SCIE")), na.rm = TRUE),
     Total_Score = Math_Score + Reading_Score + Science_Score,
+    Average_Score = Total_Score / 3,
     Gender = ifelse(ST004D01T == 1,  "Female", "Male"),
     Own_Room = ifelse(ST250Q01JA == 1, "Yes" , "No"),
     mi_num = ST251Q06JA
   ) %>%
-  select(CNTSCHID, CNTSTUID, Math_Score, Reading_Score, Science_Score, Total_Score, Gender, Own_Room, mi_num)
+  select(CNTSCHID, CNTSTUID, Math_Score, Reading_Score, Science_Score, Total_Score, Average_Score, Gender, Own_Room, mi_num)
 ```
 
 Another data set is created for schools. The following code calculates the maths, reading, and science, as well as the average grades in these three subjects for each school’s students.
@@ -153,15 +154,13 @@ plot1 + plot2 + plot3 + plot4
 
 Clarity
 
--   X-axis label "count" is not meaningful and should be replaced with something more informative
+-   Histograms are not able to show the distribution of continuous variables well. Instead, a boxplot or density plot would be more suitable.
 
--   Axes limits are not aligned and can be misleading, especially for the charts showing Math, Reading, and Science scores
-
--   Bin size to too large, which may conceal some more intricate movements in data.
+-   Axes limits are not aligned and can be misleading, especially for the charts showing Math, Reading, and Science scores.
 
 -   The plot layout of 2x2 is not ideal. I would use a layout where easy comparison can be made for Math, Reading, and Science.
 
--   On the same point, I would opt not to show Total Scores as it gives no further value add to what the first 3 charts can already show.
+-   On the same point, I would opt not to show Total Scores as it is on a different scale as compared to the other 3 plots. Rather, I would use Average Scores to give a summary of all 3 scores together.
 
 Aesthetics
 
@@ -169,165 +168,120 @@ Aesthetics
 
 -   the "\_" in the y-axis label appears unprofessional
 
--   The colour choice is neat and simple
+-   The colour choice is neat and simple. It is however, too striking for a fill colour. A lighter shade would be more pleasant to the eyes while using striking colours to highlight points of attention.
 
--   The repetition of "Distribution" in each chart's title is unnecessary, and can be mentioned in the plot title instead
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-p11 <- ggplot(data = PV, aes(x = Math_Score)) +
-  geom_histogram(binwidth = 50, boundary = 100, color = "lightblue4", fill = "lightblue") +
-  geom_vline(xintercept = mean(PV$Math_Score),
-             colour = "red",
-             linetype = "dashed") +
-  annotate(
-    geom = "text", 
-    x = mean(PV$Math_Score) - 180, 
-    y = 1400,
-    label = paste0("Mean: \n", round(mean(PV$Math_Score),2)),
-    color = "red",
-    fontface = 2
-  ) +
-  xlab("Math") +
-  ylab("Number of Students") +
-  xlim(200, 900) + 
-  ylim(0, 1500) +
-  theme_minimal() +
-  theme(text = element_text(size = 8),
-        plot.title = element_text(hjust = 0.5),
-        plot.margin = unit(c(30,0,30,0), "pt"))
-
-p12 <- ggplot(data = PV, aes(x = Reading_Score)) +
-  geom_histogram(binwidth = 50, boundary = 100, color = "lightblue4", fill = "lightblue") +
-  geom_vline(xintercept = mean(PV$Reading_Score),
-             colour = "red",
-             linetype = "dashed") +
-  annotate(
-    geom = "text", 
-    x = mean(PV$Reading_Score) - 180, 
-    y = 1400,
-    label = paste0("Mean: \n", round(mean(PV$Reading_Score),2)),
-    color = "red",
-    fontface = 2
-  ) +
-  xlab("Reading") +
-  ylab("Number of Students") +
-  xlim(200, 900) + 
-  ylim(0, 1500) +
-  theme_minimal() +
-  theme(text = element_text(size = 8),
-        plot.title = element_text(hjust = 0.5))
-
-p13 <- ggplot(data = PV, aes(x = Science_Score)) +
-  geom_histogram(binwidth = 50, boundary = 100, color = "lightblue4", fill = "lightblue") +
-  geom_vline(xintercept = mean(PV$Science_Score),
-             colour = "red",
-             linetype = "dashed") +
-  annotate(
-    geom = "text", 
-    x = mean(PV$Science_Score) - 180, 
-    y = 1400,
-    label = paste0("Mean: \n", round(mean(PV$Science_Score),2)),
-    color = "red",
-    fontface = 2
-  ) +
-  xlab("Science") +
-  ylab("Number of Students") +
-  xlim(200, 900) + 
-  ylim(0, 1500) +
-  theme_minimal() +
-  theme(text = element_text(size = 8),
-        plot.title = element_text(hjust = 0.5))
-
-p1 <- p11 + p12 + p13
-
-p1 <- p1 + 
-  plot_layout(guides = "collect",
-              axis_titles = "collect",
-              axes = "collect") + 
-  plot_annotation(
-    title = "Distribution of Scores"
-  )
-
-p1
-```
-
-```{r}
-PV[, c("CNTSTUID", "Math_Score", "Reading_Score", "Science_Score")] %>% gather(key = "Subject", value = "Scores", Math_Score, Reading_Score, Science_Score)
-
-```
+-   The repetition of "Distribution" in each chart's title is unnecessary, and can be mentioned once in the plot title instead
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
+#| warning: false
 
 temp <- PV[, c("CNTSTUID", "Math_Score", "Reading_Score", "Science_Score")] %>% gather(key = "Subject", value = "Scores", Math_Score, Reading_Score, Science_Score)
 
 p11 <- ggplot(data = temp, aes(x = Scores, fill = Subject)) +
   geom_density(alpha = 0.3) +
   xlab("Math, Reading, and Science Scores") +
-  ylab("Density") +
+  ylab("Student\nDensity") +
   xlim(200, 900) + 
   theme_minimal() +
   theme(text = element_text(size = 8),
-        plot.title = element_text(hjust = 0.5)) + 
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_text(face = "bold"),
+        axis.title.y = element_text(face = "bold")) + 
   geom_vline(xintercept = mean(PV$Math_Score),
-             colour = "darkred",
+             colour = "red",
              linetype = "dashed") +
   geom_vline(xintercept = mean(PV$Reading_Score),
-             colour = "darkgreen",
+             colour = "lawngreen",
              linetype = "dashed") +
   geom_vline(xintercept = mean(PV$Science_Score),
-             colour = "darkblue",
+             colour = "blue",
              linetype = "dashed") +
   annotate(
     geom = "text", 
-    x = mean(PV$Science_Score) - 180, 
-    y = 0.0025,
-    label = paste0("Math Mean: \n", round(mean(PV$Math_Score),2)),
-    color = "darkred",
+    x = 800, 
+    y = 0.004,
+    label = paste0("Math Mean: ", round(mean(PV$Math_Score),2)),
+    color = "red",
     fontface = 2,
     size = 3
   ) +
   annotate(
     geom = "text", 
-    x = mean(PV$Science_Score) - 180, 
+    x = 800, 
     y = 0.003,
-    label = paste0("Reading Mean: \n", round(mean(PV$Reading_Score),2)),
-    color = "darkgreen",
+    label = paste0("Reading Mean: ", round(mean(PV$Reading_Score),2)),
+    color = "lawngreen",
     fontface = 2,
     size = 3
   ) +
   annotate(
     geom = "text", 
-    x = mean(PV$Science_Score) - 180, 
+    x = 800, 
     y = 0.0035,
-    label = paste0("Science Mean: \n", round(mean(PV$Science_Score),2)),
-    color = "darkblue",
+    label = paste0("Science Mean: ", round(mean(PV$Science_Score),2)),
+    color = "blue",
     fontface = 2,
     size = 3
-  )
+  ) +
+  scale_y_continuous(labels = scales::percent)
 
-p12 <- ggplot(data = PV, aes(x = Total_Score)) +
-  geom_density(fill = "lightgray") +
-  xlab("Total Scores")+
-  ylab("Density") +
+p12 <- ggplot(data = PV, aes(y = Average_Score)) +
+  geom_boxplot(fill = "lightgray") +
+  geom_point(aes(x = 0 ,y = mean(Math_Score)),
+             colour = "red",
+             size = 2) +
+  geom_point(aes(x = 0 ,y = mean(Reading_Score)),
+             colour = "lawngreen",
+             size = 2) +
+  geom_point(aes(x = 0 ,y = mean(Science_Score)),
+             colour = "blue",
+             size = 2) +
+  coord_flip() +
+  ylim(200, 900) + 
+  xlab("Average\nScores") +
+  ylab(element_blank()) +
   theme_minimal() +
   theme(text = element_text(size = 8),
-        plot.title = element_text(hjust = 0.5))
+        axis.text.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.y = element_text(face = "bold"))
 
 p1 <- p12 / p11
 
 p1 <- p1 + 
-  plot_layout(axes = "collect") + 
+  plot_layout(axes="collect",
+              heights = c(1,5)) + 
   plot_annotation(
-    title = "Distribution of Scores"
+    title = "Distribution of Students' Scores"
   )
 
 p1
 ```
+
+Clarity
+
+-   Changed the layout with a boxplot that shows Average Scores at the top that gives a summary of all 3 subjects, and a density plot to show the breakdown of these subjects together for easier comparison
+
+-   x-axis limits are aligned for both top and bottom charts
+
+-   Lines have been added to visualize the means of all 3 subjects. Their corresponding points have also been plotted on the boxplot
+
+-   Annotations are added to highlight the mean numbers
+
+Aesthetics
+
+-   Soft grid lines are removed to prevent confusion with the boxplot
+
+-   Plot title and axis labels have been replaced to give a clearer picture of what the variables are
+
+-   Transparency is added to the fill colour to tone down the glare. Its non-transparent colours are used for the lines, points, and annotation to highlight the points of focus
+
+-   bold axis titles for inking effect
 
 ## 3.2 Student Performance by Gender
 
@@ -381,7 +335,116 @@ combined_plots <- plot1 + plot2 + plot3 + plot4 +
 combined_plots
 ```
 
-This visualization is very similar to the previous, and have the same points for clarity and aesthetics. Therefore, I'll skip straight to the remade visualization.
+Clarity
+
+-   Axes limits are not aligned and can be misleading, especially for the charts showing Math, Reading, and Science scores.
+
+-   The plot layout of 2x2 is not ideal. I would use a layout where easy comparison can be made for Math, Reading, and Science.
+
+-   Similarly, I would opt not to show Total Scores as it is on a different scale as compared to the other 3 plots. Rather, I would use Average Scores to give a summary of all 3 scores together.
+
+Aesthetics
+
+-   Soft grid lines are not distracting
+
+-   the "\_" in the y-axis label appears unprofessional
+
+-   The colour choice is simple and shows the contrast between the 2 genders clearly
+
+-   The repetition of "Scores by Gender" in each chart's title is unnecessary, and can be mentioned once in the plot title instead
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+
+p21 <- ggplot(data = PV, aes(x = Gender, y = Math_Score, fill = Gender)) +
+  geom_boxplot(alpha = 0.3, show.legend = FALSE) +
+  xlab("Math") +
+  ylab("Scores") +
+  ylim(200, 800) +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x = element_text(face = "bold", size = 8),
+        axis.title.y = element_text(face = "bold")) +
+  scale_fill_manual(values = c("Female" = "red", "Male" = "blue"))
+
+p22 <- ggplot(data = PV, aes(x = Gender, y = Reading_Score, fill = Gender)) +
+  geom_boxplot(alpha = 0.3, show.legend = FALSE) +
+  xlab("Reading") +
+  ylab("Scores") +
+  ylim(200, 800) +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x = element_text(face = "bold", size = 8),
+        axis.title.y = element_text(face = "bold")) +
+  scale_fill_manual(values = c("Female" = "red", "Male" = "blue"))
+
+p23 <- ggplot(data = PV, aes(x = Gender, y = Science_Score, fill = Gender)) +
+  geom_boxplot(alpha = 0.3, show.legend = FALSE) +
+  xlab("Science") +
+  ylab("Scores") +
+  ylim(200, 800) +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x = element_text(face = "bold", size = 8),
+        axis.title.y = element_text(face = "bold")) +
+  scale_fill_manual(values = c("Female" = "red", "Male" = "blue"))
+
+p24 <- ggplot(data = PV, aes(x = Average_Score, fill = Gender)) +
+  geom_density(alpha = 0.3) +
+  labs(title = "Average Scores") +
+  xlab(element_blank()) +
+  xlim(200,800) +
+  ylab("Density") +
+  scale_fill_manual(values = c("Female" = "red", "Male" = "blue")) +
+  scale_y_continuous(labels = scales::percent) +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "right",
+        axis.title.y = element_text(face = "bold"))
+
+p2 <- p24 / (p21 + p22 + p23 + plot_layout(axes = "collect"))
+
+p2 <- p2 + plot_layout(guides = "collect",
+                       heights = c(1,3)) + 
+  plot_annotation(
+    title = "Distribution of Students' Scores by Gender"
+  )
+
+p2
+```
+
+Clarity
+
+-   Changed the layout with a density that shows Average Scores by gender at the top that gives a summary of all 3 subjects, and 3 box plots to show the breakdown of these subjects by gender for easier comparison
+
+-   x and y-axis limits are aligned for both top and bottom charts
+
+Aesthetics
+
+-   Soft grid lines are removed to prevent confusion with the boxplot
+
+-   Plot title and axis labels have been replaced to give a clearer picture of what the variables are
+
+-   Transparency is added to the fill colour to tone down the glare
+
+-   Bold axis labels and titles
 
 ## 3.3 Student Performance by School
 
@@ -424,6 +487,107 @@ Aesthetics
 -   the "\_" in the y-axis label appears unprofessional
 
 -   The colour choice is neat and simple
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+
+top<- School_Avg_Scores %>%
+  pivot_longer(cols = starts_with("Avg_Score"), 
+               names_to = "Subject", 
+               values_to = "Avg_Score") %>%
+  group_by(Subject) %>%
+  arrange(Avg_Score) %>%
+  slice(c((n()):(n()))) %>% 
+  gather(key = "Subject", 
+         value = "Score", 
+         Avg_Math_Score, 
+         Avg_Reading_Score, 
+         Avg_Science_Score, 
+         Avg_Score)
+
+bottom <- School_Avg_Scores %>%
+  pivot_longer(cols = starts_with("Avg_Score"), 
+               names_to = "Subject", 
+               values_to = "Avg_Score") %>%
+  group_by(Subject) %>%
+  arrange(Avg_Score) %>%
+  slice(c(1:1)) %>% 
+  gather(key = "Subject", 
+         value = "Score", 
+         Avg_Math_Score,
+         Avg_Reading_Score, 
+         Avg_Science_Score, 
+         Avg_Score)
+
+ggplot(School_Avg_Scores_long,
+       aes(x = Subject,
+           y = Score, 
+           fill = Subject)) +
+  geom_boxplot(fill = "lightgray") +
+  geom_point(data = top, 
+             aes(x = Subject, 
+                 y = Score, 
+                 color = "Top School")) +
+  geom_text_repel(data = top[grepl('Avg_Score', top$Subject),],
+                  aes(label = CNTSCHID), 
+                  box.padding = 0.8,
+                  nudge_x = 0.7,
+                  nudge_y = 40,
+                  force = 1, 
+                  color = "blue",
+                  size = 3) +
+  geom_point(data = bottom, 
+             aes(x = Subject, 
+                 y = Score, 
+                 color = "Bottom School")) +
+  geom_text_repel(data = bottom[grepl('Avg_Score', bottom$Subject),],
+                  aes(label = CNTSCHID), 
+                  box.padding = 0.8,
+                  nudge_x = 0.7,
+                  nudge_y = -40,
+                  force = 1, 
+                  color = "red",
+                  size = 3) +
+  labs(title = "Boxplot of Average Scores for Each Subject", 
+       x = "", 
+       y = "Average Scores") +
+  scale_x_discrete(labels=c("Avg_Math_Score" = "Math",
+                            "Avg_Reading_Score" = "Reading",
+                            "Avg_Science_Score" = "Science",
+                            "Avg_Score" = "Average of\n three Subjects")) +
+  theme_minimal() +
+  theme(text = element_text(size = 10),
+        plot.title = element_text(hjust = 0.5,
+                                  face = "bold"),
+        axis.title.y = element_text(face = "bold",
+                                    size = 8),
+        axis.text.x = element_text(face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.title = element_blank()) + 
+  scale_colour_manual(values = c("Top School" = "blue",
+                                 "Bottom School" = "red")) +
+  guides(color=guide_legend("colour", reverse = TRUE), fill = "none")
+
+```
+
+Clarity
+
+-   Added y-axis label "Average Scores"
+
+-   Remove annotations for all but the Top and Bottom School. I also only included the school ID only on the boxplot for "Average of three subjects", while highlighting their respective position for each of the different subjects using coloured points. Added a legend for the coloured points as well.
+
+Aesthetics
+
+-   Removed the grid lines as there are already axis ticks.
+
+-   Tidied up the x-axis text. Removed the "\_" and "Avg"/"Score" as these are now shown in the y-axis title.
+
+-   Replaced the fill with lightgray. This helps to provide contrast with the coloured points of the Top and Bottom Schools.
+
+-   Bold axis labels and titles
 
 ## 3.4 Student Performance by Musical Instrument
 
