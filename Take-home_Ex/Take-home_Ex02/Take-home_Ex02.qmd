@@ -51,7 +51,7 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 We will be using a curated set of variables for our analysis. The variables and their descriptions are listed in the table below.
 
 | Variable      | Description                                                      | Data Type   |
-|--------------|---------------------------------------------|--------------|
+|----------------|-----------------------------------------|----------------|
 | CNTSCHID      | The unique School's ID                                           | Categorical |
 | CNTSTUID      | The unique student's ID                                          | Categorical |
 | Math_Score    | Average PV scores for Math                                       | Numerical   |
@@ -255,41 +255,70 @@ p1
 ```
 
 ```{r}
+PV[, c("CNTSTUID", "Math_Score", "Reading_Score", "Science_Score")] %>% gather(key = "Subject", value = "Scores", Math_Score, Reading_Score, Science_Score)
+
+```
+
+```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 
-p11 <- ggplot(data = PV, aes(x = Math_Score)) +
-  geom_histogram(binwidth = 50, boundary = 100, color = "blue", fill = "#3459e6") +
-  xlab("Math") +
-  ylab("Number of Students") +
+temp <- PV[, c("CNTSTUID", "Math_Score", "Reading_Score", "Science_Score")] %>% gather(key = "Subject", value = "Scores", Math_Score, Reading_Score, Science_Score)
+
+p11 <- ggplot(data = temp, aes(x = Scores, fill = Subject)) +
+  geom_density(alpha = 0.3) +
+  xlab("Math, Reading, and Science Scores") +
+  ylab("Density") +
   xlim(200, 900) + 
-  ylim(0, 1500) +
   theme_minimal() +
   theme(text = element_text(size = 8),
-        plot.title = element_text(hjust = 0.5),
-        plot.margin = unit(c(30,0,30,0), "pt"))
+        plot.title = element_text(hjust = 0.5)) + 
+  geom_vline(xintercept = mean(PV$Math_Score),
+             colour = "darkred",
+             linetype = "dashed") +
+  geom_vline(xintercept = mean(PV$Reading_Score),
+             colour = "darkgreen",
+             linetype = "dashed") +
+  geom_vline(xintercept = mean(PV$Science_Score),
+             colour = "darkblue",
+             linetype = "dashed") +
+  annotate(
+    geom = "text", 
+    x = mean(PV$Science_Score) - 180, 
+    y = 0.0025,
+    label = paste0("Math Mean: \n", round(mean(PV$Math_Score),2)),
+    color = "darkred",
+    fontface = 2,
+    size = 3
+  ) +
+  annotate(
+    geom = "text", 
+    x = mean(PV$Science_Score) - 180, 
+    y = 0.003,
+    label = paste0("Reading Mean: \n", round(mean(PV$Reading_Score),2)),
+    color = "darkgreen",
+    fontface = 2,
+    size = 3
+  ) +
+  annotate(
+    geom = "text", 
+    x = mean(PV$Science_Score) - 180, 
+    y = 0.0035,
+    label = paste0("Science Mean: \n", round(mean(PV$Science_Score),2)),
+    color = "darkblue",
+    fontface = 2,
+    size = 3
+  )
 
-p12 <- ggplot(data = PV, aes(x = Reading_Score)) +
-  geom_histogram(binwidth = 50, boundary = 100, color = "blue", fill = "#3459e6") +
-  xlab("Reading") +
-  ylab("Number of Students") +
-  xlim(200, 900) + 
-  ylim(0, 1500) +
+p12 <- ggplot(data = PV, aes(x = Total_Score)) +
+  geom_density(fill = "lightgray") +
+  xlab("Total Scores")+
+  ylab("Density") +
   theme_minimal() +
   theme(text = element_text(size = 8),
         plot.title = element_text(hjust = 0.5))
 
-p13 <- ggplot(data = PV, aes(x = Science_Score)) +
-  geom_histogram(binwidth = 50, boundary = 100, color = "blue", fill = "#3459e6") +
-  xlab("Science") +
-  ylab("Number of Students") +
-  xlim(200, 900) + 
-  ylim(0, 1500) +
-  theme_minimal() +
-  theme(text = element_text(size = 8),
-        plot.title = element_text(hjust = 0.5))
-
-p1 <- (p11 + p12 + p13)
+p1 <- p12 / p11
 
 p1 <- p1 + 
   plot_layout(axes = "collect") + 
