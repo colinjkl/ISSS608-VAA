@@ -51,7 +51,7 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 We will be using a curated set of variables for our analysis. The variables and their descriptions are listed in the table below.
 
 | Variable      | Description                                                      | Data Type   |
-|--------------|---------------------------------------------|--------------|
+|------------------|-----------------------------------|------------------|
 | CNTSCHID      | The unique School's ID                                           | Categorical |
 | CNTSTUID      | The unique student's ID                                          | Categorical |
 | Math_Score    | Average PV scores for Math                                       | Numerical   |
@@ -152,7 +152,9 @@ plot4 <- ggplot(data = PV, aes(x = Total_Score)) +
 plot1 + plot2 + plot3 + plot4
 ```
 
-Clarity
+### 3.1.1 Pros and Cons
+
+**Clarity**
 
 -   Histograms are not able to show the distribution of continuous variables well. Instead, a boxplot or density plot would be more suitable.
 
@@ -162,7 +164,7 @@ Clarity
 
 -   On the same point, I would opt not to show Total Scores as it is on a different scale as compared to the other 3 plots. Rather, I would use Average Scores to give a summary of all 3 scores together.
 
-Aesthetics
+**Aesthetics**
 
 -   Soft grid lines are not distracting
 
@@ -171,6 +173,32 @@ Aesthetics
 -   The colour choice is neat and simple. It is however, too striking for a fill colour. A lighter shade would be more pleasant to the eyes while using striking colours to highlight points of attention.
 
 -   The repetition of "Distribution" in each chart's title is unnecessary, and can be mentioned once in the plot title instead
+
+### 3.1.2 Sketch
+
+![](Sketch 1.png){fig-align="center"}
+
+**Clarity**
+
+-   Changed the layout with a boxplot that shows Average Scores at the top that gives a summary of all 3 subjects, and a density plot to show the breakdown of these subjects together for easier comparison
+
+-   x-axis limits are aligned for both top and bottom charts
+
+-   Lines have been added to visualize the means of all 3 subjects. Their corresponding points have also been plotted on the boxplot
+
+-   Annotations are added to highlight the mean numbers
+
+**Aesthetics**
+
+-   Soft grid lines are removed to prevent confusion with the boxplot
+
+-   Plot title and axis labels have been replaced to give a clearer picture of what the variables are
+
+-   Transparency is added to the fill colour to tone down the glare. Its non-transparent colours are used for the lines, points, and annotation to highlight the points of focus
+
+-   bold axis titles for inking effect
+
+### 3.1.3 Make-over
 
 ```{r}
 #| code-fold: true
@@ -263,26 +291,6 @@ p1 <- p1 +
 p1
 ```
 
-Clarity
-
--   Changed the layout with a boxplot that shows Average Scores at the top that gives a summary of all 3 subjects, and a density plot to show the breakdown of these subjects together for easier comparison
-
--   x-axis limits are aligned for both top and bottom charts
-
--   Lines have been added to visualize the means of all 3 subjects. Their corresponding points have also been plotted on the boxplot
-
--   Annotations are added to highlight the mean numbers
-
-Aesthetics
-
--   Soft grid lines are removed to prevent confusion with the boxplot
-
--   Plot title and axis labels have been replaced to give a clearer picture of what the variables are
-
--   Transparency is added to the fill colour to tone down the glare. Its non-transparent colours are used for the lines, points, and annotation to highlight the points of focus
-
--   bold axis titles for inking effect
-
 ## 3.2 Student Performance by Gender
 
 The following code generates density plots to compare the distribution of academic performance between students of different genders, providing a comprehensive understanding of the gender differences in academic achievement.
@@ -335,7 +343,9 @@ combined_plots <- plot1 + plot2 + plot3 + plot4 +
 combined_plots
 ```
 
-Clarity
+### 3.2.1 Pros and Cons
+
+**Clarity**
 
 -   Axes limits are not aligned and can be misleading, especially for the charts showing Math, Reading, and Science scores.
 
@@ -343,7 +353,7 @@ Clarity
 
 -   Similarly, I would opt not to show Total Scores as it is on a different scale as compared to the other 3 plots. Rather, I would use Average Scores to give a summary of all 3 scores together.
 
-Aesthetics
+**Aesthetics**
 
 -   Soft grid lines are not distracting
 
@@ -352,6 +362,28 @@ Aesthetics
 -   The colour choice is simple and shows the contrast between the 2 genders clearly
 
 -   The repetition of "Scores by Gender" in each chart's title is unnecessary, and can be mentioned once in the plot title instead
+
+### 3.2.2 Sketch
+
+![](Sketch 2.png){fig-align="center"}
+
+**Clarity**
+
+-   Changed the layout with a density that shows Average Scores by gender at the top that gives a summary of all 3 subjects, and 3 box plots to show the breakdown of these subjects by gender for easier comparison
+
+-   x and y-axis limits are aligned for both top and bottom charts
+
+**Aesthetics**
+
+-   Soft grid lines are removed to prevent confusion with the boxplot
+
+-   Plot title and axis labels have been replaced to give a clearer picture of what the variables are
+
+-   Transparency is added to the fill colour to tone down the glare
+
+-   Bold axis labels and titles
+
+### 3.2.3 Make-over
 
 ```{r}
 #| code-fold: true
@@ -430,22 +462,6 @@ p2 <- p2 + plot_layout(guides = "collect",
 p2
 ```
 
-Clarity
-
--   Changed the layout with a density that shows Average Scores by gender at the top that gives a summary of all 3 subjects, and 3 box plots to show the breakdown of these subjects by gender for easier comparison
-
--   x and y-axis limits are aligned for both top and bottom charts
-
-Aesthetics
-
--   Soft grid lines are removed to prevent confusion with the boxplot
-
--   Plot title and axis labels have been replaced to give a clearer picture of what the variables are
-
--   Transparency is added to the fill colour to tone down the glare
-
--   Bold axis labels and titles
-
 ## 3.3 Student Performance by School
 
 The following code draws box plots showing the distribution of school average scores in each subject, with text labels identifying the four highest-scoring schools and the two lowest-scoring schools in each subject.
@@ -474,19 +490,43 @@ ggplot(School_Avg_Scores_long, aes(x = Subject, y = Score, fill = Subject)) +
         plot.title = element_text(hjust = 0.5))
 ```
 
-Clarity
+### 3.3.1 Pros and Cons
+
+**Clarity**
 
 -   Lack of y-axis label
 
 -   annotations are cluttered and difficult to read. It seems like the intention was to highlight the best and worst performing schools for Avg_Score, as well as their position on Math, Reading, and Science respectively. In this case, I would only single out one school for best and one school for worst, and use a different colour to highlight their position on each boxplot.
 
-Aesthetics
+**Aesthetics**
 
 -   Soft grid lines are not distracting
 
 -   the "\_" in the y-axis label appears unprofessional
 
 -   The colour choice is neat and simple
+
+### 3.3.2 Sketch
+
+![](Sketch 3.png){fig-align="center"}
+
+**Clarity**
+
+-   Added y-axis label "Average Scores"
+
+-   Remove annotations for all but the Top and Bottom School. I also only included the school ID only on the boxplot for "Average of three subjects", while highlighting their respective position for each of the different subjects using coloured points. Added a legend for the coloured points as well.
+
+**Aesthetics**
+
+-   Removed the grid lines as there are already axis ticks.
+
+-   Tidied up the x-axis text. Removed the "\_" and "Avg_Score" as these are now shown in the y-axis title.
+
+-   Replaced the fill with lightgray. This helps to provide contrast with the coloured points of the Top and Bottom Schools.
+
+-   Bold axis labels and titles
+
+### 3.3.3 Make-over
 
 ```{r}
 #| code-fold: true
@@ -573,22 +613,6 @@ ggplot(School_Avg_Scores_long,
 
 ```
 
-Clarity
-
--   Added y-axis label "Average Scores"
-
--   Remove annotations for all but the Top and Bottom School. I also only included the school ID only on the boxplot for "Average of three subjects", while highlighting their respective position for each of the different subjects using coloured points. Added a legend for the coloured points as well.
-
-Aesthetics
-
--   Removed the grid lines as there are already axis ticks.
-
--   Tidied up the x-axis text. Removed the "\_" and "Avg"/"Score" as these are now shown in the y-axis title.
-
--   Replaced the fill with lightgray. This helps to provide contrast with the coloured points of the Top and Bottom Schools.
-
--   Bold axis labels and titles
-
 ## 3.4 Student Performance by Musical Instrument
 
 The following code shows scatter plots of students’ maths, reading, science and overall performance against the number of musical instruments owned, as well as showing the relationship by fitting a line through linear regression.
@@ -637,21 +661,146 @@ combined_plot <- plot_math + plot_reading + plot_science + plot_total
 combined_plot
 ```
 
-Clarity
+### 3.4.1 Pros and Cons
+
+**Clarity**
 
 -   Lack of x and y axis labels
 
--   Choice of scatter plot is confusing and not meaningful. It does not clearly show the distribution of grades and number of students at each x-axis tick.
+-   Axis limits are not aligned, making it difficult to make comparisons
 
--   The geom_smooth line makes little sense due to the nature of how the scatter points look like. (we can't really tell that the line is going through the mean)
+-   Choice of scatter plot is not suitable for discrete vs continuous data. It does not clearly show the distribution of grades and number of students at each x-axis tick.
 
-Aesthetics
+-   The geom_smooth line makes little sense due to the nature of how the scatter points look like. (we can't really tell that the line is going through the mean and giving an upward trend)
+
+**Aesthetics**
 
 -   Soft grid lines are not distracting
 
 -   The colour choice is neat and simple
 
 -   The repetition of "by Musical Instruments" in each chart's title is unnecessary, and can be mentioned in the plot title instead
+
+### 3.4.2 Sketch
+
+![](Sketch 4.png){fig-align="center"}
+
+**Clarity**
+
+-   Added x and y labels
+
+-   Aligned all axis limits so that they are of the same scale
+
+-   Changed the layout and replaced the scatter plot with a geom_bin_2d that shows Average Scores on the left that gives a summary of all 3 subjects. The bin map also indicates the total number of students with 1, 2, 3 or 4 instruments unlike the previous scatter plot.
+
+-   Boxplots are used to show breakdown for individual subjects.
+
+-   The geom_smooth line is removed as the trend can already be observed from the plots.
+
+**Aesthetics**
+
+-   Soft grid lines are removed as it is not needed.
+
+-   The colour choice is reduced to a simple gray and red scale to avoid distractions.
+
+-   Axis titles are collected to avoid repetitions.
+
+-   Bold axis labels and titles.
+
+### 3.4.3 Make-over
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+
+p41 <- ggplot(data=na.omit(PV), 
+              aes(x = as.factor(mi_num), 
+                  y = Math_Score)) +
+  geom_boxplot(fill = "lightgray") +
+  ylim(200,800) +
+  labs(title = element_blank(), 
+       x = element_blank(),
+       y = "Math") +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.y = element_text(face = "bold")
+        )
+
+p42 <- ggplot(data=na.omit(PV), 
+              aes(x = as.factor(mi_num), 
+                  y = Reading_Score)) +
+  geom_boxplot(fill = "lightgray") +
+  ylim(200,800) +
+  labs(title = element_blank(), 
+       x = element_blank(),
+       y = "Reading") +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.y = element_text(face = "bold")
+        )
+
+p43 <- ggplot(data=na.omit(PV), 
+              aes(x = as.factor(mi_num), 
+                  y = Science_Score)) +
+  geom_boxplot(fill = "lightgray") +
+  ylim(200,800) +
+  labs(title = element_blank(), 
+       x = element_blank(),
+       y = "Science") +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.y = element_text(face = "bold")
+        )
+
+
+p44 <- ggplot(data=na.omit(PV), 
+              aes(x=as.factor(mi_num), 
+                  y=Average_Score)) +
+  ylim(200,800) + 
+  geom_bin_2d(bins = 12) +
+  scale_fill_continuous(low = "seashell", 
+                        high = "red") +
+  labs(title = element_blank(), 
+       x = element_blank(), 
+       y = "Average of three Subjects")+
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        legend.position = "left",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.y = element_text(face = "bold")
+        )
+
+
+p4 <- p44 + (p41 / p42 / p43 + plot_layout(axis_titles = "collect"))
+
+p4 <- p4 + 
+  plot_layout(axis_titles = "collect",
+              widths = c(4,6)) + 
+  plot_annotation(
+    title = "Distribution of Students' Scores by Number of Musical Instruments\nin household",
+  )
+
+p4 <- p4 & theme(plot.margin = margin(5.5, 5.5, 0, 5.5))
+
+wrap_elements(panel = p4) +
+  labs(tag = "Number of Musical Intruments") +
+  theme(
+    plot.tag = element_text(size = rel(0.8), 
+                            face = "bold"),
+    plot.tag.position = "bottom"
+  )
+```
 
 ## 3.5 Student Performance by Own Room
 
@@ -697,22 +846,140 @@ combined_plot<- p1 + p2 + p3 + p4
 combined_plot
 ```
 
-Clarity
+### 3.5.1 Pros and Cons
 
--   Clarity
+**Clarity**
 
-    -   Title is not informative, and does not make sense with y-axis labels "Yes" and "No". Could re-phrase "Private Space" into more commonly used words such as "own room"
+-   Lack of axis labels
 
-    -   x-axis limits are not aligned and can be misleading, especially for the charts showing Math, Reading, and Science scores
+-   Axes limits are not aligned and can be misleading, especially for the charts showing Math, Reading, and Science scores.
 
-    -   the plot layout of 2x2 is not ideal given that the chart for Total Score is fundamentally different from the other 3. I would use a layout where easy comparison can be made for Math, Reading, and Science, while using the Total_Score chart to give a "summary" feel
+-   The plot layout of 2x2 is not ideal. I would use a layout where easy comparison can be made for Math, Reading, and Science.
 
-    -   Showing results for NA is unnecessary as it does not really reveal any useful information
+-   On the same point, I would opt not to show Total Scores as it is on a different scale as compared to the other 3 plots. Rather, I would use Average Scores to give a summary of all 3 scores together.
 
-    Aesthetics
+-   Data for NA should not be shown as it does not add value to the analysis
 
-    -   Soft grid lines are not distracting
+**Aesthetics**
 
-    -   Different colour fill could be used to contrast the results of "Yes" and "No"
+-   Soft grid lines are not distracting
 
-    -   The repetition of "by Private Space" in each chart's title is unnecessary, and can be mentioned in the plot title instead
+-   "Score by Private Space" is repeated in all charts' titles. Instead, it can be mentioned only once in the plot title
+
+-   The colour is same for all responses. I would use separate colours for yes and no responses.
+
+### 3.5.2 Sketch
+
+![](Sketch 5.png){fig-align="center"}
+
+**Clarity**
+
+-   Added x and y labels
+
+-   Aligned all axis limits so that they are of the same scale
+
+-   Changed the layout and replaced the Total Score boxplot with a Density plot which shows Average Scores on the left that gives a summary of all 3 subjects.
+
+-   Boxplots are used to show breakdown for individual subjects.
+
+-   NA responses are removed as it does not add to the analysis
+
+**Aesthetics**
+
+-   Soft grid lines are removed as it is not needed.
+
+-   Fill colour by response is added
+
+-   Axis are collected to avoid repetitions.
+
+-   Bold axis labels and titles.
+
+### 3.5.3 Make-over
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+
+p51 <- ggplot(data = na.omit(PV), 
+              aes(x = Own_Room, 
+                  y = Math_Score,
+                  fill = Own_Room)) +
+  geom_boxplot(alpha = 0.3, 
+               show.legend = FALSE) +
+  ylim(200, 800) +
+  labs(title ="Math",
+       x = "", 
+       y = "") +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  scale_fill_manual(values = c("Yes" = "blue",
+                               "No" = "red"))
+
+p52 <- ggplot(data = na.omit(PV), 
+              aes(x = Own_Room, 
+                  y = Reading_Score,
+                  fill = Own_Room)) +
+  geom_boxplot(alpha = 0.3, 
+               show.legend = FALSE) +
+  ylim(200, 800) +
+  labs(title ="Reading",
+       x = "", 
+       y = "") +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  scale_fill_manual(values = c("Yes" = "blue",
+                               "No" = "red"))
+
+p53 <- ggplot(data = na.omit(PV), 
+              aes(x = Own_Room, 
+                  y = Science_Score,
+                  fill = Own_Room)) +
+  geom_boxplot(alpha = 0.3, 
+               show.legend = FALSE) +
+  ylim(200, 800) +
+  labs(title ="Science",
+       x = "", 
+       y = "") +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  scale_fill_manual(values = c("Yes" = "blue",
+                               "No" = "red"))
+
+p54 <- ggplot(data = na.omit(PV), 
+              aes(y = Average_Score , 
+                  fill = Own_Room)) + 
+  geom_density(alpha = 0.3) +
+  ylim(200, 800) +
+  labs(title ="Average of three\nSubjects", 
+       x = "",
+       y = "Score") +
+  theme_minimal() +
+  theme(text = element_text(size = 8),
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        legend.position = "left",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.y = element_text(face = "bold"),
+        axis.text.y = element_blank()) +
+  scale_x_reverse() +
+  scale_fill_manual(values = c("Yes" = "blue",
+                               "No" = "red")) + 
+  guides(fill = guide_legend(title="Own Room"))
+
+
+p5 <- p54 + (p51 + p52 + p53 + plot_layout(axes = "collect"))
+
+p5 + plot_layout(widths = c(1,5)) + 
+  plot_annotation(title = "Distribution of Students' Scores by Private Space")
+```
