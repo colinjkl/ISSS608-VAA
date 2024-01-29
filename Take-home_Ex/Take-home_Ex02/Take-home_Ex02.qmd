@@ -51,11 +51,7 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 We will be using a curated set of variables for our analysis. The variables and their descriptions are listed in the table below.
 
 | Variable      | Description                                                      | Data Type   |
-<<<<<<< HEAD
 |---------------|------------------------------------------------------------------|-------------|
-=======
-|------------------|-----------------------------------|------------------|
->>>>>>> d2a7b2de1aba599aee50fef681d0a742a07d145c
 | CNTSCHID      | The unique School's ID                                           | Categorical |
 | CNTSTUID      | The unique student's ID                                          | Categorical |
 | Math_Score    | Average PV scores for Math                                       | Numerical   |
@@ -180,7 +176,7 @@ plot1 + plot2 + plot3 + plot4
 
 ### 3.1.2 Sketch
 
-![](Sketch 1.png){fig-align="center"}
+![](Sketch%201.png){fig-align="center"}
 
 **Clarity**
 
@@ -369,7 +365,7 @@ combined_plots
 
 ### 3.2.2 Sketch
 
-![](Sketch 2.png){fig-align="center"}
+![](Sketch%202.png){fig-align="center"}
 
 **Clarity**
 
@@ -512,7 +508,7 @@ ggplot(School_Avg_Scores_long, aes(x = Subject, y = Score, fill = Subject)) +
 
 ### 3.3.2 Sketch
 
-![](Sketch 3.png){fig-align="center"}
+![](Sketch%203.png){fig-align="center"}
 
 **Clarity**
 
@@ -687,7 +683,7 @@ combined_plot
 
 ### 3.4.2 Sketch
 
-![](Sketch 4.png){fig-align="center"}
+![](Sketch%204.png){fig-align="center"}
 
 **Clarity**
 
@@ -874,7 +870,7 @@ combined_plot
 
 ### 3.5.2 Sketch
 
-![](Sketch 5.png){fig-align="center"}
+![](Sketch%205.png){fig-align="center"}
 
 **Clarity**
 
