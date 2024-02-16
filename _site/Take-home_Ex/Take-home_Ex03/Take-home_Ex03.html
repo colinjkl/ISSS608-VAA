@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-02-13">
+
+<title>ISSS608-VAA - Take-home_Ex03</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../../site_libs/d3-bundle-5.16.0/d3-bundle.min.js"></script>
+<script src="../../site_libs/d3-lasso-0.0.5/d3-lasso.min.js"></script>
+<script src="../../site_libs/save-svg-as-png-1.4.17/save-svg-as-png.min.js"></script>
+<script src="../../site_libs/flatbush-4.0.0/flatbush.min.js"></script>
+<link href="../../site_libs/ggiraphjs-0.4.6/ggiraphjs.min.css" rel="stylesheet">
+<script src="../../site_libs/ggiraphjs-0.4.6/ggiraphjs.min.js"></script>
+<script src="../../site_libs/girafe-binding-0.8.8/girafe.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ISSS608-VAA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Hands-on Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04a.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4a</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04b.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4b</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04c.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4c</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04d.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4d</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5a</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5b</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05c.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5c</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05d.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5d</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05e.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5e</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">In-class Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex01/In-class_Ex01.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 1</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Take-home Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 3</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../prototype/app.R" rel="" target="">
+ <span class="menu-text">Shiny App Prototype</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">1. Overview</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">2. Data Preparation</a>
+  <ul class="collapse">
+  <li><a href="#loading-r-packages" id="toc-loading-r-packages" class="nav-link" data-scroll-target="#loading-r-packages">2.1 Loading R packages</a></li>
+  <li><a href="#importing-historical-daily-temperature-data-set" id="toc-importing-historical-daily-temperature-data-set" class="nav-link" data-scroll-target="#importing-historical-daily-temperature-data-set">2.2 Importing historical daily temperature data set</a></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a></li>
+  </ul></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a>
+  <ul class="collapse">
+  <li><a href="#min-and-max" id="toc-min-and-max" class="nav-link" data-scroll-target="#min-and-max">min and max</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Take-home_Ex03</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 13, 2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">February 15, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="overview" class="level1">
+<h1>1. Overview</h1>
+<p>According to an office report as shown in the infographic below,</p>
+<ul>
+<li>Daily mean temperature are projected to increase by 1.4 to 4.6, and</li>
+<li>The contrast between the wet months (November to January) and dry month (February and June to September) is likely to be more pronounced.</li>
+</ul>
+<p>As a visual analytics greenhorn, you are keen to apply newly acquired visual interactivity and visualising uncertainty methods to validate the claims presented above.</p>
+</section>
+<section id="data-preparation" class="level1">
+<h1>2. Data Preparation</h1>
+<p>First, let us prepare the required data.</p>
+<section id="loading-r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="loading-r-packages">2.1 Loading R packages</h2>
+<p>We begin by loading the required R packages.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               haven,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               dplyr,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               plotly,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               ggrepel, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>               patchwork, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>               ggthemes, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>               hrbrthemes,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>               data.table,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>               ggiraph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="importing-historical-daily-temperature-data-set" class="level2">
+<h2 class="anchored" data-anchor-id="importing-historical-daily-temperature-data-set">2.2 Importing historical daily temperature data set</h2>
+<p>The data we will be using is the historical daily temperature data from Meteorological Service Singapore website. We will be looking at the daily records of July in the years 1983, 1993, 2003, 2013, and 2023 at the Changi Weather Station.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>files <span class="ot">=</span> <span class="fu">list.files</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"data/"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">".*csv$"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case =</span> F,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> T</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">lapply</span>(files, data.table<span class="sc">::</span>fread, <span class="at">encoding =</span> <span class="st">"Latin-1"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(data)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling">Data Wrangling</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span><span class="st">`</span><span class="at">Minimum Temperature (°C)</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(data<span class="sc">$</span>Year <span class="sc">==</span> <span class="dv">2023</span>, data<span class="sc">$</span><span class="st">`</span><span class="at">Minimum Temperature (Â°C)</span><span class="st">`</span>, data<span class="sc">$</span><span class="st">`</span><span class="at">Minimum Temperature (°C)</span><span class="st">`</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span><span class="st">`</span><span class="at">Maximum Temperature (°C)</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(data<span class="sc">$</span>Year <span class="sc">==</span> <span class="dv">2023</span>, data<span class="sc">$</span><span class="st">`</span><span class="at">Maximum Temperature (Â°C)</span><span class="st">`</span>, data<span class="sc">$</span><span class="st">`</span><span class="at">Maximum Temperature (°C)</span><span class="st">`</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span><span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(data<span class="sc">$</span>Year <span class="sc">==</span> <span class="dv">2023</span>, data<span class="sc">$</span><span class="st">`</span><span class="at">Mean Temperature (Â°C)</span><span class="st">`</span>, data<span class="sc">$</span><span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>month_data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_month_temp =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_month_temp =</span> <span class="fu">sd</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">n</span>())</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>day_data <span class="ot">&lt;-</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  data[<span class="fu">c</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Station"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Year"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Month"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Day"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mean Temperature (°C)"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Maximum Temperature (°C)"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Minimum Temperature (°C)"</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  )]</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(day_data) <span class="ot">&lt;-</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Station"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Year"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Month"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Day"</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mean_day_temp"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"max_day_temp"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"min_day_temp"</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="visualization" class="level1">
+<h1>Visualization</h1>
+<section id="min-and-max" class="level2">
+<h2 class="anchored" data-anchor-id="min-and-max">min and max</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>day_data, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> Day,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> mean_day_temp,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="fu">as.factor</span>(Year))) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line_interactive</span>(              </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">tooltip =</span> Year, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">data_id =</span> Year),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">show.legend =</span> F) <span class="sc">+</span>               </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="cn">NULL</span>,               </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="cn">NULL</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">data=</span>month_data, </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(Year),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> mean_month_temp,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> <span class="fu">as.factor</span>(Year))</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col_interactive</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">tooltip =</span> Year, </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">data_id =</span> Year),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.8</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">data=</span> day_data,</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Year,</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> mean_day_temp)) <span class="sc">+</span> </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter_interactive</span>(</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">tooltip =</span> Year, </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">data_id =</span> Year,</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="fu">as.factor</span>(Year))</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth_interactive</span>(</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">tooltip =</span> <span class="st">"smooth"</span>),</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">method=</span><span class="st">"lm"</span>,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="st">'red'</span>,</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">fullrange =</span> T</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">1983</span>,<span class="dv">1993</span>,<span class="dv">2003</span>,<span class="dv">2013</span>,<span class="dv">2023</span>,<span class="dv">2100</span>),</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1983</span>,<span class="dv">2100</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="fu">girafe</span>(                                  </span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">code =</span> <span class="fu">print</span>((p1 <span class="sc">+</span> p2)<span class="sc">/</span>p3),                             </span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">width_svg =</span> <span class="dv">6</span>,                         </span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">height_svg =</span> <span class="dv">6</span><span class="sc">*</span><span class="fl">0.618</span>,</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opts_hover</span>(<span class="at">css =</span> <span class="st">"stroke-width:4;"</span>),</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opts_hover_inv</span>(<span class="at">css =</span> <span class="st">"opacity:0.2;"</span>) </span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>  )                                        </span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>)                                        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="girafe html-widget html-fill-item" id="htmlwidget-d6e539d2d763212950a5" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-d6e539d2d763212950a5">{"x":{"html":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='ggiraph-svg' role='img' id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3' viewBox='0 0 432 266.98'>\n <defs id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_defs'>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c1'>\n   <rect x='0' y='0' width='432' height='266.98'/>\n  <\/clipPath>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c2'>\n   <rect x='45.96' y='10.96' width='281.39' height='219.04'/>\n  <\/clipPath>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c3'>\n   <rect x='45.96' y='10.96' width='281.39' height='91.03'/>\n  <\/clipPath>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c4'>\n   <rect x='5.48' y='5.48' width='167.35' height='128.01'/>\n  <\/clipPath>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c5'>\n   <rect x='45.96' y='10.96' width='121.39' height='91.03'/>\n  <\/clipPath>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c6'>\n   <rect x='172.83' y='5.48' width='253.69' height='128.01'/>\n  <\/clipPath>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c7'>\n   <rect x='205.97' y='10.96' width='121.39' height='91.03'/>\n  <\/clipPath>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c8'>\n   <rect x='5.48' y='133.49' width='421.04' height='128.01'/>\n  <\/clipPath>\n  <clipPath id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c9'>\n   <rect x='45.96' y='138.97' width='281.39' height='91.03'/>\n  <\/clipPath>\n <\/defs>\n <g id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_rootg' class='ggiraph-svg-rootg'>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c1)'>\n   <rect x='0' y='0' width='432' height='266.98' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.75' stroke-linejoin='round' stroke-linecap='round' class='ggiraph-svg-bg'/>\n   <rect x='0' y='0' width='432' height='266.98' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c4)'>\n   <rect x='5.48' y='5.48' width='167.35' height='128.01' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c5)'>\n   <rect x='45.96' y='10.96' width='121.39' height='91.03' fill='#EBEBEB' fill-opacity='1' stroke='none'/>\n   <polyline points='66.19,101.99 66.19,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='102.98,101.99 102.98,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='139.76,101.99 139.76,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='47.80,101.99 47.80,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='84.58,101.99 84.58,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='121.37,101.99 121.37,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='158.15,101.99 158.15,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e1' points='51.48,45.75 55.16,77.93 58.84,65.67 62.51,64.14 66.19,51.88 69.87,67.20 73.55,58.01 77.23,68.74 80.91,79.46 84.58,79.46 88.26,74.87 91.94,59.54 95.62,51.88 99.30,42.68 102.98,70.27 106.66,47.28 110.33,41.15 114.01,54.94 117.69,68.74 121.37,36.55 125.05,41.15 128.73,39.62 132.40,39.62 136.08,67.20 139.76,88.66 143.44,97.85 147.12,88.66 150.80,64.14 154.47,64.14 158.15,45.75 161.83,45.75' fill='none' stroke='#F8766D' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt' title='1983' data-id='1983'/>\n   <polyline id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e2' points='51.48,61.07 55.16,44.21 58.84,33.49 62.51,27.36 66.19,50.35 69.87,31.95 73.55,36.55 77.23,50.35 80.91,51.88 84.58,33.49 88.26,42.68 91.94,38.08 95.62,48.81 99.30,30.42 102.98,25.82 106.66,24.29 110.33,35.02 114.01,50.35 117.69,51.88 121.37,33.49 125.05,39.62 128.73,51.88 132.40,73.33 136.08,74.87 139.76,56.48 143.44,41.15 147.12,48.81 150.80,39.62 154.47,47.28 158.15,45.75 161.83,42.68' fill='none' stroke='#A3A500' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt' title='1993' data-id='1993'/>\n   <polyline id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e3' points='51.48,42.68 55.16,48.81 58.84,31.95 62.51,56.48 66.19,30.42 69.87,25.82 73.55,30.42 77.23,51.88 80.91,39.62 84.58,65.67 88.26,39.62 91.94,51.88 95.62,70.27 99.30,53.41 102.98,38.08 106.66,44.21 110.33,51.88 114.01,48.81 117.69,41.15 121.37,61.07 125.05,79.46 128.73,44.21 132.40,36.55 136.08,36.55 139.76,31.95 143.44,33.49 147.12,28.89 150.80,39.62 154.47,30.42 158.15,28.89 161.83,28.89' fill='none' stroke='#00BF7D' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt' title='2003' data-id='2003'/>\n   <polyline id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e4' points='51.48,50.35 55.16,67.20 58.84,58.01 62.51,59.54 66.19,41.15 69.87,61.07 73.55,44.21 77.23,67.20 80.91,41.15 84.58,35.02 88.26,28.89 91.94,33.49 95.62,25.82 99.30,39.62 102.98,48.81 106.66,21.23 110.33,24.29 114.01,45.75 117.69,53.41 121.37,58.01 125.05,50.35 128.73,42.68 132.40,59.54 136.08,38.08 139.76,31.95 143.44,41.15 147.12,33.49 150.80,41.15 154.47,42.68 158.15,41.15 161.83,54.94' fill='none' stroke='#00B0F6' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt' title='2013' data-id='2013'/>\n   <polyline id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e5' points='51.48,45.75 55.16,30.42 58.84,47.28 62.51,30.42 66.19,25.82 69.87,41.15 73.55,31.95 77.23,15.10 80.91,27.36 84.58,21.23 88.26,30.42 91.94,41.15 95.62,24.29 99.30,35.02 102.98,25.82 106.66,19.69 110.33,21.23 114.01,16.63 117.69,33.49 121.37,27.36 125.05,36.55 128.73,30.42 132.40,51.88 136.08,24.29 139.76,41.15 143.44,38.08 147.12,47.28 150.80,35.02 154.47,27.36 158.15,16.63 161.83,50.35' fill='none' stroke='#E76BF3' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt' title='2023' data-id='2023'/>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c1)'>\n   <polyline points='47.80,104.73 47.80,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='84.58,104.73 84.58,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='121.37,104.73 121.37,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='158.15,104.73 158.15,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <text x='45.35' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>0<\/text>\n   <text x='79.69' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>10<\/text>\n   <text x='116.47' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>20<\/text>\n   <text x='153.26' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>30<\/text>\n   <text x='96.87' y='125.69' font-size='8.25pt' font-family='Arial'>Day<\/text>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c6)'>\n   <rect x='172.83' y='5.48' width='253.69' height='128.01' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c7)'>\n   <rect x='205.97' y='10.96' width='121.39' height='91.03' fill='#EBEBEB' fill-opacity='1' stroke='none'/>\n   <polyline points='205.97,82.70 327.35,82.70' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='205.97,52.38 327.35,52.38' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='205.97,22.07 327.35,22.07' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='205.97,97.85 327.35,97.85' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='205.97,67.54 327.35,67.54' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='205.97,37.23 327.35,37.23' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='219.97,101.99 219.97,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='243.32,101.99 243.32,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='266.66,101.99 266.66,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='290.00,101.99 290.00,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='313.35,101.99 313.35,10.96' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <rect id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e6' x='210.63' y='20.83' width='18.68' height='77.03' fill='#F8766D' fill-opacity='1' stroke='none' title='1983' data-id='1983'/>\n   <rect id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e7' x='233.98' y='17.47' width='18.68' height='80.38' fill='#A3A500' fill-opacity='1' stroke='none' title='1993' data-id='1993'/>\n   <rect id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e8' x='257.32' y='17.35' width='18.68' height='80.51' fill='#00BF7D' fill-opacity='1' stroke='none' title='2003' data-id='2003'/>\n   <rect id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e9' x='280.67' y='17.59' width='18.68' height='80.26' fill='#00B0F6' fill-opacity='1' stroke='none' title='2013' data-id='2013'/>\n   <rect id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e10' x='304.01' y='15.1' width='18.68' height='82.76' fill='#E76BF3' fill-opacity='1' stroke='none' title='2023' data-id='2023'/>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c1)'>\n   <text x='196.14' y='101' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>0<\/text>\n   <text x='191.24' y='70.69' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>10<\/text>\n   <text x='191.24' y='40.38' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>20<\/text>\n   <polyline points='203.23,97.85 205.97,97.85' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='203.23,67.54 205.97,67.54' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='203.23,37.23 205.97,37.23' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='219.97,104.73 219.97,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='243.32,104.73 243.32,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='266.66,104.73 266.66,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='290.00,104.73 290.00,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='313.35,104.73 313.35,101.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <text x='210.18' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>1983<\/text>\n   <text x='233.52' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>1993<\/text>\n   <text x='256.87' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>2003<\/text>\n   <text x='280.21' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>2013<\/text>\n   <text x='303.56' y='113.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>2023<\/text>\n   <text x='230.78' y='125.69' font-size='8.25pt' font-family='Arial'>as.factor(Year)<\/text>\n   <text transform='translate(186.18,103.88) rotate(-90.00)' font-size='8.25pt' font-family='Arial'>mean_month_temp<\/text>\n   <rect x='338.31' y='-0.04' width='82.73' height='113.03' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <text x='343.79' y='14.47' font-size='8.25pt' font-family='Arial'>as.factor(Year)<\/text>\n   <rect x='343.79' y='21.11' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <rect x='344.5' y='21.82' width='15.86' height='15.86' fill='#F8766D' fill-opacity='1' stroke='none'/>\n   <rect x='343.79' y='38.39' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <rect x='344.5' y='39.1' width='15.86' height='15.86' fill='#A3A500' fill-opacity='1' stroke='none'/>\n   <rect x='343.79' y='55.67' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <rect x='344.5' y='56.38' width='15.86' height='15.86' fill='#00BF7D' fill-opacity='1' stroke='none'/>\n   <rect x='343.79' y='72.95' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <rect x='344.5' y='73.66' width='15.86' height='15.86' fill='#00B0F6' fill-opacity='1' stroke='none'/>\n   <rect x='343.79' y='90.23' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <rect x='344.5' y='90.94' width='15.86' height='15.86' fill='#E76BF3' fill-opacity='1' stroke='none'/>\n   <text x='366.55' y='32.9' font-size='6.6pt' font-family='Arial'>1983<\/text>\n   <text x='366.55' y='50.18' font-size='6.6pt' font-family='Arial'>1993<\/text>\n   <text x='366.55' y='67.46' font-size='6.6pt' font-family='Arial'>2003<\/text>\n   <text x='366.55' y='84.74' font-size='6.6pt' font-family='Arial'>2013<\/text>\n   <text x='366.55' y='102.02' font-size='6.6pt' font-family='Arial'>2023<\/text>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c8)'>\n   <rect x='5.48' y='133.49' width='421.04' height='128.01' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c9)'>\n   <rect x='45.96' y='138.97' width='281.39' height='91.03' fill='#EBEBEB' fill-opacity='1' stroke='none'/>\n   <polyline points='45.96,217.83 327.35,217.83' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='45.96,192.30 327.35,192.30' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='45.96,166.76 327.35,166.76' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='45.96,141.22 327.35,141.22' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='47.82,230.00 47.82,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='69.68,230.00 69.68,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='91.55,230.00 91.55,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='113.41,230.00 113.41,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='135.28,230.00 135.28,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='230.39,230.00 230.39,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='325.50,230.00 325.50,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='45.96,205.07 327.35,205.07' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='45.96,179.53 327.35,179.53' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='45.96,153.99 327.35,153.99' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='58.75,230.00 58.75,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='80.62,230.00 80.62,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='102.48,230.00 102.48,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='124.34,230.00 124.34,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='146.21,230.00 146.21,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='314.56,230.00 314.56,138.97' fill='none' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e11' cx='66.05' cy='212.52' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e12' cx='62.32' cy='203.93' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e13' cx='60.39' cy='204.83' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e14' cx='63.02' cy='205.9' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e15' cx='67.27' cy='199.97' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e16' cx='63.35' cy='194.82' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e17' cx='64.59' cy='207.22' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e18' cx='62.35' cy='192.15' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e19' cx='64.23' cy='186.99' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e20' cx='60.67' cy='186.97' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e21' cx='65.7' cy='219.39' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e22' cx='64.12' cy='225.86' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e23' cx='61.03' cy='218.99' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e24' cx='62.87' cy='203.33' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1983' data-id='1983'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e25' cx='82.53' cy='200.78' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e26' cx='78.17' cy='190.05' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e27' cx='82.15' cy='182.99' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e28' cx='77.45' cy='178.19' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e29' cx='86.62' cy='194.07' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e30' cx='83.11' cy='181.53' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e31' cx='74.44' cy='185.01' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e32' cx='72.51' cy='193.73' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e33' cx='88.57' cy='195.25' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e34' cx='80.04' cy='182.31' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e35' cx='72.69' cy='188.4' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e36' cx='73.29' cy='185.99' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e37' cx='72.18' cy='193.13' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e38' cx='80.05' cy='180.22' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e39' cx='83.08' cy='177.26' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e40' cx='75.2' cy='176.53' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e41' cx='72.72' cy='183.99' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e42' cx='74.53' cy='193.87' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e43' cx='80.34' cy='194.55' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e44' cx='84.92' cy='182.6' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e45' cx='74.64' cy='186.78' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e46' cx='87.84' cy='194.87' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e47' cx='86.55' cy='209.47' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e48' cx='85.42' cy='209.85' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e49' cx='87.48' cy='197.9' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e50' cx='73.45' cy='187.32' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e51' cx='83.13' cy='192.48' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e52' cx='81.26' cy='186.88' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e53' cx='83.39' cy='191.94' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e54' cx='77.67' cy='190.68' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e55' cx='89.31' cy='189.03' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='1993' data-id='1993'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e56' cx='103.48' cy='188.6' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e57' cx='106.86' cy='192.95' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e58' cx='108.62' cy='181.59' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e59' cx='107.68' cy='198.01' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e60' cx='94.12' cy='180.54' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e61' cx='103.99' cy='177.5' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e62' cx='105.9' cy='180.58' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e63' cx='105.33' cy='194.95' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e64' cx='95.49' cy='186.37' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e65' cx='110.02' cy='204.07' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e66' cx='102.64' cy='186.96' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e67' cx='107.85' cy='194.82' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e68' cx='103.15' cy='207.31' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e69' cx='107.82' cy='195.82' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e70' cx='95.47' cy='186.03' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e71' cx='98.43' cy='189.68' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e72' cx='103.49' cy='194.57' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e73' cx='103.67' cy='192.9' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e74' cx='93.97' cy='187.62' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e75' cx='108.34' cy='201' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e76' cx='104.92' cy='212.91' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e77' cx='101.8' cy='189.75' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e78' cx='94.15' cy='185.03' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e79' cx='105.4' cy='184.31' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e80' cx='105.05' cy='181.65' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e81' cx='98.76' cy='182.46' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e82' cx='108.28' cy='179.7' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e83' cx='95.39' cy='186.99' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e84' cx='105.41' cy='180.66' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e85' cx='107.75' cy='179.6' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e86' cx='105.73' cy='179.8' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2003' data-id='2003'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e87' cx='121.69' cy='194.15' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e88' cx='124.02' cy='205.29' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e89' cx='131.2' cy='198.73' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e90' cx='123.85' cy='199.98' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e91' cx='125.09' cy='187.39' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e92' cx='120.84' cy='201.07' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e93' cx='132.16' cy='189.87' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e94' cx='128.41' cy='204.7' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e95' cx='121.78' cy='187.32' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e96' cx='124.46' cy='183.75' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e97' cx='130.14' cy='179.67' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e98' cx='130.34' cy='182.54' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e99' cx='131.41' cy='177.55' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e100' cx='117.7' cy='186.92' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e101' cx='132.45' cy='193.18' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e102' cx='126.9' cy='174.28' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e103' cx='124.14' cy='176.49' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e104' cx='122.96' cy='190.74' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e105' cx='123.39' cy='195.73' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e106' cx='121.52' cy='198.63' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e107' cx='131.64' cy='193.84' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e108' cx='120.23' cy='188.81' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e109' cx='121.67' cy='199.86' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e110' cx='115.95' cy='185.96' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e111' cx='120.27' cy='181.24' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e112' cx='125.84' cy='187.5' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e113' cx='131.64' cy='182.52' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e114' cx='132.1' cy='187.62' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e115' cx='118.54' cy='188.32' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e116' cx='126.26' cy='187.69' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e117' cx='123.49' cy='197.29' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2013' data-id='2013'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e118' cx='154.63' cy='190.74' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e119' cx='154.27' cy='180.88' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e120' cx='154.34' cy='192.18' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e121' cx='138.18' cy='180.39' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e122' cx='151.24' cy='177.1' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e123' cx='143.79' cy='187.76' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e124' cx='153.26' cy='181.92' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e125' cx='154.02' cy='170.45' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e126' cx='154' cy='178.31' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e127' cx='138.88' cy='174.1' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e128' cx='151.29' cy='180.32' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e129' cx='147.25' cy='187.85' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e130' cx='140.68' cy='176.76' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e131' cx='141.85' cy='183.85' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e132' cx='140.14' cy='177.6' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e133' cx='150.87' cy='173.74' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e134' cx='149.7' cy='174.2' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e135' cx='138.02' cy='171.47' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e136' cx='148.28' cy='182.65' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e137' cx='153' cy='178.28' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e138' cx='153.82' cy='184.64' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e139' cx='139.47' cy='180.75' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e140' cx='146.55' cy='195.22' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e141' cx='154.75' cy='176.09' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e142' cx='150.14' cy='187.62' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e143' cx='141.17' cy='185.33' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e144' cx='153.39' cy='191.62' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e145' cx='139.4' cy='183.59' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e146' cx='150.2' cy='178.58' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e147' cx='153.36' cy='170.97' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <circle id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e148' cx='146.26' cy='193.52' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2023' data-id='2023'/>\n   <polygon id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e149' points='58.75,195.36 61.99,194.92 65.23,194.47 68.47,194.02 71.70,193.57 74.94,193.10 78.18,192.64 81.42,192.16 84.66,191.67 87.89,191.18 91.13,190.67 94.37,190.15 97.61,189.61 100.85,189.06 104.09,188.50 107.32,187.92 110.56,187.32 113.80,186.71 117.04,186.08 120.28,185.45 123.51,184.80 126.75,184.14 129.99,183.48 133.23,182.81 136.47,182.13 139.70,181.45 142.94,180.77 146.18,180.08 149.42,179.39 152.66,178.70 155.90,178.00 159.13,177.30 162.37,176.60 165.61,175.90 168.85,175.20 172.09,174.49 175.32,173.79 178.56,173.08 181.80,172.37 185.04,171.66 188.28,170.96 191.51,170.25 194.75,169.54 197.99,168.83 201.23,168.12 204.47,167.40 207.71,166.69 210.94,165.98 214.18,165.27 217.42,164.56 220.66,163.84 223.90,163.13 227.13,162.42 230.37,161.70 233.61,160.99 236.85,160.28 240.09,159.56 243.32,158.85 246.56,158.13 249.80,157.42 253.04,156.70 256.28,155.99 259.52,155.27 262.75,154.56 265.99,153.84 269.23,153.13 272.47,152.41 275.71,151.70 278.94,150.98 282.18,150.27 285.42,149.55 288.66,148.83 291.90,148.12 295.13,147.40 298.37,146.69 301.61,145.97 304.85,145.25 308.09,144.54 311.33,143.82 314.56,143.11 314.56,163.20 311.33,163.62 308.09,164.03 304.85,164.45 301.61,164.86 298.37,165.28 295.13,165.70 291.90,166.11 288.66,166.53 285.42,166.94 282.18,167.36 278.94,167.78 275.71,168.19 272.47,168.61 269.23,169.03 265.99,169.45 262.75,169.86 259.52,170.28 256.28,170.70 253.04,171.11 249.80,171.53 246.56,171.95 243.32,172.37 240.09,172.78 236.85,173.20 233.61,173.62 230.37,174.04 227.13,174.46 223.90,174.88 220.66,175.30 217.42,175.72 214.18,176.14 210.94,176.56 207.71,176.98 204.47,177.40 201.23,177.82 197.99,178.24 194.75,178.66 191.51,179.08 188.28,179.51 185.04,179.93 181.80,180.35 178.56,180.78 175.32,181.20 172.09,181.63 168.85,182.06 165.61,182.49 162.37,182.92 159.13,183.35 155.90,183.79 152.66,184.22 149.42,184.66 146.18,185.10 142.94,185.54 139.70,185.99 136.47,186.44 133.23,186.90 129.99,187.36 126.75,187.83 123.51,188.31 120.28,188.79 117.04,189.29 113.80,189.80 110.56,190.32 107.32,190.85 104.09,191.40 100.85,191.97 97.61,192.55 94.37,193.15 91.13,193.76 87.89,194.38 84.66,195.02 81.42,195.67 78.18,196.32 74.94,196.99 71.70,197.66 68.47,198.33 65.23,199.01 61.99,199.70 58.75,200.39' fill='#999999' fill-opacity='0.4' stroke='none' title='smooth'/>\n   <polyline id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e150' points='58.75,195.36 61.99,194.92 65.23,194.47 68.47,194.02 71.70,193.57 74.94,193.10 78.18,192.64 81.42,192.16 84.66,191.67 87.89,191.18 91.13,190.67 94.37,190.15 97.61,189.61 100.85,189.06 104.09,188.50 107.32,187.92 110.56,187.32 113.80,186.71 117.04,186.08 120.28,185.45 123.51,184.80 126.75,184.14 129.99,183.48 133.23,182.81 136.47,182.13 139.70,181.45 142.94,180.77 146.18,180.08 149.42,179.39 152.66,178.70 155.90,178.00 159.13,177.30 162.37,176.60 165.61,175.90 168.85,175.20 172.09,174.49 175.32,173.79 178.56,173.08 181.80,172.37 185.04,171.66 188.28,170.96 191.51,170.25 194.75,169.54 197.99,168.83 201.23,168.12 204.47,167.40 207.71,166.69 210.94,165.98 214.18,165.27 217.42,164.56 220.66,163.84 223.90,163.13 227.13,162.42 230.37,161.70 233.61,160.99 236.85,160.28 240.09,159.56 243.32,158.85 246.56,158.13 249.80,157.42 253.04,156.70 256.28,155.99 259.52,155.27 262.75,154.56 265.99,153.84 269.23,153.13 272.47,152.41 275.71,151.70 278.94,150.98 282.18,150.27 285.42,149.55 288.66,148.83 291.90,148.12 295.13,147.40 298.37,146.69 301.61,145.97 304.85,145.25 308.09,144.54 311.33,143.82 314.56,143.11' fill='none' stroke='none' title='smooth'/>\n   <polyline id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e151' points='314.56,163.20 311.33,163.62 308.09,164.03 304.85,164.45 301.61,164.86 298.37,165.28 295.13,165.70 291.90,166.11 288.66,166.53 285.42,166.94 282.18,167.36 278.94,167.78 275.71,168.19 272.47,168.61 269.23,169.03 265.99,169.45 262.75,169.86 259.52,170.28 256.28,170.70 253.04,171.11 249.80,171.53 246.56,171.95 243.32,172.37 240.09,172.78 236.85,173.20 233.61,173.62 230.37,174.04 227.13,174.46 223.90,174.88 220.66,175.30 217.42,175.72 214.18,176.14 210.94,176.56 207.71,176.98 204.47,177.40 201.23,177.82 197.99,178.24 194.75,178.66 191.51,179.08 188.28,179.51 185.04,179.93 181.80,180.35 178.56,180.78 175.32,181.20 172.09,181.63 168.85,182.06 165.61,182.49 162.37,182.92 159.13,183.35 155.90,183.79 152.66,184.22 149.42,184.66 146.18,185.10 142.94,185.54 139.70,185.99 136.47,186.44 133.23,186.90 129.99,187.36 126.75,187.83 123.51,188.31 120.28,188.79 117.04,189.29 113.80,189.80 110.56,190.32 107.32,190.85 104.09,191.40 100.85,191.97 97.61,192.55 94.37,193.15 91.13,193.76 87.89,194.38 84.66,195.02 81.42,195.67 78.18,196.32 74.94,196.99 71.70,197.66 68.47,198.33 65.23,199.01 61.99,199.70 58.75,200.39' fill='none' stroke='none' title='NA'/>\n   <polyline id='svg_4dabd92a_b5f5_4641_9acf_618d140772b3_e152' points='58.75,197.88 61.99,197.31 65.23,196.74 68.47,196.18 71.70,195.61 74.94,195.04 78.18,194.48 81.42,193.91 84.66,193.35 87.89,192.78 91.13,192.21 94.37,191.65 97.61,191.08 100.85,190.52 104.09,189.95 107.32,189.38 110.56,188.82 113.80,188.25 117.04,187.69 120.28,187.12 123.51,186.55 126.75,185.99 129.99,185.42 133.23,184.85 136.47,184.29 139.70,183.72 142.94,183.16 146.18,182.59 149.42,182.02 152.66,181.46 155.90,180.89 159.13,180.33 162.37,179.76 165.61,179.19 168.85,178.63 172.09,178.06 175.32,177.50 178.56,176.93 181.80,176.36 185.04,175.80 188.28,175.23 191.51,174.66 194.75,174.10 197.99,173.53 201.23,172.97 204.47,172.40 207.71,171.83 210.94,171.27 214.18,170.70 217.42,170.14 220.66,169.57 223.90,169.00 227.13,168.44 230.37,167.87 233.61,167.31 236.85,166.74 240.09,166.17 243.32,165.61 246.56,165.04 249.80,164.47 253.04,163.91 256.28,163.34 259.52,162.78 262.75,162.21 265.99,161.64 269.23,161.08 272.47,160.51 275.71,159.95 278.94,159.38 282.18,158.81 285.42,158.25 288.66,157.68 291.90,157.12 295.13,156.55 298.37,155.98 301.61,155.42 304.85,154.85 308.09,154.28 311.33,153.72 314.56,153.15' fill='none' stroke='#FF0000' stroke-opacity='1' stroke-width='2.13' stroke-linejoin='round' stroke-linecap='butt' title='smooth'/>\n  <\/g>\n  <g clip-path='url(#svg_4dabd92a_b5f5_4641_9acf_618d140772b3_c1)'>\n   <text x='23.89' y='208.22' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>25.0<\/text>\n   <text x='23.89' y='182.68' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>27.5<\/text>\n   <text x='23.89' y='157.14' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>30.0<\/text>\n   <polyline points='43.22,205.07 45.96,205.07' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='43.22,179.53 45.96,179.53' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='43.22,153.99 45.96,153.99' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='58.75,232.74 58.75,230.00' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='80.62,232.74 80.62,230.00' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='102.48,232.74 102.48,230.00' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='124.34,232.74 124.34,230.00' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='146.21,232.74 146.21,230.00' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='314.56,232.74 314.56,230.00' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <text x='48.96' y='241.23' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>1983<\/text>\n   <text x='70.82' y='241.23' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>1993<\/text>\n   <text x='92.69' y='241.23' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>2003<\/text>\n   <text x='114.55' y='241.23' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>2013<\/text>\n   <text x='136.42' y='241.23' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>2023<\/text>\n   <text x='304.77' y='241.23' font-size='6.6pt' font-family='Arial' fill='#4D4D4D' fill-opacity='1'>2100<\/text>\n   <text x='175.54' y='253.7' font-size='8.25pt' font-family='Arial'>Year<\/text>\n   <text transform='translate(18.84,225.47) rotate(-90.00)' font-size='8.25pt' font-family='Arial'>mean_day_temp<\/text>\n   <rect x='338.31' y='127.97' width='82.73' height='113.03' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <text x='343.79' y='142.48' font-size='8.25pt' font-family='Arial'>as.factor(Year)<\/text>\n   <rect x='343.79' y='149.12' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <circle cx='352.43' cy='157.76' r='1.47pt' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round'/>\n   <rect x='343.79' y='166.4' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <circle cx='352.43' cy='175.04' r='1.47pt' fill='#A3A500' fill-opacity='1' stroke='#A3A500' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round'/>\n   <rect x='343.79' y='183.68' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <circle cx='352.43' cy='192.32' r='1.47pt' fill='#00BF7D' fill-opacity='1' stroke='#00BF7D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round'/>\n   <rect x='343.79' y='200.96' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <circle cx='352.43' cy='209.6' r='1.47pt' fill='#00B0F6' fill-opacity='1' stroke='#00B0F6' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round'/>\n   <rect x='343.79' y='218.24' width='17.28' height='17.28' fill='#F2F2F2' fill-opacity='1' stroke='none'/>\n   <circle cx='352.43' cy='226.88' r='1.47pt' fill='#E76BF3' fill-opacity='1' stroke='#E76BF3' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round'/>\n   <text x='366.55' y='160.91' font-size='6.6pt' font-family='Arial'>1983<\/text>\n   <text x='366.55' y='178.19' font-size='6.6pt' font-family='Arial'>1993<\/text>\n   <text x='366.55' y='195.47' font-size='6.6pt' font-family='Arial'>2003<\/text>\n   <text x='366.55' y='212.75' font-size='6.6pt' font-family='Arial'>2013<\/text>\n   <text x='366.55' y='230.03' font-size='6.6pt' font-family='Arial'>2023<\/text>\n  <\/g>\n <\/g>\n<\/svg>","js":null,"uid":"svg_4dabd92a_b5f5_4641_9acf_618d140772b3","ratio":1.618122977346278,"settings":{"tooltip":{"css":".tooltip_SVGID_ { padding:5px;background:black;color:white;border-radius:2px;text-align:left; ; position:absolute;pointer-events:none;z-index:999;}","placement":"doc","opacity":0.9,"offx":10,"offy":10,"use_cursor_pos":true,"use_fill":false,"use_stroke":false,"delay_over":200,"delay_out":500},"hover":{"css":".hover_data_SVGID_ { stroke-width:4; }","reactive":false,"nearest_distance":null},"hover_inv":{"css":".hover_inv_SVGID_ { opacity:0.2; }"},"hover_key":{"css":".hover_key_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_key_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_key_SVGID_ { fill:orange;stroke:black; }\nline.hover_key_SVGID_, polyline.hover_key_SVGID_ { fill:none;stroke:orange; }\nrect.hover_key_SVGID_, polygon.hover_key_SVGID_, path.hover_key_SVGID_ { fill:orange;stroke:none; }\nimage.hover_key_SVGID_ { stroke:orange; }","reactive":true},"hover_theme":{"css":".hover_theme_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_theme_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_theme_SVGID_ { fill:orange;stroke:black; }\nline.hover_theme_SVGID_, polyline.hover_theme_SVGID_ { fill:none;stroke:orange; }\nrect.hover_theme_SVGID_, polygon.hover_theme_SVGID_, path.hover_theme_SVGID_ { fill:orange;stroke:none; }\nimage.hover_theme_SVGID_ { stroke:orange; }","reactive":true},"select":{"css":".select_data_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_data_SVGID_ { stroke:none;fill:red; }\ncircle.select_data_SVGID_ { fill:red;stroke:black; }\nline.select_data_SVGID_, polyline.select_data_SVGID_ { fill:none;stroke:red; }\nrect.select_data_SVGID_, polygon.select_data_SVGID_, path.select_data_SVGID_ { fill:red;stroke:none; }\nimage.select_data_SVGID_ { stroke:red; }","type":"multiple","only_shiny":true,"selected":[]},"select_inv":{"css":""},"select_key":{"css":".select_key_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_key_SVGID_ { stroke:none;fill:red; }\ncircle.select_key_SVGID_ { fill:red;stroke:black; }\nline.select_key_SVGID_, polyline.select_key_SVGID_ { fill:none;stroke:red; }\nrect.select_key_SVGID_, polygon.select_key_SVGID_, path.select_key_SVGID_ { fill:red;stroke:none; }\nimage.select_key_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"select_theme":{"css":".select_theme_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_theme_SVGID_ { stroke:none;fill:red; }\ncircle.select_theme_SVGID_ { fill:red;stroke:black; }\nline.select_theme_SVGID_, polyline.select_theme_SVGID_ { fill:none;stroke:red; }\nrect.select_theme_SVGID_, polygon.select_theme_SVGID_, path.select_theme_SVGID_ { fill:red;stroke:none; }\nimage.select_theme_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"zoom":{"min":1,"max":1,"duration":300},"toolbar":{"position":"topright","pngname":"diagram","tooltips":null,"hidden":[],"delay_over":200,"delay_out":500},"sizing":{"rescale":true,"width":1}}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

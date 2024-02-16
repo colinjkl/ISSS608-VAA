@@ -1,0 +1,168 @@
+---
+title: "Take-home_Ex03"
+date: "February 13, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+# 1. Overview
+
+According to an office report as shown in the infographic below,
+
+-   Daily mean temperature are projected to increase by 1.4 to 4.6, and
+-   The contrast between the wet months (November to January) and dry month (February and June to September) is likely to be more pronounced.
+
+As a visual analytics greenhorn, you are keen to apply newly acquired visual interactivity and visualising uncertainty methods to validate the claims presented above.
+
+# 2. Data Preparation
+
+First, let us prepare the required data.
+
+## 2.1 Loading R packages
+
+We begin by loading the required R packages.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+pacman::p_load(tidyverse,
+               haven,
+               dplyr,
+               plotly,
+               ggrepel, 
+               patchwork, 
+               ggthemes, 
+               hrbrthemes,
+               data.table,
+               ggiraph)
+```
+
+## 2.2 Importing historical daily temperature data set
+
+The data we will be using is the historical daily temperature data from Meteorological Service Singapore website. We will be looking at the daily records of July in the years 1983, 1993, 2003, 2013, and 2023 at the Changi Weather Station.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+files = list.files(
+  path = "data/",
+  pattern = ".*csv$",
+  ignore.case = F,
+  full.names = T
+)
+
+data = lapply(files, data.table::fread, encoding = "Latin-1")
+data = dplyr::bind_rows(data)
+data <- as.data.frame(data)
+```
+
+## Data Wrangling
+
+```{r}
+
+data$`Minimum Temperature (°C)` <- ifelse(data$Year == 2023, data$`Minimum Temperature (Â°C)`, data$`Minimum Temperature (°C)`)
+data$`Maximum Temperature (°C)` <- ifelse(data$Year == 2023, data$`Maximum Temperature (Â°C)`, data$`Maximum Temperature (°C)`)
+data$`Mean Temperature (°C)` <- ifelse(data$Year == 2023, data$`Mean Temperature (Â°C)`, data$`Mean Temperature (°C)`)
+
+month_data <- data %>% 
+  group_by(Year) %>% 
+  summarise(
+    mean_month_temp = mean(`Mean Temperature (°C)`),
+    se_month_temp = sd(`Mean Temperature (°C)`)/sqrt(n())
+    )
+```
+
+```{r}
+day_data <-
+  data[c(
+    "Station",
+    "Year",
+    "Month",
+    "Day",
+    "Mean Temperature (°C)",
+    "Maximum Temperature (°C)",
+    "Minimum Temperature (°C)"
+  )]
+
+colnames(day_data) <-
+  c(
+    "Station",
+    "Year",
+    "Month",
+    "Day",
+    "mean_day_temp",
+    "max_day_temp",
+    "min_day_temp"
+  )
+```
+
+# Visualization
+
+## min and max
+
+```{r}
+p1 <- ggplot(data=day_data, 
+             aes(x = Day,
+                 y = mean_day_temp,
+                 color = as.factor(Year))) +
+  geom_line_interactive(              
+    aes(tooltip = Year, 
+        data_id = Year),
+    show.legend = F) +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+
+p2 <- ggplot(
+  data=month_data, 
+  aes(x = as.factor(Year),
+      y = mean_month_temp,
+      fill = as.factor(Year))
+  ) +
+  geom_col_interactive(
+    aes(tooltip = Year, 
+        data_id = Year),
+    width = 0.8
+  )
+
+p3 <- ggplot(
+  data= day_data,
+  aes(x = Year,
+      y = mean_day_temp)) + 
+  geom_jitter_interactive(
+    aes(tooltip = Year, 
+        data_id = Year,
+        color = as.factor(Year))
+  ) + 
+  geom_smooth_interactive(
+    aes(tooltip = "smooth"),
+    method="lm",
+    col='red',
+    fullrange = T
+  ) +
+  scale_x_continuous(
+    breaks = c(1983,1993,2003,2013,2023,2100),
+    limits = c(1983,2100)
+  )
+  
+  
+
+girafe(                                  
+  code = print((p1 + p2)/p3),                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(
+    opts_hover(css = "stroke-width:4;"),
+    opts_hover_inv(css = "opacity:0.2;") 
+  )                                        
+)                                        
+```
+
+```{r}
+
+```
