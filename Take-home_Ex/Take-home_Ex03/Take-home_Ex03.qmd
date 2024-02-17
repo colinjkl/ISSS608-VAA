@@ -9,22 +9,22 @@ execute:
 editor: visual
 ---
 
-# 1. Overview
+# *1. Overview*
 
-According to an office report as shown in the infographic below,
+*According to an office report as shown in the infographic below,*
 
--   Daily mean temperature are projected to increase by 1.4 to 4.6, and
--   The contrast between the wet months (November to January) and dry month (February and June to September) is likely to be more pronounced.
+-   *Daily mean temperature are projected to increase by 1.4 to 4.6, and*
+-   *The contrast between the wet months (November to January) and dry month (February and June to September) is likely to be more pronounced.*
 
-As a visual analytics greenhorn, you are keen to apply newly acquired visual interactivity and visualising uncertainty methods to validate the claims presented above.
+*As a visual analytics greenhorn, you are keen to apply newly acquired visual interactivity and visualising uncertainty methods to validate the claims presented above.*
 
-# 2. Data Preparation
+# *2. Data Preparation*
 
-First, let us prepare the required data.
+*First, let us prepare the required data.*
 
-## 2.1 Loading R packages
+## *2.1 Loading R packages*
 
-We begin by loading the required R packages.
+*We begin by loading the required R packages.*
 
 ```{r}
 #| code-fold: true
@@ -39,12 +39,13 @@ pacman::p_load(tidyverse,
                ggthemes, 
                hrbrthemes,
                data.table,
-               ggiraph)
+               ggiraph,
+               RColorBrewer)
 ```
 
-## 2.2 Importing historical daily temperature data set
+## *2.2 Importing historical daily temperature data set*
 
-The data we will be using is the historical daily temperature data from Meteorological Service Singapore website. We will be looking at the daily records of July in the years 1983, 1993, 2003, 2013, and 2023 at the Changi Weather Station.
+*The data we will be using is the historical daily temperature data from Meteorological Service Singapore website. We will be looking at the daily records of July in the years 1983, 1993, 2003, 2013, and 2023 at the Changi Weather Station.*
 
 ```{r}
 #| code-fold: true
@@ -62,23 +63,39 @@ data = dplyr::bind_rows(data)
 data <- as.data.frame(data)
 ```
 
-## Data Wrangling
+## *Data Wrangling*
+
+The column name for temperature in 2023 is consistent with the names used before. It now has an extra latin character included (Â). The following code merges the 2 corresponding columns together into 1 column.
 
 ```{r}
 
+
+# Merging column with latin character together with the one without
 data$`Minimum Temperature (°C)` <- ifelse(data$Year == 2023, data$`Minimum Temperature (Â°C)`, data$`Minimum Temperature (°C)`)
 data$`Maximum Temperature (°C)` <- ifelse(data$Year == 2023, data$`Maximum Temperature (Â°C)`, data$`Maximum Temperature (°C)`)
 data$`Mean Temperature (°C)` <- ifelse(data$Year == 2023, data$`Mean Temperature (Â°C)`, data$`Mean Temperature (°C)`)
+```
+
+We also want to look at the data at the Yearly level instead of daily. To do this, we group the data by Year and summarize their Mean values.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 
 month_data <- data %>% 
   group_by(Year) %>% 
   summarise(
-    mean_month_temp = mean(`Mean Temperature (°C)`),
-    se_month_temp = sd(`Mean Temperature (°C)`)/sqrt(n())
-    )
+    mean_month_temp = mean(`Mean Temperature (°C)`)
+  )
 ```
 
+Next, renaming some columns to remove white spaces in names for easier coding later on. Also, we drop all other irrelevant data.
+
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Take only temperature and relevant data
 day_data <-
   data[c(
     "Station",
@@ -90,6 +107,7 @@ day_data <-
     "Minimum Temperature (°C)"
   )]
 
+# Rename columns to remove white spaces
 colnames(day_data) <-
   c(
     "Station",
@@ -102,8 +120,16 @@ colnames(day_data) <-
   )
 ```
 
+Finally, we want to do some forecasting to predict future temperatures. To do this, we use the lm function to perform linear regression. Then, we use the model to predict values for upcoming years 2033, 2043, and so on. We also store the 95% confidence interval values which will be used to observe the prediction range later.
+
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Regression with day data
 model = lm(mean_day_temp ~ Year, day_data)
+
+# Create results data frame
 forecast = data.frame(Year = c(2033,
                                2043,
                                2053,
@@ -111,15 +137,119 @@ forecast = data.frame(Year = c(2033,
                                2073,
                                2083,
                                2093))
+
+# Forecast temperatures and store in results data frame
 forecast = cbind(forecast, predict(model, forecast, interval = "confidence"))
 ```
 
 # Visualization
 
-## min and max
+## Without interactivity
 
 ```{r}
-palette_choice = 1
+#| code-fold: true
+#| code-summary: "Show the code"
+
+palette_choice <- c("#66C2A5","#FC8D62","#8DA0CB","#E78AC3","#A6D854","blue")
+
+p1 <- ggplot(data=day_data, 
+             aes(x = Day,
+                 y = mean_day_temp,
+                 color = as.factor(Year))) +
+  geom_line(
+    show.legend = F) +
+  ylab(element_blank()) +
+  xlab("Day") +
+  ggtitle("Daily temperature in December") +
+  theme(
+    plot.title = element_text(size = 10),
+    axis.title.x = element_text(size = 8)
+  ) +
+  scale_color_manual(name = "Year", values = palette_choice)
+
+p2 <- ggplot(
+  data=day_data, 
+  aes(x = as.factor(Year),
+      y = mean_day_temp,
+      fill = as.factor(Year))
+) +
+  geom_boxplot(
+    linewidth = 0.1,
+    outlier.shape = NA,
+    show.legend = F
+  ) +
+  ylab(element_blank()) +
+  xlab(element_blank()) +
+  theme(
+    axis.text.x = element_blank(), 
+    axis.ticks.x = element_blank()) +
+  scale_fill_manual(name = "Year", values = palette_choice)
+
+p3 <- ggplot() +
+  geom_point(
+    data = month_data,
+    aes(x = Year,
+        y = mean_month_temp,
+        color = as.factor(Year))
+  ) + 
+  geom_pointrange(
+    data = forecast,
+    aes(x = Year,
+        y = fit,
+        color = c("Forecast"),
+        ymin = lwr,
+        ymax = upr,
+    ),
+    fatten = 0.5
+  ) +
+  ylab(element_blank()) +
+  ggtitle("Mean December Temperature Forecast") +
+  theme(
+    plot.title = element_text(size = 10),
+    axis.title.x = element_text(size = 8)
+  ) +
+  scale_x_continuous(
+    breaks = seq(1983,2093,10),
+    limits = c(1983,2093)
+  ) +
+  scale_color_manual(name = "Year", values = palette_choice)
+
+y_lab <- 
+  ggplot() + 
+  annotate(geom = "text", x = 1, y = 1, label = "Temperature (°C)", angle = 90) +
+  coord_cartesian(clip = "off") +
+  theme_void()
+
+
+y_lab + ((p1 + p2 + plot_layout(
+  axes = "collect",
+  widths = c(4,1)
+)) / p3 + 
+  plot_layout(
+    guides = "collect",
+    axes = "collect",
+    axis_titles = "collect",
+    heights = c(1,1)
+  )) +
+  plot_layout(
+    widths = c(0.1,1)
+  ) +
+  plot_annotation(
+    title = "Singapore's Temperature on the rise",
+    subtitle = "Expected to rise by 1.4% to 4.2% by end of the Century",
+    caption = "*Historic temperature records are obtained from Changi Weather station",
+    theme = theme(plot.title = element_text(size = 22))
+  )              
+
+```
+
+## With interactivity
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+palette_choice <- c("#66C2A5","#FC8D62","#8DA0CB","#E78AC3","#A6D854","blue")
 
 p1 <- ggplot(data=day_data, 
              aes(x = Day,
@@ -129,28 +259,34 @@ p1 <- ggplot(data=day_data,
     aes(tooltip = Year, 
         data_id = Year),
     show.legend = F) +
-  ylab("Temperature (°C)") +
+  ylab(element_blank()) +
   xlab("Day") +
-  scale_color_brewer(name = "Year", palette = palette_choice)
+  ggtitle("Daily temperature in December") +
+  theme(
+    plot.title = element_text(size = 10),
+    axis.title.x = element_text(size = 8)
+  ) +
+  scale_color_manual(name = "Year", values = palette_choice)
 
 p2 <- ggplot(
   data=day_data, 
   aes(x = as.factor(Year),
       y = mean_day_temp,
       fill = as.factor(Year))
-  ) +
+) +
   geom_boxplot_interactive(
     aes(tooltip = Year, 
         data_id = Year),
     linewidth = 0.1,
+    outlier.shape = NA,
     show.legend = F
   ) +
-  ylab("Temperature (°C)") +
-  xlab(element_blank()) + 
+  ylab(element_blank()) +
+  xlab(element_blank()) +
   theme(
     axis.text.x = element_blank(), 
     axis.ticks.x = element_blank()) +
-  scale_fill_brewer(name = "Year", palette = palette_choice)
+  scale_fill_manual(name = "Year", values = palette_choice)
 
 p3 <- ggplot() +
   geom_point_interactive(
@@ -165,6 +301,7 @@ p3 <- ggplot() +
     data = forecast,
     aes(x = Year,
         y = fit,
+        color = c("Forecast"),
         ymin = lwr,
         ymax = upr,
         tooltip = paste(Year, 
@@ -173,30 +310,46 @@ p3 <- ggplot() +
                         " +/- ", 
                         round(fit-lwr,2)),
         data_id = Year),
-    color = "limegreen",
     fatten = 0.5
   ) +
-  ylab("Temperature (°C)") +
+  ylab(element_blank()) +
+  ggtitle("Mean December Temperature Forecast") +
+  theme(
+    plot.title = element_text(size = 10),
+    axis.title.x = element_text(size = 8)
+  ) +
   scale_x_continuous(
-    breaks = c(1983,1993,2003,2013,2023,2093),
+    breaks = seq(1983,2093,10),
     limits = c(1983,2093)
   ) +
-  scale_color_brewer(name = "Year", palette = palette_choice)
+  scale_color_manual(name = "Year", values = palette_choice)
+
+y_lab <- 
+  ggplot() + 
+  annotate(geom = "text", x = 1, y = 1, label = "Temperature (°C)", angle = 90) +
+  coord_cartesian(clip = "off") +
+  theme_void()
 
 girafe(                                  
-  code = print((
-    (p1 + p2 +
+  code = print(y_lab + ((p1 + p2 + plot_layout(
+         axes = "collect",
+         widths = c(4,1)
+       )) / p3 + 
       plot_layout(
         guides = "collect",
         axes = "collect",
-        widths = c(4,1)
-      )) / p3 + 
-      plot_layout(
-        guides = "collect",
-        axes = "collect",
+        axis_titles = "collect",
         heights = c(1,1)
+      )) +
+      plot_layout(
+        widths = c(0.1,1)
       ) +
-      plot_annotation(title = "Daily temperature in December"))),                   
+      plot_annotation(
+        title = "Singapore's Temperature on the rise",
+        subtitle = "Expected to rise by 1.4% to 4.2% by end of the Century",
+        caption = "*Historic temperature records are obtained from Changi Weather station",
+        theme = theme(plot.title = element_text(size = 22))
+      )),               
   width_svg = 6,                         
   height_svg = 6*0.618,
   options = list(
@@ -204,33 +357,4 @@ girafe(
     opts_hover_inv(css = "opacity:0.2;") 
   )                                        
 )                                        
-```
-
-```{r}
-p3 <- ggplot() +
-  geom_point_interactive(
-    data = month_data,
-    aes(x = Year,
-        y = mean_month_temp,
-        tooltip = Year, 
-        data_id = Year,
-        color = as.factor(Year))
-  ) + 
-  geom_pointrange_interactive(
-    data = forecast,
-    aes(x = Year,
-        y = fit,
-        ymin = lwr,
-        ymax = upr,
-        tooltip = "Forcast",
-        data_id = Year)
-  ) +
-  ylab("Temperature (°C)") +
-  scale_x_continuous(
-    breaks = c(1983,1993,2003,2013,2023,2100),
-    limits = c(1983,2100)
-  ) +
-  scale_color_discrete(name = "Year")
-
-p3
 ```
