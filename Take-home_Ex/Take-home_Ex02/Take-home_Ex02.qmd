@@ -51,7 +51,7 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 We will be using a curated set of variables for our analysis. The variables and their descriptions are listed in the table below.
 
 | Variable      | Description                                                      | Data Type   |
-|--------------|---------------------------------------------|--------------|
+|---------------|------------------------------------------------------------------|-------------|
 | CNTSCHID      | The unique School's ID                                           | Categorical |
 | CNTSTUID      | The unique student's ID                                          | Categorical |
 | Math_Score    | Average PV scores for Math                                       | Numerical   |
