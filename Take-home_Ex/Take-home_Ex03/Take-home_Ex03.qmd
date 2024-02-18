@@ -9,43 +9,39 @@ execute:
 editor: visual
 ---
 
-# *1. Overview*
+# 1. Overview
 
-*According to an office report as shown in the infographic below,*
+According to an office report as shown in the info-graphic below,
 
--   *Daily mean temperature are projected to increase by 1.4 to 4.6, and*
--   *The contrast between the wet months (November to January) and dry month (February and June to September) is likely to be more pronounced.*
+-   Daily mean temperature are projected to increase by 1.4 to 4.6, and
+-   The contrast between the wet months (November to January) and dry month (February and June to September) is likely to be more pronounced.
 
-*As a visual analytics greenhorn, you are keen to apply newly acquired visual interactivity and visualising uncertainty methods to validate the claims presented above.*
+As a visual analytics greenhorn, you are keen to apply newly acquired visual interactivity and visualizing uncertainty methods to validate the claims presented above.
 
-# *2. Data Preparation*
+# 2. Data Preparation
 
-*First, let us prepare the required data.*
+First, let us prepare the required data.
 
-## *2.1 Loading R packages*
+## 2.1 Loading R packages
 
-*We begin by loading the required R packages.*
+We begin by loading the required R packages.
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 
 pacman::p_load(tidyverse,
-               haven,
                dplyr,
-               plotly,
-               ggrepel, 
                patchwork, 
                ggthemes, 
                hrbrthemes,
-               data.table,
                ggiraph,
                RColorBrewer)
 ```
 
-## *2.2 Importing historical daily temperature data set*
+## 2.2 Importing historical daily temperature data set
 
-*The data we will be using is the historical daily temperature data from Meteorological Service Singapore website. We will be looking at the daily records of July in the years 1983, 1993, 2003, 2013, and 2023 at the Changi Weather Station.*
+The data we will be using is the historical daily temperature data from Meteorological Service Singapore website. We will be looking at the daily records of July in the years 1983, 1993, 2003, 2013, and 2023 at the Changi Weather Station.
 
 ```{r}
 #| code-fold: true
@@ -63,12 +59,13 @@ data = dplyr::bind_rows(data)
 data <- as.data.frame(data)
 ```
 
-## *Data Wrangling*
+## 2.3 Data Wrangling
 
-The column name for temperature in 2023 is consistent with the names used before. It now has an extra latin character included (Â). The following code merges the 2 corresponding columns together into 1 column.
+The column name for temperature in 2023 is inconsistent with the names used before. It now has an extra latin character included (Â). The following code merges the 2 corresponding columns together into 1 column.
 
 ```{r}
-
+#| code-fold: true
+#| code-summary: "Show the code"
 
 # Merging column with latin character together with the one without
 data$`Minimum Temperature (°C)` <- ifelse(data$Year == 2023, data$`Minimum Temperature (Â°C)`, data$`Minimum Temperature (°C)`)
@@ -146,9 +143,13 @@ forecast = cbind(forecast, predict(model, forecast, interval = "confidence"))
 
 ## Without interactivity
 
+The visualization below displays historical temperature records for the month of December measured at Singapore's Changi Weather Station every 10 years from 1983 to 2023. In addition, a forecast is made using simple linear regression from 2033 to 2093 which shows the expected rise in temperature till the end of the century.
+
+::: panel-tabset
+## Plot
+
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
+#| echo: false
 
 palette_choice <- c("#66C2A5","#FC8D62","#8DA0CB","#E78AC3","#A6D854","blue")
 
@@ -235,19 +236,135 @@ y_lab + ((p1 + p2 + plot_layout(
     widths = c(0.1,1)
   ) +
   plot_annotation(
-    title = "Singapore's Temperature on the rise",
-    subtitle = "Expected to rise by 1.4% to 4.2% by end of the Century",
+    title = "Singapore's Daily Temperature on the rise",
+    subtitle = "Expected to rise by 1.4 to 4.6 by end of the Century",
     caption = "*Historic temperature records are obtained from Changi Weather station",
     theme = theme(plot.title = element_text(size = 22))
   )              
 
 ```
 
-## With interactivity
+## Code
 
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
+#| eval: false
+
+palette_choice <- c("#66C2A5","#FC8D62","#8DA0CB","#E78AC3","#A6D854","blue")
+
+p1 <- ggplot(data=day_data, 
+             aes(x = Day,
+                 y = mean_day_temp,
+                 color = as.factor(Year))) +
+  geom_line(
+    show.legend = F) +
+  ylab(element_blank()) +
+  xlab("Day") +
+  ggtitle("Daily temperature in December") +
+  theme(
+    plot.title = element_text(size = 10),
+    axis.title.x = element_text(size = 8)
+  ) +
+  scale_color_manual(name = "Year", values = palette_choice)
+
+p2 <- ggplot(
+  data=day_data, 
+  aes(x = as.factor(Year),
+      y = mean_day_temp,
+      fill = as.factor(Year))
+) +
+  geom_boxplot(
+    linewidth = 0.1,
+    outlier.shape = NA,
+    show.legend = F
+  ) +
+  ylab(element_blank()) +
+  xlab(element_blank()) +
+  theme(
+    axis.text.x = element_blank(), 
+    axis.ticks.x = element_blank()) +
+  scale_fill_manual(name = "Year", values = palette_choice)
+
+p3 <- ggplot() +
+  geom_point(
+    data = month_data,
+    aes(x = Year,
+        y = mean_month_temp,
+        color = as.factor(Year))
+  ) + 
+  geom_pointrange(
+    data = forecast,
+    aes(x = Year,
+        y = fit,
+        color = c("Forecast"),
+        ymin = lwr,
+        ymax = upr,
+    ),
+    fatten = 0.5
+  ) +
+  ylab(element_blank()) +
+  ggtitle("Mean December Temperature Forecast") +
+  theme(
+    plot.title = element_text(size = 10),
+    axis.title.x = element_text(size = 8)
+  ) +
+  scale_x_continuous(
+    breaks = seq(1983,2093,10),
+    limits = c(1983,2093)
+  ) +
+  scale_color_manual(name = "Year", values = palette_choice)
+
+y_lab <- 
+  ggplot() + 
+  annotate(geom = "text", x = 1, y = 1, label = "Temperature (°C)", angle = 90) +
+  coord_cartesian(clip = "off") +
+  theme_void()
+
+
+y_lab + ((p1 + p2 + plot_layout(
+  axes = "collect",
+  widths = c(4,1)
+)) / p3 + 
+  plot_layout(
+    guides = "collect",
+    axes = "collect",
+    axis_titles = "collect",
+    heights = c(1,1)
+  )) +
+  plot_layout(
+    widths = c(0.1,1)
+  ) +
+  plot_annotation(
+    title = "Singapore's Daily Temperature on the rise",
+    subtitle = "Expected to rise by 1.4 to 4.6 by end of the Century",
+    caption = "*Historic temperature records are obtained from Changi Weather station",
+    theme = theme(plot.title = element_text(size = 22))
+  )              
+```
+:::
+
+::: callout-tip
+## Insights
+
+-   Temperature did rise in the last half century as seen in the line chart and boxplot, more notably between 1983 to 1993 and 2013 to 2023.
+
+-   The lowest daily mean temperature in 2023 is almost as high as the highest daily mean temperature in 1983.
+
+-   Overall, the mean temperature in December increased from 25.4 in 1983 to 27.3 in 2023, an average rise of about 0.48 each year.
+
+-   Following this trend, the temperature is predicted to reach a monthly mean of 29.8 in 2093, with a 95% confidence interval between the high of 30.7 and the low of 28.9.
+
+-   This means that temperature will rise by around 1.6 to 3.4 by the end of the century, which falls slightly short of the claim that temperature is expected to rise by around 1.4 to 4.6 in the same period.
+:::
+
+## With interactivity
+
+Now, we add interactivity to the visualization.
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
 
 palette_choice <- c("#66C2A5","#FC8D62","#8DA0CB","#E78AC3","#A6D854","blue")
 
@@ -256,7 +373,7 @@ p1 <- ggplot(data=day_data,
                  y = mean_day_temp,
                  color = as.factor(Year))) +
   geom_line_interactive(              
-    aes(tooltip = Year, 
+    aes(tooltip = paste("Year: ", Year), 
         data_id = Year),
     show.legend = F) +
   ylab(element_blank()) +
@@ -275,7 +392,7 @@ p2 <- ggplot(
       fill = as.factor(Year))
 ) +
   geom_boxplot_interactive(
-    aes(tooltip = Year, 
+    aes(tooltip = paste("Year: ", Year), 
         data_id = Year),
     linewidth = 0.1,
     outlier.shape = NA,
@@ -283,7 +400,9 @@ p2 <- ggplot(
   ) +
   ylab(element_blank()) +
   xlab(element_blank()) +
+  ggtitle("Distribution") +
   theme(
+    plot.title = element_text(size = 10),
     axis.text.x = element_blank(), 
     axis.ticks.x = element_blank()) +
   scale_fill_manual(name = "Year", values = palette_choice)
@@ -293,7 +412,7 @@ p3 <- ggplot() +
     data = month_data,
     aes(x = Year,
         y = mean_month_temp,
-        tooltip = Year, 
+        tooltip = paste("Year: ", Year, "\nMean Monthly Temp: ", round(mean_month_temp,1), "°C"), 
         data_id = Year,
         color = as.factor(Year))
   ) + 
@@ -308,7 +427,8 @@ p3 <- ggplot() +
                         " Forecast:\n", 
                         round(fit,2), 
                         " +/- ", 
-                        round(fit-lwr,2)),
+                        round(fit-lwr,2),
+                        "°C"),
         data_id = Year),
     fatten = 0.5
   ) +
@@ -345,8 +465,8 @@ girafe(
         widths = c(0.1,1)
       ) +
       plot_annotation(
-        title = "Singapore's Temperature on the rise",
-        subtitle = "Expected to rise by 1.4% to 4.2% by end of the Century",
+        title = "Singapore's Daily Temperature on the rise",
+        subtitle = "Expected to rise by 1.4 to 4.6 by end of the Century",
         caption = "*Historic temperature records are obtained from Changi Weather station",
         theme = theme(plot.title = element_text(size = 22))
       )),               
@@ -358,3 +478,128 @@ girafe(
   )                                        
 )                                        
 ```
+
+## Code
+
+```{r}
+#| eval: false
+
+palette_choice <- c("#66C2A5","#FC8D62","#8DA0CB","#E78AC3","#A6D854","blue")
+
+p1 <- ggplot(data=day_data, 
+             aes(x = Day,
+                 y = mean_day_temp,
+                 color = as.factor(Year))) +
+  geom_line_interactive(              
+    aes(tooltip = paste("Year: ", Year), 
+        data_id = Year),
+    show.legend = F) +
+  ylab(element_blank()) +
+  xlab("Day") +
+  ggtitle("Daily temperature in December") +
+  theme(
+    plot.title = element_text(size = 10),
+    axis.title.x = element_text(size = 8)
+  ) +
+  scale_color_manual(name = "Year", values = palette_choice)
+
+p2 <- ggplot(
+  data=day_data, 
+  aes(x = as.factor(Year),
+      y = mean_day_temp,
+      fill = as.factor(Year))
+) +
+  geom_boxplot_interactive(
+    aes(tooltip = paste("Year: ", Year), 
+        data_id = Year),
+    linewidth = 0.1,
+    outlier.shape = NA,
+    show.legend = F
+  ) +
+  ylab(element_blank()) +
+  xlab(element_blank()) +
+  theme(
+    axis.text.x = element_blank(), 
+    axis.ticks.x = element_blank()) +
+  scale_fill_manual(name = "Year", values = palette_choice)
+
+p3 <- ggplot() +
+  geom_point_interactive(
+    data = month_data,
+    aes(x = Year,
+        y = mean_month_temp,
+        tooltip = paste("Year: ", Year, "\nMean Monthly Temp: ", round(mean_month_temp,1), "°C"), 
+        data_id = Year,
+        color = as.factor(Year))
+  ) + 
+  geom_pointrange_interactive(
+    data = forecast,
+    aes(x = Year,
+        y = fit,
+        color = c("Forecast"),
+        ymin = lwr,
+        ymax = upr,
+        tooltip = paste(Year, 
+                        " Forecast:\n", 
+                        round(fit,2), 
+                        " +/- ", 
+                        round(fit-lwr,2),
+                        "°C"),
+        data_id = Year),
+    fatten = 0.5
+  ) +
+  ylab(element_blank()) +
+  ggtitle("Mean December Temperature Forecast") +
+  theme(
+    plot.title = element_text(size = 10),
+    axis.title.x = element_text(size = 8)
+  ) +
+  scale_x_continuous(
+    breaks = seq(1983,2093,10),
+    limits = c(1983,2093)
+  ) +
+  scale_color_manual(name = "Year", values = palette_choice)
+
+y_lab <- 
+  ggplot() + 
+  annotate(geom = "text", x = 1, y = 1, label = "Temperature (°C)", angle = 90) +
+  coord_cartesian(clip = "off") +
+  theme_void()
+
+girafe(                                  
+  code = print(y_lab + ((p1 + p2 + plot_layout(
+         axes = "collect",
+         widths = c(4,1)
+       )) / p3 + 
+      plot_layout(
+        guides = "collect",
+        axes = "collect",
+        axis_titles = "collect",
+        heights = c(1,1)
+      )) +
+      plot_layout(
+        widths = c(0.1,1)
+      ) +
+      plot_annotation(
+        title = "Singapore's Daily Temperature on the rise",
+        subtitle = "Expected to rise by 1.4 to 4.6 by end of the Century",
+        caption = "*Historic temperature records are obtained from Changi Weather station",
+        theme = theme(plot.title = element_text(size = 22))
+      )),               
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(
+    opts_hover(css = "stroke-width:2;"),
+    opts_hover_inv(css = "opacity:0.2;") 
+  )                                        
+)                        
+```
+:::
+
+::: callout-tip
+## Insights
+
+-   Hovering over any point would highlight the corresponding years in the other charts, making it easier to view the distribution for each year.
+
+-   Tooltips displays mean monthly and predicted temperatures when hovering over points or forecasts in the point/pointrange chart. Users no longer need to check the y-axis on the far left.
+:::
