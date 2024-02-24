@@ -1,0 +1,83 @@
+---
+title: "web scrap"
+---
+
+```{r}
+pacman::p_load(
+  data.table,
+  dplyr
+)
+```
+
+```{r}
+test <- data.table::fread("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S121_201110.csv")
+```
+
+```{r}
+stations = c(
+  "paya lebar" = "06",
+  "tengah" = "23",
+  "changi" = "24",
+  "seletar" = "25",
+  "tai seng" = "43",
+  "jurong west" = "44",
+  "ang mo kio" = "109",
+  "clementi" = "50",
+  "admiralty" = "104",
+  "sentosa" = "60",
+  "pulau ubin" = "106",
+  "east coast parkway" = "107",
+  "marina barrage" = "108",
+  "newton" = "111",
+  "tuas south" = "115",
+  "pasir panjang" = "116",
+  "jurong island" = "117",
+  "choa chu kang south" = "121"
+)
+```
+
+```{r}
+pad_zero <- function(num) {
+  if (num < 10) {
+    return (paste0("0", as.character(num)))
+  } else {
+    return (as.character(num))
+  }
+}
+
+df <- data.frame()
+
+for (station in stations) {
+  for (y in 1:2) {
+    for (m in 1:12) {
+      year <- pad_zero(y-1)
+      month <- pad_zero(m)
+      tryCatch(
+        {
+          joining_df <- data.table::fread(paste0(
+          "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S",
+          station,
+          "_20",
+          year,
+          month,
+          ".csv"))
+          df <- rbind(df, joining_df)
+        }, error = function(e) {
+          print(e)
+        }
+      )
+      df <- rbind(df, joining_df)
+    }
+  }
+}
+```
+
+```{r}
+paste0(
+        "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S",
+        station,
+        "_20",
+        year,
+        month,
+        ".csv")
+```
