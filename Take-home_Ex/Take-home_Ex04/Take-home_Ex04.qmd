@@ -1,0 +1,63 @@
+---
+title: "Climate and Dengue in Singapore"
+author: "Colin Jiang Kelin"
+date: "February 27, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: false
+  echo: true
+  freeze: true
+  message: false
+  warning: false
+editor: visual
+---
+
+# Overview
+
+short intro here
+
+# Getting Started
+
+## Loading libraries
+
+In this exercise, we will be requiring the following libraries.
+
+```{r}
+pacman::p_load(
+  ggthemes,
+  tidyverse,
+  data.table
+)
+```
+
+## Data import
+
+For this exercise, we will be using the climate data sets from the [Meteorological Service Singapore](http://www.weather.gov.sg/home/) and the dengue data set from the [SGCharts: Outbreak](https://outbreak.sgcharts.com/data) website.
+
+```{r}
+climate <- read_csv("data/clean_climate_data.csv")
+dengue <- read_csv("data/clean_dengue_data.csv")
+```
+
+# Year Comparison
+
+```{r}
+library(sf)
+library(ggplot2)
+library(tmap)
+
+my_sf <- st_as_sf(dengue, coords = c('lon', 'lat'), crs = 4326)
+
+```
+
+```{r}
+#Plot it:
+
+tmap_mode("view")
+
+tm_shape(my_sf)+
+tm_bubbles(col = "red",
+           size = "num_cases",
+           border.col = "black",
+           border.lwd = 1)
+```

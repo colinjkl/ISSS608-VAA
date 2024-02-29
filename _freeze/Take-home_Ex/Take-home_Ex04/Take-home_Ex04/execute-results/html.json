@@ -1,0 +1,16 @@
+{
+  "hash": "4f37372b3d6e4e25e4551ed4b046cc54",
+  "result": {
+    "markdown": "---\ntitle: \"Climate and Dengue in Singapore\"\nauthor: \"Colin Jiang Kelin\"\ndate: \"February 27, 2024\"\ndate-modified: \"last-modified\"\nexecute: \n  eval: false\n  echo: true\n  freeze: true\n  message: false\n  warning: false\neditor: visual\n---\n\n\n# Overview\n\nshort intro here\n\n# Getting Started\n\n## Loading libraries\n\nIn this exercise, we will be requiring the following libraries.\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(\n  ggthemes,\n  tidyverse,\n  data.table\n)\n```\n:::\n\n\n## Data import\n\nFor this exercise, we will be using the climate data sets from the [Meteorological Service Singapore](http://www.weather.gov.sg/home/) and the dengue data set from the [SGCharts: Outbreak](https://outbreak.sgcharts.com/data) website.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nclimate <- read_csv(\"data/clean_climate_data.csv\")\ndengue <- read_csv(\"data/clean_dengue_data.csv\")\n```\n:::\n\n\n# Year Comparison\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sf)\nlibrary(ggplot2)\nlibrary(tmap)\n\nmy_sf <- st_as_sf(dengue, coords = c('lon', 'lat'), crs = 4326)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\n#Plot it:\n\ntmap_mode(\"view\")\n\ntm_shape(my_sf)+\ntm_bubbles(col = \"red\",\n           size = \"num_cases\",\n           border.col = \"black\",\n           border.lwd = 1)\n```\n:::\n",
+    "supporting": [
+      "Take-home_Ex04_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
