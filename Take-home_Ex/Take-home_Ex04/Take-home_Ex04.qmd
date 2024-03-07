@@ -4,7 +4,7 @@ author: "Colin Jiang Kelin"
 date: "February 27, 2024"
 date-modified: "last-modified"
 execute: 
-  eval: false
+  eval: true
   echo: true
   freeze: true
   message: false
@@ -12,52 +12,547 @@ execute:
 editor: visual
 ---
 
-# Overview
+# 1. Overview
 
 short intro here
 
-# Getting Started
+# 2. Getting Started
 
-## Loading libraries
+## 2.1 Loading libraries
 
 In this exercise, we will be requiring the following libraries.
 
 ```{r}
 pacman::p_load(
+  ggplot2,
   ggthemes,
   tidyverse,
-  data.table
+  data.table,
+  zoo,
+  ggfortify,
+  reshape,
+  MLmetrics
 )
 ```
 
-## Data import
+## 2.2 Data import
 
 For this exercise, we will be using the climate data sets from the [Meteorological Service Singapore](http://www.weather.gov.sg/home/) and the dengue data set from the [SGCharts: Outbreak](https://outbreak.sgcharts.com/data) website.
 
+### 2.2.1 Climate data
+
+Historical daily climate records can be downloaded directly from [this page](http://www.weather.gov.sg/climate-historical-daily/) in the [Meteorological Service Singapore](http://www.weather.gov.sg/home/) web page.
+
+However, there are several things to note about this data set:
+
+1.  There are a total of 63 weather stations in Singapore, out of which, only 18 of them keeps records of rainfall, temperature, and wind speed. The other 41 only has rainfall records. [**As such, we will only look at the 18 stations with all records for consistency.**]{.underline}
+
+2.  The oldest data dates back to 1980, but only in a few stations. In fact, from 2009, manual observations were gradually replaced by automated meteorological instruments. [**Therefore, we will try to keep our analysis limited to data from 2009 where possible.**]{.underline}
+
+On the more technical side of things, the data can only be downloaded for 1 weather station for 1 month at a time. If we were to download the data for the last 20 years manually, it would take 20years \* 12months \* 22stations = 5,280 iterations of downloads by hand. To tackle this task efficiently, a script is written to download the data automatically from the url provided.
+
+This can be done simply by using the `data.table::fread` function with the url. For example, the code chunk below shows 1 iteration of download for Changi weather station for the month of January in 2024.
+
 ```{r}
-climate <- read_csv("data/clean_climate_data.csv")
-dengue <- read_csv("data/clean_dengue_data.csv")
+data.table::fread("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S24_202401.csv")
 ```
 
-# Year Comparison
+Now, we want to write a for loop to iterate over all 18 stations. Each station is identified by a unique key value represented in the following list.
 
 ```{r}
-library(sf)
-library(ggplot2)
-library(tmap)
+#| eval: false
 
-my_sf <- st_as_sf(dengue, coords = c('lon', 'lat'), crs = 4326)
+stations = c(
+  "paya lebar" = "06",
+  "tengah" = "23",
+  "changi" = "24",
+  "seletar" = "25",
+  "tai seng" = "43",
+  "jurong west" = "44",
+  "ang mo kio" = "109",
+  "clementi" = "50",
+  "admiralty" = "104",
+  "sentosa" = "60",
+  "pulau ubin" = "106",
+  "east coast parkway" = "107",
+  "marina barrage" = "108",
+  "newton" = "111",
+  "tuas south" = "115",
+  "pasir panjang" = "116",
+  "jurong island" = "117",
+  "choa chu kang south" = "121"
+)
+```
 
+We also want to iterate over the years and month number in the url. For now, we will download the last 20 years of data.
+
+Another issue that we encountered was that some of the column names changed at certain years either due to a different spelling or symbol. There is also many white spaces in the name, which could make coding more tedious later on. As such, I opted to change all the column names to simpler short forms with underscore as the separator instead of space.
+
+The code chunk below shows the list of old to new column names. A function is also written for the renaming task, to rename the columns as we download the data sets 1 by 1. This helps with the `data.table::rbindlist` used in the loop as all the column names needs to be the same as the data set before.
+
+```{r}
+#| eval: false
+
+col_names = c(
+  "Station" = "Station",
+  "Year" = "Year",
+  "Month" = "Month",
+  "Daily Rainfall Total (mm)" = "daily_rainfall",
+  "Highest 30 Min Rainfall (mm)" = "highest_30m_rainfall",
+  "Highest 30 min Rainfall (mm)" = "highest_30m_rainfall",
+  "Highest 60 Min Rainfall (mm)" = "highest_60m_rainfall",
+  "Highest 60 min Rainfall (mm)" = "highest_60m_rainfall",
+  "Highest 120 Min Rainfall (mm)" = "highest_120m_rainfall",
+  "Highest 120 min Rainfall (mm)" = "highest_120m_rainfall",
+  "Mean Temperature (°C)" = "mean_temp",
+  "Mean Temperature (°C)" = "mean_temp",
+  "Mean Temperature (Â°C)" = "mean_temp",
+  "Maximum Temperature (°C)" = "max_temp",
+  "Maximum Temperature (°C)" = "max_temp",
+  "Maximum Temperature (Â°C)" = "max_temp",
+  "Minimum Temperature (°C)" = "min_temp",
+  "Minimum Temperature (°C)" = "min_temp",
+  "Minimum Temperature (Â°C)" = "min_temp",
+  "Mean Wind Speed (km/h)" = "mean_wind",
+  "Max Wind Speed (km/h)" = "max_wind"
+)
+
+clean_names <- function(df, col_names) {
+
+  for (n in names(col_names)) {
+    names(df)[names(df) == n] <- col_names[[n]]
+  }
+  
+  return (df)
+}
+```
+
+Finally, we can write our loop. The full code is shown below.
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+#| eval: false
+#| message: false
+#| error: false
+
+pad_zero <- function(num) {
+  if (num < 10) {
+    return (paste0("0", as.character(num)))
+  } else {
+    return (as.character(num))
+  }
+}
+
+df <- data.table()
+
+for (station in stations) {
+  for (y in 3:23) {
+    for (m in 1:12) {
+      year <- pad_zero(y)
+      month <- pad_zero(m)
+      tryCatch(
+        {
+          joining_df <- data.table::fread(paste0(
+          "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S",
+          station,
+          "_20",
+          year,
+          month,
+          ".csv"),
+          encoding = "Latin-1")
+          
+          joining_df <- clean_names(joining_df, col_names)
+          
+          df <- rbindlist(list(df, joining_df), use.names=TRUE, fill=TRUE)
+        }, error = function(e) {
+          print(e)
+        }
+      )
+    }
+  }
+}
+```
+
+After downloading, we save the data in a csv file with the `data.table::fwrite` function.
+
+```{r}
+#| eval: false
+
+fwrite(df, "data/clean_climate_data.csv")
+```
+
+### 2.2.2 Weather Station data
+
+The coordinates of each weather station can be found [here](http://www.weather.gov.sg/wp-content/uploads/2022/06/Station_Records.pdf). Due to the small number, I have manually collated them in a csv file and saved it.
+
+### 2.2.3 Load data
+
+Assuming we had already saved off the data previously, we will now load the data sets using the `readr::read_csv` function
+
+```{r}
+climate <- data.table::fread("data/clean_climate_data.csv", encoding="Latin-1") %>% as.data.frame()
+
+stations <- read_csv("data/weather_stations.csv")
+```
+
+# 3. Preliminary EDA
+
+In this section, we will perform some preliminary exploratory analysis to understand how our data looks like as a time series. This will help us determine whether each variable can or can not be used, or what additional wrangling that is required to be done before the time series analysis is possible.
+
+But first, we have to do some additional cleaning as well to prevent errors.
+
+## 3.1 Remove unwanted characters
+
+There are many observations with "-". To avoid errors, we will change all of them to 0s.
+
+```{r}
+climate <- data.frame(lapply(climate, function(x) gsub("—", 0, x)), stringsAsFactors=F)
+```
+
+## 3.2 Data type
+
+Next, we want to ensure that all columns are in their correct data type. For Station, Year, Month, and Day, we want them to be factors. The rest should be numerical.
+
+For those values that were coerced as NA, we will convert them to 0 as well.
+
+```{r}
+climate[c("Station", "Year", "Month", "Day")] <- lapply(climate[c("Station", "Year", "Month", "Day")] , factor)
+
+climate[!names(climate) %in% c("Station", "Year", "Month", "Day")] <- lapply(climate[!names(climate) %in% c("Station", "Year", "Month", "Day")] , as.numeric)
+
+climate[is.na(climate)] <- 0
+```
+
+## 3.3 Date column
+
+We also want a date column for easier sorting in chronological order. To do that, we can use the `zoo::as.Date` function.
+
+```{r}
+climate$date <- as.Date(with(climate, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
+```
+
+## 3.4 Daily Mean Temperature, Rainfall, and Wind
+
+Let us explore how the mean temperature, rainfall, and wind looks like in the past 20 years.
+
+The code chunk below plots the daily mean temperature over the last 20 years for each weather station. Similar code was used to plot the chart for rainfall and temperature as well.
+
+::: panel-tabset
+### Temperature
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+ggplot() + 
+  geom_line(data = climate, aes(x=date, y=mean_temp, colour=Station)) + 
+  facet_wrap(~Station) + 
+  ggtitle("Daily Mean Temperature in last 20 years")
+```
+
+### Rainfall
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+ggplot() + 
+  geom_line(data = climate, aes(x=date, y=daily_rainfall, colour=Station)) + 
+  facet_wrap(~Station) +
+  ggtitle("Daily rainfall in the last 20 years")
+```
+
+### Wind
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+ggplot() + 
+  geom_line(data = climate, aes(x=date, y=mean_wind, colour=Station)) + 
+  facet_wrap(~Station) +
+  ggtitle("Daily mean wind speed in the last 20 years")
+```
+:::
+
+::: callout-note
+### Insights
+
+1.  The start date of each weather station varies. This should be taken into account when fitting the model, as well as in the date range selection in the Shiny App.
+2.  There are many periods within the time series where the data is 0s or NA, especially so in temperature and wind. **To deal with this, we can** **take the mean value of that month from other years as a filler value**. For example, if jan 2010 is missing, we can use the mean value from jan 2003-2009, and 2011-2023 to fill the gap.
+3.  Daily rainfall has many 0 values, representing days without rain. This however, makes it difficult to model a time series. **Thus, dates will be rolled up to monthly levels and we will analyse mean monthly values instead.** To be consistent, we will use monthly levels for temperature and wind data as well.
+4.  Certain stations such as Sentosa stopped collecting data before 2023. **These stations should be removed.**
+:::
+
+# 4. Data Wrangling
+
+## 4.1 Remove incomplete stations
+
+As observed above, these stations have data that ended earlier than december 2023, and thus will be removed from the time series analysis.
+
+```{r}
+print("temp")
+```
+
+## 4.2 Roll up to Monthly levels
+
+As there are many instances of 0s within each month, we will have to ignore them as they will pull down the monthly average temperature or wind. Therefore, a function is written to calculate the non-zero mean value instead. However, this is not needed for rainfall as 0s would mean days with no rain.
+
+```{r}
+non_zero_mean <- function(x) {
+  y <- mean(x[x!=0])
+  return (y)
+}
+```
+
+Next, we use the `dplyr::group_by` and `dplyr::summarise` functions to calculate the monthly average for all variables. We also re-create the date column as a function of year and month using `zoo::as.yearmon`.
+
+```{r}
+monthly_climate <- climate %>% 
+  group_by(Station, Year, Month) %>% 
+  summarise(mean_temp = non_zero_mean(mean_temp),
+            max_temp = non_zero_mean(max_temp),
+            min_temp = non_zero_mean(min_temp),
+            mean_wind = non_zero_mean(mean_wind),
+            max_wind = non_zero_mean(max_wind),
+            mean_rain = mean(daily_rainfall),
+            mean_30m_rain = mean(highest_30m_rainfall),
+            mean_60m_rain = mean(highest_60m_rainfall),
+            mean_120m_rain = mean(highest_120m_rainfall),
+            date = min(date))
+
+monthly_climate$date <- as.yearmon(monthly_climate$date)
+
+monthly_climate[is.na(monthly_climate)] <- 0
+```
+
+## 4.3 Filling zeros with non-zero means
+
+This task requires several steps which is performed by the code chunk below.
+
+First, we want to iterate through all relevant temperature and wind variables.
+
+Next, for each variable, we look at all the stations data.
+
+Then, for each station, we find the months where all data is missing or 0.
+
+Lastly, for each of these months, we replace the NA or 0 with the non-zero mean of the same month in other years for that station. For example, if Changi station jan 2010 is missing, then we will replace the value with the non-zero mean from Changi station jan 2003-2009, and 2011-2023.
+
+```{r}
+replace_zero <- function(df, s, y, m, col) {
+  df[df$Station == s &
+       df$Year == y &
+       df$Month == m, col][[1]] <- non_zero_mean(df[df$Station == s & df$Month == m, col])
+  
+  return (df)
+}
+
+columns = c("mean_temp", "max_temp", "min_temp", "mean_wind", "max_wind")
+
+for (c in columns) {
+  for (s in levels(monthly_climate$Station)) {
+    for (y in levels(monthly_climate$Year)) {
+      for (m in levels(monthly_climate$Month)) {
+        
+        value <- monthly_climate[monthly_climate$Station == s &
+                                   monthly_climate$Year == y &
+                                   monthly_climate$Month == m, c][[1]]
+        
+        if (length(value) == 0) {
+          monthly_climate <- replace_zero(monthly_climate, s, y, m, c)
+        } else if (value == 0) {
+          monthly_climate <- replace_zero(monthly_climate, s, y, m, c)
+        }
+      }
+    }
+  }
+}
+```
+
+## 4.4 Final look at data
+
+Let us chart the same variables once more and check if all values are fine now.
+
+::: panel-tabset
+### Temperature
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+ggplot() + 
+  geom_line(data = monthly_climate, aes(x=date, y=mean_temp, colour=Station)) + 
+  facet_wrap(~Station) + 
+  ggtitle("Monthly Mean Temperature in last 20 years")
+```
+
+### Rainfall
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+ggplot() + 
+  geom_line(data = monthly_climate, aes(x=date, y=mean_rain, colour=Station)) + 
+  facet_wrap(~Station) +
+  ggtitle("Monthly rainfall in the last 20 years")
+```
+
+### Wind
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+ggplot() + 
+  geom_line(data = monthly_climate, aes(x=date, y=mean_wind, colour=Station)) + 
+  facet_wrap(~Station) +
+  ggtitle("Monthly mean wind speed in the last 20 years")
+```
+:::
+
+# 5. Time Series Forecasting
+
+In this section, we will be using time series econometric models to forecast future climate conditions in Singapore.
+
+## 5.1 Input variables
+
+This section determines the variable selection done by the user of the Shiny Application. For the purpose of this prototype, it will be hard-coded for now.
+
+```{r}
+target_station <- "Newton"
+target_variable <- "mean_rain"
+target_date_start <- "2009-10"
+target_date_end <- "2023-12"
+target_validation_start <- "2023-1"
+```
+
+## 5.2 Model Fitting
+
+```{r}
+
+
+target <- monthly_climate[
+  monthly_climate$Station == target_station, 
+  c("Station", "Year", "Month", "date", target_variable)
+]
+
+target$cumulative_sum <- cumsum(target[target_variable])
+
+target <- target[target$cumulative_sum > 0, ]
+
+y <- dplyr::first(target[order(target$date), "Year"])[[1]] %>% 
+  as.character() %>% 
+  as.numeric()
+m <- dplyr::first(target[order(target$date), "Month"])[[1]] %>% 
+  as.character() %>% 
+  as.numeric()
+
+dfts <- ts(target[target_variable], frequency = 12, start=c(y, m))
+
+training <- window(dfts, start = c(y,m), end = c(2022,12))
+validation <- window(dfts, start = c(2023,1))
+
+HW <- HoltWinters(training)
+
+validation_preds <- predict(HW,
+                            n.ahead = length(validation))
+
+mape <- MAPE(validation_preds, validation) * 100
+
+print(mape)
+
+plot(dfts, ylab=target_variable)
+lines(HW$fitted[,1], lty=2, col="blue")
+lines(validation_preds, lty=2, col="red")
 ```
 
 ```{r}
-#Plot it:
+components_dfts <- decompose(dfts)
+plot(components_dfts)
+```
 
-tmap_mode("view")
+## 5.2 Model Tuning
 
-tm_shape(my_sf)+
-tm_bubbles(col = "red",
-           size = "num_cases",
-           border.col = "black",
-           border.lwd = 1)
+After fitting the model, users are allowed to view validation results and decide if they wish to further tune the model by adjusting certain variables.
+
+```{r}
+alpha = 0
+beta = 0
+gamma = 0
+
+```
+
+## 5.3 Model Forecast
+
+Lastly, once parameters are confirmed, we can proceed to make predictions and plot them.
+
+```{r}
+
+# https://www.r-bloggers.com/2012/07/holt-winters-forecast-using-ggplot2/
+
+HWplot <- function(ts_object, 
+                   n.ahead = 4, 
+                   CI = .95, 
+                   error.ribbon = 'green', 
+                   line.size = 1) {
+    
+    hw_object <- HoltWinters(ts_object)
+    
+    forecast <- predict(hw_object,  
+                        n.ahead = n.ahead,  
+                        prediction.interval = T,  
+                        level = CI)
+    
+    df <- as.data.frame(forecast)
+    
+    for_values <- data.frame(time = round(time(forecast), 3),  
+                             value_forecast = df$fit,  
+                             dev = df$upr - df$fit)
+    
+    fitted_values <- data.frame(time = round(time(hw_object$fitted), 3),
+                                fitted = as.data.frame(hw_object$fitted)$xhat)
+    
+    actual_values <- data.frame(time = round(time(hw_object$x), 3),
+                                Actual = c(hw_object$x))
+    
+    
+    graphset <- merge(actual_values,  fitted_values,  by='time',  all=TRUE)
+    graphset <- merge(graphset,  for_values,  all=TRUE,  by='time')
+    graphset[is.na(graphset$dev),  ]$dev <- 0
+    
+    graphset$Fitted <- c(rep(NA,  NROW(graphset) - (NROW(for_values) + NROW(fitted_values))),  fitted_values$fitted,  for_values$value_forecast)
+    
+    graphset.melt <- melt(graphset[, c('time', 'Actual', 'Fitted')], id='time')
+    
+    p <- ggplot(graphset.melt,  
+                aes(x=time,  y=value)) + 
+      geom_ribbon(data=graphset, 
+                  aes(x=time, 
+                      y=Fitted, 
+                      ymin=Fitted-dev,  
+                      ymax=Fitted + dev),  
+                  alpha=.2,  
+                  fill=error.ribbon) + 
+      geom_line(aes(colour=variable), 
+                linewidth=line.size) + 
+      geom_vline(xintercept=max(actual_values$time),  
+                 lty=2) + 
+      xlab('Time') + 
+      ylab('Value') + 
+      theme(legend.position='bottom') + 
+      scale_colour_hue('')
+    
+    return(p)
+
+}
+```
+
+```{r}
+HWplot(dfts, n.ahead=36, CI=.95, error.ribbon='green',line.size=1)
+```
+
+```{r}
+
 ```

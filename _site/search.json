@@ -1291,15 +1291,15 @@
     "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#loading-libraries",
     "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#loading-libraries",
     "title": "Climate and Dengue in Singapore",
-    "section": "Loading libraries",
-    "text": "Loading libraries\nIn this exercise, we will be requiring the following libraries.\n\npacman::p_load(\n  ggthemes,\n  tidyverse,\n  data.table\n)"
+    "section": "2.1 Loading libraries",
+    "text": "2.1 Loading libraries\nIn this exercise, we will be requiring the following libraries.\n\npacman::p_load(\n  ggplot2,\n  ggthemes,\n  tidyverse,\n  data.table,\n  zoo,\n  ggfortify,\n  reshape,\n  MLmetrics\n)"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#data-import",
     "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#data-import",
     "title": "Climate and Dengue in Singapore",
-    "section": "Data import",
-    "text": "Data import\nFor this exercise, we will be using the climate data sets from the Meteorological Service Singapore and the dengue data set from the SGCharts: Outbreak website.\n\nclimate &lt;- read_csv(\"data/clean_climate_data.csv\")\ndengue &lt;- read_csv(\"data/clean_dengue_data.csv\")"
+    "section": "2.2 Data import",
+    "text": "2.2 Data import\nFor this exercise, we will be using the climate data sets from the Meteorological Service Singapore and the dengue data set from the SGCharts: Outbreak website.\n\n2.2.1 Climate data\nHistorical daily climate records can be downloaded directly from this page in the Meteorological Service Singapore web page.\nHowever, there are several things to note about this data set:\n\nThere are a total of 63 weather stations in Singapore, out of which, only 18 of them keeps records of rainfall, temperature, and wind speed. The other 41 only has rainfall records. As such, we will only look at the 18 stations with all records for consistency.\nThe oldest data dates back to 1980, but only in a few stations. In fact, from 2009, manual observations were gradually replaced by automated meteorological instruments. Therefore, we will try to keep our analysis limited to data from 2009 where possible.\n\nOn the more technical side of things, the data can only be downloaded for 1 weather station for 1 month at a time. If we were to download the data for the last 20 years manually, it would take 20years * 12months * 22stations = 5,280 iterations of downloads by hand. To tackle this task efficiently, a script is written to download the data automatically from the url provided.\nThis can be done simply by using the data.table::fread function with the url. For example, the code chunk below shows 1 iteration of download for Changi weather station for the month of January in 2024.\n\ndata.table::fread(\"http://www.weather.gov.sg/files/dailydata/DAILYDATA_S24_202401.csv\")\n\n    Station Year Month Day Daily Rainfall Total (mm)\n 1:  Changi 2024     1   1                      49.6\n 2:  Changi 2024     1   2                       0.4\n 3:  Changi 2024     1   3                       8.8\n 4:  Changi 2024     1   4                      80.6\n 5:  Changi 2024     1   5                       4.2\n 6:  Changi 2024     1   6                       0.6\n 7:  Changi 2024     1   7                      64.0\n 8:  Changi 2024     1   8                       0.0\n 9:  Changi 2024     1   9                       2.6\n10:  Changi 2024     1  10                      63.2\n11:  Changi 2024     1  11                       0.0\n12:  Changi 2024     1  12                      12.4\n13:  Changi 2024     1  13                       0.0\n14:  Changi 2024     1  14                       0.0\n15:  Changi 2024     1  15                       0.4\n16:  Changi 2024     1  16                      20.6\n17:  Changi 2024     1  17                       5.6\n18:  Changi 2024     1  18                       0.4\n19:  Changi 2024     1  19                      17.0\n20:  Changi 2024     1  20                      23.4\n21:  Changi 2024     1  21                      13.4\n22:  Changi 2024     1  22                       0.0\n23:  Changi 2024     1  23                      43.4\n24:  Changi 2024     1  24                      34.0\n25:  Changi 2024     1  25                      54.6\n26:  Changi 2024     1  26                       0.0\n27:  Changi 2024     1  27                       0.0\n28:  Changi 2024     1  28                       0.4\n29:  Changi 2024     1  29                       0.0\n30:  Changi 2024     1  30                       0.0\n31:  Changi 2024     1  31                       0.0\n    Station Year Month Day Daily Rainfall Total (mm)\n    Highest 30 min Rainfall (mm) Highest 60 min Rainfall (mm)\n 1:                         24.6                         32.4\n 2:                          0.4                          0.4\n 3:                          8.2                          8.8\n 4:                         17.6                         22.4\n 5:                          3.0                          3.0\n 6:                          0.6                          0.6\n 7:                         12.8                         16.4\n 8:                          0.0                          0.0\n 9:                          0.8                          1.0\n10:                         19.0                         29.6\n11:                          0.0                          0.0\n12:                          5.6                          6.0\n13:                          0.0                          0.0\n14:                          0.0                          0.0\n15:                          0.2                          0.2\n16:                         11.6                         14.8\n17:                          4.2                          4.4\n18:                          0.2                          0.2\n19:                          5.2                          7.0\n20:                          4.6                          6.6\n21:                         10.6                         12.8\n22:                          0.0                          0.0\n23:                         35.6                         43.0\n24:                         13.8                         19.4\n25:                         29.4                         42.0\n26:                          0.0                          0.0\n27:                          0.0                          0.0\n28:                          0.2                          0.4\n29:                          0.0                          0.0\n30:                          0.0                          0.0\n31:                          0.0                          0.0\n    Highest 30 min Rainfall (mm) Highest 60 min Rainfall (mm)\n    Highest 120 min Rainfall (mm) Mean Temperature (°C)\n 1:                          37.2                  25.6\n 2:                           0.4                  27.3\n 3:                           8.8                  27.1\n 4:                          31.6                  24.8\n 5:                           3.4                  26.6\n 6:                           0.6                  27.6\n 7:                          26.0                  24.5\n 8:                           0.0                  26.7\n 9:                           1.0                  26.7\n10:                          45.8                  26.3\n11:                           0.0                  27.4\n12:                           6.4                  25.3\n13:                           0.0                  27.0\n14:                           0.0                  27.6\n15:                           0.2                  27.8\n16:                          17.8                  26.6\n17:                           4.6                  27.4\n18:                           0.2                  27.0\n19:                          10.8                  26.3\n20:                           8.6                  24.5\n21:                          13.4                  26.9\n22:                           0.0                  27.6\n23:                          43.4                  27.0\n24:                          24.8                  26.7\n25:                          48.6                  25.7\n26:                           0.0                  28.0\n27:                           0.0                  28.2\n28:                           0.4                  27.8\n29:                           0.0                  28.0\n30:                           0.0                  27.8\n31:                           0.0                  27.7\n    Highest 120 min Rainfall (mm) Mean Temperature (°C)\n    Maximum Temperature (°C) Minimum Temperature (°C) Mean Wind Speed (km/h)\n 1:                     28.8                     24.2                    9.6\n 2:                     32.0                     24.7                   12.1\n 3:                     31.5                     24.5                   10.0\n 4:                     26.3                     23.4                   10.8\n 5:                     29.7                     24.4                   14.4\n 6:                     31.2                     25.4                   10.7\n 7:                     26.9                     23.2                    8.3\n 8:                     31.4                     23.4                    9.6\n 9:                     30.4                     24.6                   10.6\n10:                     29.3                     24.3                    9.4\n11:                     30.0                     25.4                   13.2\n12:                     26.9                     23.4                   10.9\n13:                     31.0                     24.4                    8.3\n14:                     31.1                     25.7                   12.1\n15:                     31.3                     25.5                   15.1\n16:                     30.4                     23.9                   11.6\n17:                     31.2                     24.8                   18.5\n18:                     29.9                     25.5                   12.2\n19:                     30.7                     23.7                    9.3\n20:                     26.1                     23.3                    9.0\n21:                     32.3                     23.4                   10.5\n22:                     31.5                     24.8                   11.1\n23:                     32.9                     23.8                    9.9\n24:                     30.4                     23.9                   11.9\n25:                     30.2                     23.8                   11.0\n26:                     31.6                     25.4                   20.3\n27:                     31.2                     26.7                   20.4\n28:                     31.4                     25.4                   18.1\n29:                     31.2                     26.2                   19.6\n30:                     31.6                     25.6                   15.6\n31:                     32.0                     25.5                   16.1\n    Maximum Temperature (°C) Minimum Temperature (°C) Mean Wind Speed (km/h)\n    Max Wind Speed (km/h)\n 1:                  35.2\n 2:                  40.7\n 3:                  35.2\n 4:                  31.5\n 5:                  46.3\n 6:                  31.5\n 7:                  33.3\n 8:                  31.5\n 9:                  35.2\n10:                  53.7\n11:                  37.0\n12:                  42.6\n13:                  38.9\n14:                  35.2\n15:                  46.3\n16:                  38.9\n17:                  57.4\n18:                  50.0\n19:                  42.6\n20:                  31.5\n21:                  35.2\n22:                  29.6\n23:                  57.4\n24:                  37.0\n25:                  37.0\n26:                  48.2\n27:                  44.4\n28:                  46.3\n29:                  46.3\n30:                  37.0\n31:                  40.7\n    Max Wind Speed (km/h)\n\n\nNow, we want to write a for loop to iterate over all 18 stations. Each station is identified by a unique key value represented in the following list.\n\nstations = c(\n  \"paya lebar\" = \"06\",\n  \"tengah\" = \"23\",\n  \"changi\" = \"24\",\n  \"seletar\" = \"25\",\n  \"tai seng\" = \"43\",\n  \"jurong west\" = \"44\",\n  \"ang mo kio\" = \"109\",\n  \"clementi\" = \"50\",\n  \"admiralty\" = \"104\",\n  \"sentosa\" = \"60\",\n  \"pulau ubin\" = \"106\",\n  \"east coast parkway\" = \"107\",\n  \"marina barrage\" = \"108\",\n  \"newton\" = \"111\",\n  \"tuas south\" = \"115\",\n  \"pasir panjang\" = \"116\",\n  \"jurong island\" = \"117\",\n  \"choa chu kang south\" = \"121\"\n)\n\nWe also want to iterate over the years and month number in the url. For now, we will download the last 20 years of data.\nAnother issue that we encountered was that some of the column names changed at certain years either due to a different spelling or symbol. There is also many white spaces in the name, which could make coding more tedious later on. As such, I opted to change all the column names to simpler short forms with underscore as the separator instead of space.\nThe code chunk below shows the list of old to new column names. A function is also written for the renaming task, to rename the columns as we download the data sets 1 by 1. This helps with the data.table::rbindlist used in the loop as all the column names needs to be the same as the data set before.\n\ncol_names = c(\n  \"Station\" = \"Station\",\n  \"Year\" = \"Year\",\n  \"Month\" = \"Month\",\n  \"Daily Rainfall Total (mm)\" = \"daily_rainfall\",\n  \"Highest 30 Min Rainfall (mm)\" = \"highest_30m_rainfall\",\n  \"Highest 30 min Rainfall (mm)\" = \"highest_30m_rainfall\",\n  \"Highest 60 Min Rainfall (mm)\" = \"highest_60m_rainfall\",\n  \"Highest 60 min Rainfall (mm)\" = \"highest_60m_rainfall\",\n  \"Highest 120 Min Rainfall (mm)\" = \"highest_120m_rainfall\",\n  \"Highest 120 min Rainfall (mm)\" = \"highest_120m_rainfall\",\n  \"Mean Temperature (°C)\" = \"mean_temp\",\n  \"Mean Temperature (°C)\" = \"mean_temp\",\n  \"Mean Temperature (Â°C)\" = \"mean_temp\",\n  \"Maximum Temperature (°C)\" = \"max_temp\",\n  \"Maximum Temperature (°C)\" = \"max_temp\",\n  \"Maximum Temperature (Â°C)\" = \"max_temp\",\n  \"Minimum Temperature (°C)\" = \"min_temp\",\n  \"Minimum Temperature (°C)\" = \"min_temp\",\n  \"Minimum Temperature (Â°C)\" = \"min_temp\",\n  \"Mean Wind Speed (km/h)\" = \"mean_wind\",\n  \"Max Wind Speed (km/h)\" = \"max_wind\"\n)\n\nclean_names &lt;- function(df, col_names) {\n\n  for (n in names(col_names)) {\n    names(df)[names(df) == n] &lt;- col_names[[n]]\n  }\n  \n  return (df)\n}\n\nFinally, we can write our loop. The full code is shown below.\n\npad_zero &lt;- function(num) {\n  if (num &lt; 10) {\n    return (paste0(\"0\", as.character(num)))\n  } else {\n    return (as.character(num))\n  }\n}\n\ndf &lt;- data.table()\n\nfor (station in stations) {\n  for (y in 3:23) {\n    for (m in 1:12) {\n      year &lt;- pad_zero(y)\n      month &lt;- pad_zero(m)\n      tryCatch(\n        {\n          joining_df &lt;- data.table::fread(paste0(\n          \"http://www.weather.gov.sg/files/dailydata/DAILYDATA_S\",\n          station,\n          \"_20\",\n          year,\n          month,\n          \".csv\"),\n          encoding = \"Latin-1\")\n          \n          joining_df &lt;- clean_names(joining_df, col_names)\n          \n          df &lt;- rbindlist(list(df, joining_df), use.names=TRUE, fill=TRUE)\n        }, error = function(e) {\n          print(e)\n        }\n      )\n    }\n  }\n}\n\nAfter downloading, we save the data in a csv file with the data.table::fwrite function.\n\nfwrite(df, \"data/clean_climate_data.csv\")\n\n\n\n2.2.2 Weather Station data\nThe coordinates of each weather station can be found here. Due to the small number, I have manually collated them in a csv file and saved it.\n\n\n2.2.3 Load data\nAssuming we had already saved off the data previously, we will now load the data sets using the readr::read_csv function\n\nclimate &lt;- data.table::fread(\"data/clean_climate_data.csv\", encoding=\"Latin-1\") %&gt;% as.data.frame()\n\nstations &lt;- read_csv(\"data/weather_stations.csv\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html",
@@ -1384,5 +1384,278 @@
     "title": "7c. Analytical Mapping",
     "section": "3.1 Visualising distribution of non-functional water point",
     "text": "3.1 Visualising distribution of non-functional water point\n\np1 &lt;- tm_shape(NGA_wp) +\n  tm_fill(\"wp_functional\",\n          n = 10,\n          style = \"equal\",\n          palette = \"Blues\") +\n  tm_borders(lwd = 0.1,\n             alpha = 1) +\n  tm_layout(main.title = \"Distribution of functional water point by LGAs\",\n            legend.outside = FALSE)\n\n\np2 &lt;- tm_shape(NGA_wp) +\n  tm_fill(\"total_wp\",\n          n = 10,\n          style = \"equal\",\n          palette = \"Blues\") +\n  tm_borders(lwd = 0.1,\n             alpha = 1) +\n  tm_layout(main.title = \"Distribution of total  water point by LGAs\",\n            legend.outside = FALSE)\n\n\ntmap_arrange(p2, p1, nrow = 1)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#remove-unwanted-characters",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#remove-unwanted-characters",
+    "title": "Climate and Dengue in Singapore",
+    "section": "3.1 Remove unwanted characters",
+    "text": "3.1 Remove unwanted characters\nThere are many observations with “-”. To avoid errors, we will change all of them to 0s.\n\nclimate &lt;- data.frame(lapply(climate, function(x) gsub(\"—\", 0, x)), stringsAsFactors=F)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#data-type",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#data-type",
+    "title": "Climate and Dengue in Singapore",
+    "section": "3.2 Data type",
+    "text": "3.2 Data type\nNext, we want to ensure that all columns are in their correct data type. For Station, Year, Month, and Day, we want them to be factors. The rest should be numerical.\nFor those values that were coerced as NA, we will convert them to 0 as well.\n\nclimate[c(\"Station\", \"Year\", \"Month\", \"Day\")] &lt;- lapply(climate[c(\"Station\", \"Year\", \"Month\", \"Day\")] , factor)\n\nclimate[!names(climate) %in% c(\"Station\", \"Year\", \"Month\", \"Day\")] &lt;- lapply(climate[!names(climate) %in% c(\"Station\", \"Year\", \"Month\", \"Day\")] , as.numeric)\n\nclimate[is.na(climate)] &lt;- 0"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#date-column",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#date-column",
+    "title": "Climate and Dengue in Singapore",
+    "section": "3.3 Date column",
+    "text": "3.3 Date column\nWe also want a date column for easier sorting in chronological order. To do that, we can use the zoo::as.Date function.\n\nclimate$date &lt;- as.Date(with(climate, paste(Year, Month, Day,sep=\"-\")), \"%Y-%m-%d\")"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#daily-mean-temperature-rainfall-and-wind",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#daily-mean-temperature-rainfall-and-wind",
+    "title": "Climate and Dengue in Singapore",
+    "section": "3.4 Daily Mean Temperature, Rainfall, and Wind",
+    "text": "3.4 Daily Mean Temperature, Rainfall, and Wind\nLet us explore how the mean temperature, rainfall, and wind looks like in the past 20 years.\nThe code chunk below plots the daily mean temperature over the last 20 years for each weather station. Similar code was used to plot the chart for rainfall and temperature as well.\n\nTemperatureRainfallWind\n\n\n\nggplot() + \n  geom_line(data = climate, aes(x=date, y=mean_temp, colour=Station)) + \n  facet_wrap(~Station) + \n  ggtitle(\"Daily Mean Temperature in last 20 years\")\n\n\n\n\n\n\n\nggplot() + \n  geom_line(data = climate, aes(x=date, y=daily_rainfall, colour=Station)) + \n  facet_wrap(~Station) +\n  ggtitle(\"Daily rainfall in the last 20 years\")\n\n\n\n\n\n\n\nggplot() + \n  geom_line(data = climate, aes(x=date, y=mean_wind, colour=Station)) + \n  facet_wrap(~Station) +\n  ggtitle(\"Daily mean wind speed in the last 20 years\")\n\n\n\n\n\n\n\n\n\n\n\n\n\nInsights\n\n\n\n\nThe start date of each weather station varies. This should be taken into account when fitting the model, as well as in the date range selection in the Shiny App.\nThere are many periods within the time series where the data is 0s or NA, especially so in temperature and wind. To deal with this, we can take the mean value of that month from other years as a filler value. For example, if jan 2010 is missing, we can use the mean value from jan 2003-2009, and 2011-2023 to fill the gap.\nDaily rainfall has many 0 values, representing days without rain. This however, makes it difficult to model a time series. Thus, dates will be rolled up to monthly levels and we will analyse mean monthly values instead. To be consistent, we will use monthly levels for temperature and wind data as well.\nCertain stations such as Sentosa stopped collecting data before 2023. These stations should be removed."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#remove-incomplete-stations",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#remove-incomplete-stations",
+    "title": "Climate and Dengue in Singapore",
+    "section": "4.1 Remove incomplete stations",
+    "text": "4.1 Remove incomplete stations\nAs observed above, these stations have data that ended earlier than december 2023, and thus will be removed from the time series analysis.\n\nprint(\"temp\")\n\n[1] \"temp\""
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#roll-up-to-monthly-levels",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#roll-up-to-monthly-levels",
+    "title": "Climate and Dengue in Singapore",
+    "section": "4.2 Roll up to Monthly levels",
+    "text": "4.2 Roll up to Monthly levels\nAs there are many instances of 0s within each month, we will have to ignore them as they will pull down the monthly average temperature or wind. Therefore, a function is written to calculate the non-zero mean value instead. However, this is not needed for rainfall as 0s would mean days with no rain.\n\nnon_zero_mean &lt;- function(x) {\n  y &lt;- mean(x[x!=0])\n  return (y)\n}\n\nNext, we use the dplyr::group_by and dplyr::summarise functions to calculate the monthly average for all variables. We also re-create the date column as a function of year and month using zoo::as.yearmon.\n\nmonthly_climate &lt;- climate %&gt;% \n  group_by(Station, Year, Month) %&gt;% \n  summarise(mean_temp = non_zero_mean(mean_temp),\n            max_temp = non_zero_mean(max_temp),\n            min_temp = non_zero_mean(min_temp),\n            mean_wind = non_zero_mean(mean_wind),\n            max_wind = non_zero_mean(max_wind),\n            mean_rain = mean(daily_rainfall),\n            mean_30m_rain = mean(highest_30m_rainfall),\n            mean_60m_rain = mean(highest_60m_rainfall),\n            mean_120m_rain = mean(highest_120m_rainfall),\n            date = min(date))\n\nmonthly_climate$date &lt;- as.yearmon(monthly_climate$date)\n\nmonthly_climate[is.na(monthly_climate)] &lt;- 0"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#filling-zeros-with-non-zero-means",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#filling-zeros-with-non-zero-means",
+    "title": "Climate and Dengue in Singapore",
+    "section": "4.3 Filling zeros with non-zero means",
+    "text": "4.3 Filling zeros with non-zero means\nThis task requires several steps which is performed by the code chunk below.\nFirst, we want to iterate through all relevant temperature and wind variables.\nNext, for each variable, we look at all the stations data.\nThen, for each station, we find the months where all data is missing or 0.\nLastly, for each of these months, we replace the NA or 0 with the non-zero mean of the same month in other years for that station. For example, if Changi station jan 2010 is missing, then we will replace the value with the non-zero mean from Changi station jan 2003-2009, and 2011-2023.\n\nreplace_zero &lt;- function(df, s, y, m, col) {\n  df[df$Station == s &\n       df$Year == y &\n       df$Month == m, col][[1]] &lt;- non_zero_mean(df[df$Station == s & df$Month == m, col])\n  \n  return (df)\n}\n\ncolumns = c(\"mean_temp\", \"max_temp\", \"min_temp\", \"mean_wind\", \"max_wind\")\n\nfor (c in columns) {\n  for (s in levels(monthly_climate$Station)) {\n    for (y in levels(monthly_climate$Year)) {\n      for (m in levels(monthly_climate$Month)) {\n        \n        value &lt;- monthly_climate[monthly_climate$Station == s &\n                                   monthly_climate$Year == y &\n                                   monthly_climate$Month == m, c][[1]]\n        \n        if (length(value) == 0) {\n          monthly_climate &lt;- replace_zero(monthly_climate, s, y, m, c)\n        } else if (value == 0) {\n          monthly_climate &lt;- replace_zero(monthly_climate, s, y, m, c)\n        }\n      }\n    }\n  }\n}"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#final-look-at-data",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#final-look-at-data",
+    "title": "Climate and Dengue in Singapore",
+    "section": "4.4 Final look at data",
+    "text": "4.4 Final look at data\nLet us chart the same variables once more and check if all values are fine now.\n\nTemperatureRainfallWind\n\n\n\nggplot() + \n  geom_line(data = monthly_climate, aes(x=date, y=mean_temp, colour=Station)) + \n  facet_wrap(~Station) + \n  ggtitle(\"Monthly Mean Temperature in last 20 years\")\n\n\n\n\n\n\n\nggplot() + \n  geom_line(data = monthly_climate, aes(x=date, y=mean_rain, colour=Station)) + \n  facet_wrap(~Station) +\n  ggtitle(\"Monthly rainfall in the last 20 years\")\n\n\n\n\n\n\n\nggplot() + \n  geom_line(data = monthly_climate, aes(x=date, y=mean_wind, colour=Station)) + \n  facet_wrap(~Station) +\n  ggtitle(\"Monthly mean wind speed in the last 20 years\")"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#input-variables",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#input-variables",
+    "title": "Climate and Dengue in Singapore",
+    "section": "5.1 Input variables",
+    "text": "5.1 Input variables\nThis section determines the variable selection done by the user of the Shiny Application. For the purpose of this prototype, it will be hard-coded for now.\n\ntarget_station &lt;- \"Newton\"\ntarget_variable &lt;- \"mean_rain\"\ntarget_date_start &lt;- \"2009-10\"\ntarget_date_end &lt;- \"2023-12\"\ntarget_validation_start &lt;- \"2023-1\""
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#model-fitting",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#model-fitting",
+    "title": "Climate and Dengue in Singapore",
+    "section": "5.2 Model Fitting",
+    "text": "5.2 Model Fitting\n\ntarget &lt;- monthly_climate[\n  monthly_climate$Station == target_station, \n  c(\"Station\", \"Year\", \"Month\", \"date\", target_variable)\n]\n\ntarget$cumulative_sum &lt;- cumsum(target[target_variable])\n\ntarget &lt;- target[target$cumulative_sum &gt; 0, ]\n\ny &lt;- dplyr::first(target[order(target$date), \"Year\"])[[1]] %&gt;% \n  as.character() %&gt;% \n  as.numeric()\nm &lt;- dplyr::first(target[order(target$date), \"Month\"])[[1]] %&gt;% \n  as.character() %&gt;% \n  as.numeric()\n\ndfts &lt;- ts(target[target_variable], frequency = 12, start=c(y, m))\n\ntraining &lt;- window(dfts, start = c(y,m), end = c(2022,12))\nvalidation &lt;- window(dfts, start = c(2023,1))\n\nHW &lt;- HoltWinters(training)\n\nvalidation_preds &lt;- predict(HW,\n                            n.ahead = length(validation))\n\nmape &lt;- MAPE(validation_preds, validation) * 100\n\nprint(mape)\n\n[1] 55.07593\n\nplot(dfts, ylab=target_variable)\nlines(HW$fitted[,1], lty=2, col=\"blue\")\nlines(validation_preds, lty=2, col=\"red\")\n\n\n\n\n\ncomponents_dfts &lt;- decompose(dfts)\nplot(components_dfts)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#model-tuning",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#model-tuning",
+    "title": "Climate and Dengue in Singapore",
+    "section": "5.2 Model Tuning",
+    "text": "5.2 Model Tuning\nAfter fitting the model, users are allowed to view validation results and decide if they wish to further tune the model by adjusting certain variables.\n\nalpha = 0\nbeta = 0\ngamma = 0"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#model-forecast",
+    "href": "Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html#model-forecast",
+    "title": "Climate and Dengue in Singapore",
+    "section": "5.3 Model Forecast",
+    "text": "5.3 Model Forecast\nLastly, once parameters are confirmed, we can proceed to make predictions and plot them.\n\n# https://www.r-bloggers.com/2012/07/holt-winters-forecast-using-ggplot2/\n\nHWplot &lt;- function(ts_object, \n                   n.ahead = 4, \n                   CI = .95, \n                   error.ribbon = 'green', \n                   line.size = 1) {\n    \n    hw_object &lt;- HoltWinters(ts_object)\n    \n    forecast &lt;- predict(hw_object,  \n                        n.ahead = n.ahead,  \n                        prediction.interval = T,  \n                        level = CI)\n    \n    df &lt;- as.data.frame(forecast)\n    \n    for_values &lt;- data.frame(time = round(time(forecast), 3),  \n                             value_forecast = df$fit,  \n                             dev = df$upr - df$fit)\n    \n    fitted_values &lt;- data.frame(time = round(time(hw_object$fitted), 3),\n                                fitted = as.data.frame(hw_object$fitted)$xhat)\n    \n    actual_values &lt;- data.frame(time = round(time(hw_object$x), 3),\n                                Actual = c(hw_object$x))\n    \n    \n    graphset &lt;- merge(actual_values,  fitted_values,  by='time',  all=TRUE)\n    graphset &lt;- merge(graphset,  for_values,  all=TRUE,  by='time')\n    graphset[is.na(graphset$dev),  ]$dev &lt;- 0\n    \n    graphset$Fitted &lt;- c(rep(NA,  NROW(graphset) - (NROW(for_values) + NROW(fitted_values))),  fitted_values$fitted,  for_values$value_forecast)\n    \n    graphset.melt &lt;- melt(graphset[, c('time', 'Actual', 'Fitted')], id='time')\n    \n    p &lt;- ggplot(graphset.melt,  \n                aes(x=time,  y=value)) + \n      geom_ribbon(data=graphset, \n                  aes(x=time, \n                      y=Fitted, \n                      ymin=Fitted-dev,  \n                      ymax=Fitted + dev),  \n                  alpha=.2,  \n                  fill=error.ribbon) + \n      geom_line(aes(colour=variable), \n                linewidth=line.size) + \n      geom_vline(xintercept=max(actual_values$time),  \n                 lty=2) + \n      xlab('Time') + \n      ylab('Value') + \n      theme(legend.position='bottom') + \n      scale_colour_hue('')\n    \n    return(p)\n\n}\n\n\nHWplot(dfts, n.ahead=36, CI=.95, error.ribbon='green',line.size=1)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "",
+    "text": "In this hands-on exercise, you will learn how to model, analyse and visualise network data using R.\nBy the end of this hands-on exercise, you will be able to:\n\ncreate graph object data frames, manipulate them using appropriate functions of dplyr, lubridate, and tidygraph,\nbuild network graph visualisation using appropriate functions of ggraph,\ncompute network geometrics using tidygraph,\nbuild advanced graph visualisation by incorporating the network geometrics, and\nbuild interactive network visualisation using visNetwork package."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#the-tbl_graph-object",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#the-tbl_graph-object",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "4.1 The tbl_graph object",
+    "text": "4.1 The tbl_graph object\nTwo functions of tidygraph package can be used to create network objects, they are:\n\ntbl_graph() creates a tbl_graph network object from nodes and edges data.\nas_tbl_graph() converts network data and objects to a tbl_graph network. Below are network data and objects supported by as_tbl_graph()\n\na node data.frame and an edge data.frame,\ndata.frame, list, matrix from base,\nigraph from igraph,\nnetwork from network,\ndendrogram and hclust from stats,\nNode from data.tree,\nphylo and evonet from ape, and\ngraphNEL, graphAM, graphBAM from graph (in Bioconductor)."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#the-dplyr-verbs-in-tidygraph",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#the-dplyr-verbs-in-tidygraph",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "4.2 The dplyr verbs in tidygraph",
+    "text": "4.2 The dplyr verbs in tidygraph\n\nactivate() verb from tidygraph serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to tbl_graph object are applied to the active tibble.\n\n\n\nIn the above the .N() function is used to gain access to the node data while manipulating the edge data. Similarly .E() will give you the edge data and .G() will give you the tbl_graph object itself."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#using-tbl_graph-to-build-tidygraph-data-model.",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#using-tbl_graph-to-build-tidygraph-data-model.",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "4.3 Using tbl_graph() to build tidygraph data model.",
+    "text": "4.3 Using tbl_graph() to build tidygraph data model.\nIn this section, you will use tbl_graph() of tinygraph package to build an tidygraph’s network graph data.frame.\nBefore typing the codes, you are recommended to review to reference guide of tbl_graph()\n\nGAStech_graph &lt;- tbl_graph(nodes = GAStech_nodes,\n                           edges = GAStech_edges_aggregated, \n                           directed = TRUE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#reviewing-the-output-tidygraphs-graph-object",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#reviewing-the-output-tidygraphs-graph-object",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "4.4 Reviewing the output tidygraph’s graph object",
+    "text": "4.4 Reviewing the output tidygraph’s graph object\n\nGAStech_graph\n\n# A tbl_graph: 54 nodes and 1372 edges\n#\n# A directed multigraph with 1 component\n#\n# Node Data: 54 × 4 (active)\n      id label               Department     Title                               \n   &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;          &lt;chr&gt;                               \n 1     1 Mat.Bramar          Administration Assistant to CEO                    \n 2     2 Anda.Ribera         Administration Assistant to CFO                    \n 3     3 Rachel.Pantanal     Administration Assistant to CIO                    \n 4     4 Linda.Lagos         Administration Assistant to COO                    \n 5     5 Ruscella.Mies.Haber Administration Assistant to Engineering Group Mana…\n 6     6 Carla.Forluniau     Administration Assistant to IT Group Manager       \n 7     7 Cornelia.Lais       Administration Assistant to Security Group Manager \n 8    44 Kanon.Herrero       Security       Badging Office                      \n 9    45 Varja.Lagos         Security       Badging Office                      \n10    46 Stenig.Fusil        Security       Building Control                    \n# ℹ 44 more rows\n#\n# Edge Data: 1,372 × 4\n   from    to Weekday Weight\n  &lt;int&gt; &lt;int&gt; &lt;ord&gt;    &lt;int&gt;\n1     1     2 Sunday       5\n2     1     2 Monday       2\n3     1     2 Tuesday      3\n# ℹ 1,369 more rows"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#reviewing-the-output-tidygraphs-graph-object-1",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#reviewing-the-output-tidygraphs-graph-object-1",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "4.5 Reviewing the output tidygraph’s graph object",
+    "text": "4.5 Reviewing the output tidygraph’s graph object\n\nThe output above reveals that GAStech_graph is a tbl_graph object with 54 nodes and 4541 edges.\nThe command also prints the first six rows of “Node Data” and the first three of “Edge Data”.\nIt states that the Node Data is active. The notion of an active tibble within a tbl_graph object makes it possible to manipulate the data in one tibble at a time."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#changing-the-active-object",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#changing-the-active-object",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "4.6 Changing the active object",
+    "text": "4.6 Changing the active object\nThe nodes tibble data frame is activated by default, but you can change which tibble data frame is active with the activate() function. Thus, if we wanted to rearrange the rows in the edges tibble to list those with the highest “weight” first, we could use activate() and then arrange().\nFor example:\n\nGAStech_graph %&gt;%\n  activate(edges) %&gt;%\n  arrange(desc(Weight))\n\n# A tbl_graph: 54 nodes and 1372 edges\n#\n# A directed multigraph with 1 component\n#\n# Edge Data: 1,372 × 4 (active)\n    from    to Weekday   Weight\n   &lt;int&gt; &lt;int&gt; &lt;ord&gt;      &lt;int&gt;\n 1    40    41 Saturday      13\n 2    41    43 Monday        11\n 3    35    31 Tuesday       10\n 4    40    41 Monday        10\n 5    40    43 Monday        10\n 6    36    32 Sunday         9\n 7    40    43 Saturday       9\n 8    41    40 Monday         9\n 9    19    15 Wednesday      8\n10    35    38 Tuesday        8\n# ℹ 1,362 more rows\n#\n# Node Data: 54 × 4\n     id label           Department     Title           \n  &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;           \n1     1 Mat.Bramar      Administration Assistant to CEO\n2     2 Anda.Ribera     Administration Assistant to CFO\n3     3 Rachel.Pantanal Administration Assistant to CIO\n# ℹ 51 more rows"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plotting-a-basic-network-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plotting-a-basic-network-graph",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "5.1 Plotting a basic network graph",
+    "text": "5.1 Plotting a basic network graph\nThe code chunk below uses ggraph(), geom-edge_link() and geom_node_point() to plot a network graph by using GAStech_graph. Before your get started, it is advisable to read their respective reference guide at least once.\n\nggraph(GAStech_graph) +\n  geom_edge_link() +\n  geom_node_point()\n\n\n\n\n\n\n\n\n\n\nThings to learn from code chunk above\n\n\n\n\nThe basic plotting function is ggraph(), which takes the data to be used for the graph and the type of layout desired. Both of the arguments for ggraph() are built around igraph. Therefore, ggraph() can use either an igraph object or a tbl_graph object."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#changing-the-default-network-graph-theme",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#changing-the-default-network-graph-theme",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "5.2 Changing the default network graph theme",
+    "text": "5.2 Changing the default network graph theme\nIn this section, you will use theme_graph() to remove the x and y axes. Before your get started, it is advisable to read it’s reference guide at least once.\n\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes()) +\n  geom_node_point(aes())\n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\nThings to learn from code chunk above\n\n\n\n\nggraph introduces a special ggplot theme that provides better defaults for network graphs than the normal ggplot defaults. theme_graph(), besides removing axes, grids, and border, changes the font to Arial Narrow (this can be overridden).\nThe ggraph theme can be set for a series of plots with the set_graph_style() command run before the graphs are plotted or by using theme_graph() in the individual plots."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#changing-the-coloring-of-the-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#changing-the-coloring-of-the-plot",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "5.3 Changing the coloring of the plot",
+    "text": "5.3 Changing the coloring of the plot\nFurthermore, theme_graph() makes it easy to change the coloring of the plot.\n\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes(colour = 'grey50')) +\n  geom_node_point(aes(colour = 'grey40'))\n\ng + theme_graph(background = 'grey10',\n                text_colour = 'white')"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-ggraphs-layouts",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-ggraphs-layouts",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "5.4 Working with ggraph’s layouts",
+    "text": "5.4 Working with ggraph’s layouts\nggraph support many layout for standard used, they are: star, circle, nicely (default), dh, gem, graphopt, grid, mds, spahere, randomly, fr, kk, drl and lgl. Figures below and on the right show layouts supported by ggraph()."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#fruchterman-and-reingold-layout",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#fruchterman-and-reingold-layout",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "5.5 Fruchterman and Reingold layout",
+    "text": "5.5 Fruchterman and Reingold layout\nThe code chunks below will be used to plot the network graph using Fruchterman and Reingold layout.\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes())\n\ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#modifying-network-nodes",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#modifying-network-nodes",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "5.6 Modifying network nodes",
+    "text": "5.6 Modifying network nodes\nIn this section, you will colour each node by referring to their respective departments.\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes()) +\n  geom_node_point(aes(colour = Department, \n                      size = 3))\n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\nThings to learn from code chunk above\n\n\n\n\ngeom_node_point is equivalent in functionality to geo_point of ggplot2. It allows for simple plotting of nodes in different shapes, colours and sizes. In the codes chnuks above colour and size are used."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#modifying-edges",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#modifying-edges",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "5.7 Modifying edges",
+    "text": "5.7 Modifying edges\nIn the code chunk below, the thickness of the edges will be mapped with the Weight variable.\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") +\n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 3)\n\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\nThings to learn from code chunk above\n\n\n\n\ngeom_edge_link draws edges in the simplest way - as straight lines between the start and end nodes. But, it can do more that that. In the example above, argument width is used to map the width of the line in proportional to the Weight attribute and argument alpha is used to introduce opacity on the line."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-facet_edges",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-facet_edges",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "6.1 Working with facet_edges()",
+    "text": "6.1 Working with facet_edges()\nIn the code chunk below, facet_edges() is used. Before getting started, it is advisable for you to read it’s reference guide at least once.\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n\ng + facet_edges(~Weekday)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-facet_edges-1",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-facet_edges-1",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "6.2 Working with facet_edges()",
+    "text": "6.2 Working with facet_edges()\nThe code chunk below uses theme() to change the position of the legend.\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2) +\n  theme(legend.position = 'bottom')\n  \ng + facet_edges(~Weekday)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#a-framed-facet-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#a-framed-facet-graph",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "6.3 A framed facet graph",
+    "text": "6.3 A framed facet graph\nThe code chunk below adds frame to each graph.\n\nset_graph_style() \n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_edges(~Weekday) +\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-facet_nodes",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-facet_nodes",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "6.4 Working with facet_nodes()",
+    "text": "6.4 Working with facet_nodes()\nIn the code chunkc below, facet_nodes() is used. Before getting started, it is advisable for you to read it’s reference guide at least once.\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_nodes(~Department)+\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#computing-centrality-indices",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#computing-centrality-indices",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "7.1 Computing centrality indices",
+    "text": "7.1 Computing centrality indices\nCentrality measures are a collection of statistical indices use to describe the relative important of the actors are to a network. There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector. It is beyond the scope of this hands-on exercise to cover the principles and mathematics of these measure here. Students are encouraged to refer to Chapter 7: Actor Prominence of A User’s Guide to Network Analysis in R to gain better understanding of theses network measures.\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(betweenness_centrality = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department,\n            size=betweenness_centrality))\ng + theme_graph()\n\n\n\n\n\n\n\n\n\n\nThings to learn from code chunk above\n\n\n\n\nmutate() of dplyr is used to perform the computation.\nthe algorithm used, on the other hand, is the centrality_betweenness() of tidygraph."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#visualising-network-metrics",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#visualising-network-metrics",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "7.2 Visualising network metrics",
+    "text": "7.2 Visualising network metrics\nIt is important to note that from ggraph v2.0 onward tidygraph algorithms such as centrality measures can be accessed directly in ggraph calls. This means that it is no longer necessary to precompute and store derived node and edge centrality measures on the graph in order to use them in a plot.\n\ng &lt;- GAStech_graph %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department, \n                      size = centrality_betweenness()))\ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#visualising-community",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#visualising-community",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "7.3 Visualising Community",
+    "text": "7.3 Visualising Community\ntidygraph package inherits many of the community detection algorithms imbedded into igraph and makes them available to us, including Edge-betweenness (group_edge_betweenness), Leading eigenvector (group_leading_eigen), Fast-greedy (group_fast_greedy), Louvain (group_louvain), Walktrap (group_walktrap), Label propagation (group_label_prop), InfoMAP (group_infomap), Spinglass (group_spinglass), and Optimal (group_optimal). Some community algorithms are designed to take into account direction or weight, while others ignore it. Use this link to find out more about community detection functions provided by tidygraph,\nIn the code chunk below group_edge_betweenness() is used.\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(community = as.factor(group_edge_betweenness(weights = Weight, directed = TRUE))) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = community))  \n\ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#data-preparation",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#data-preparation",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "8.1 Data preparation",
+    "text": "8.1 Data preparation\nBefore we can plot the interactive network graph, we need to prepare the data model by using the code chunk below.\n\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  left_join(GAStech_nodes, by = c(\"sourceLabel\" = \"label\")) %&gt;%\n  rename(from = id) %&gt;%\n  left_join(GAStech_nodes, by = c(\"targetLabel\" = \"label\")) %&gt;%\n  rename(to = id) %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(from, to) %&gt;%\n    summarise(weight = n()) %&gt;%\n  filter(from!=to) %&gt;%\n  filter(weight &gt; 1) %&gt;%\n  ungroup()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plotting-the-first-interactive-network-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plotting-the-first-interactive-network-graph",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "8.2 Plotting the first interactive network graph",
+    "text": "8.2 Plotting the first interactive network graph\nThe code chunk below will be used to plot an interactive network graph by using the data prepared.\n\nvisNetwork(GAStech_nodes, \n           GAStech_edges_aggregated)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-layout",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-layout",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "8.3 Working with layout",
+    "text": "8.3 Working with layout\nIn the code chunk below, Fruchterman and Reingold layout is used.\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-visual-attributes---nodes",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-visual-attributes---nodes",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "8.4 Working with visual attributes - Nodes",
+    "text": "8.4 Working with visual attributes - Nodes\nvisNetwork() looks for a field called “group” in the nodes object and colour the nodes according to the values of the group field.\nThe code chunk below rename Department field to group.\n\nGAStech_nodes &lt;- GAStech_nodes %&gt;%\n  rename(group = Department) \n\nWhen we rerun the code chunk below, visNetwork shades the nodes by assigning unique colour to each category in the group field.\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-visual-attributes---edges",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#working-with-visual-attributes---edges",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "8.5 Working with visual attributes - Edges",
+    "text": "8.5 Working with visual attributes - Edges\nIn the code run below visEdges() is used to symbolise the edges.\n- The argument arrows is used to define where to place the arrow.\n- The smooth argument is used to plot the edges using a smooth curve.\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visEdges(arrows = \"to\", \n           smooth = list(enabled = TRUE, \n                         type = \"curvedCW\")) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)\n\n\n\n\n\nVisit Option to find out more about visEdges’s argument."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#interactivity",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#interactivity",
+    "title": "8. Modelling, Visualising and Analysing Network Data with R",
+    "section": "8.6 Interactivity",
+    "text": "8.6 Interactivity\nIn the code chunk below, visOptions() is used to incorporate interactivity features in the data visualisation.\n\nThe argument highlightNearest highlights nearest when clicking a node.\nThe argument nodesIdSelection adds an id node selection creating an HTML select element.\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visOptions(highlightNearest = TRUE,\n             nodesIdSelection = TRUE) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)\n\n\n\n\n\nVisit Option to find out more about visOption’s argument."
   }
 ]

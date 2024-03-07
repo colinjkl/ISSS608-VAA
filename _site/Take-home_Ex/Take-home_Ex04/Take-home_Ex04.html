@@ -186,6 +186,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07c.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 7c</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 8</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -248,13 +252,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">1. Overview</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">2. Getting Started</a>
   <ul class="collapse">
-  <li><a href="#loading-libraries" id="toc-loading-libraries" class="nav-link" data-scroll-target="#loading-libraries">Loading libraries</a></li>
-  <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import">Data import</a></li>
+  <li><a href="#loading-libraries" id="toc-loading-libraries" class="nav-link" data-scroll-target="#loading-libraries">2.1 Loading libraries</a></li>
+  <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import">2.2 Data import</a>
+  <ul class="collapse">
+  <li><a href="#climate-data" id="toc-climate-data" class="nav-link" data-scroll-target="#climate-data">2.2.1 Climate data</a></li>
+  <li><a href="#weather-station-data" id="toc-weather-station-data" class="nav-link" data-scroll-target="#weather-station-data">2.2.2 Weather Station data</a></li>
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">2.2.3 Load data</a></li>
   </ul></li>
-  <li><a href="#year-comparison" id="toc-year-comparison" class="nav-link" data-scroll-target="#year-comparison">Year Comparison</a></li>
+  </ul></li>
+  <li><a href="#preliminary-eda" id="toc-preliminary-eda" class="nav-link" data-scroll-target="#preliminary-eda">3. Preliminary EDA</a>
+  <ul class="collapse">
+  <li><a href="#remove-unwanted-characters" id="toc-remove-unwanted-characters" class="nav-link" data-scroll-target="#remove-unwanted-characters">3.1 Remove unwanted characters</a></li>
+  <li><a href="#data-type" id="toc-data-type" class="nav-link" data-scroll-target="#data-type">3.2 Data type</a></li>
+  <li><a href="#date-column" id="toc-date-column" class="nav-link" data-scroll-target="#date-column">3.3 Date column</a></li>
+  <li><a href="#daily-mean-temperature-rainfall-and-wind" id="toc-daily-mean-temperature-rainfall-and-wind" class="nav-link" data-scroll-target="#daily-mean-temperature-rainfall-and-wind">3.4 Daily Mean Temperature, Rainfall, and Wind</a></li>
+  </ul></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">4. Data Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#remove-incomplete-stations" id="toc-remove-incomplete-stations" class="nav-link" data-scroll-target="#remove-incomplete-stations">4.1 Remove incomplete stations</a></li>
+  <li><a href="#roll-up-to-monthly-levels" id="toc-roll-up-to-monthly-levels" class="nav-link" data-scroll-target="#roll-up-to-monthly-levels">4.2 Roll up to Monthly levels</a></li>
+  <li><a href="#filling-zeros-with-non-zero-means" id="toc-filling-zeros-with-non-zero-means" class="nav-link" data-scroll-target="#filling-zeros-with-non-zero-means">4.3 Filling zeros with non-zero means</a></li>
+  <li><a href="#final-look-at-data" id="toc-final-look-at-data" class="nav-link" data-scroll-target="#final-look-at-data">4.4 Final look at data</a></li>
+  </ul></li>
+  <li><a href="#time-series-forecasting" id="toc-time-series-forecasting" class="nav-link" data-scroll-target="#time-series-forecasting">5. Time Series Forecasting</a>
+  <ul class="collapse">
+  <li><a href="#input-variables" id="toc-input-variables" class="nav-link" data-scroll-target="#input-variables">5.1 Input variables</a></li>
+  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting">5.2 Model Fitting</a></li>
+  <li><a href="#model-tuning" id="toc-model-tuning" class="nav-link" data-scroll-target="#model-tuning">5.2 Model Tuning</a></li>
+  <li><a href="#model-forecast" id="toc-model-forecast" class="nav-link" data-scroll-target="#model-forecast">5.3 Model Forecast</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -287,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 29, 2024</p>
+      <p class="date-modified">March 5, 2024</p>
     </div>
   </div>
     
@@ -297,53 +326,687 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <section id="overview" class="level1">
-<h1>Overview</h1>
+<h1>1. Overview</h1>
 <p>short intro here</p>
 </section>
 <section id="getting-started" class="level1">
-<h1>Getting Started</h1>
+<h1>2. Getting Started</h1>
 <section id="loading-libraries" class="level2">
-<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
+<h2 class="anchored" data-anchor-id="loading-libraries">2.1 Loading libraries</h2>
 <p>In this exercise, we will be requiring the following libraries.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  ggthemes,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  tidyverse,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  data.table</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  ggplot2,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  ggthemes,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  tidyverse,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  data.table,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  zoo,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  ggfortify,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  reshape,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  MLmetrics</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data-import" class="level2">
-<h2 class="anchored" data-anchor-id="data-import">Data import</h2>
+<h2 class="anchored" data-anchor-id="data-import">2.2 Data import</h2>
 <p>For this exercise, we will be using the climate data sets from the <a href="http://www.weather.gov.sg/home/">Meteorological Service Singapore</a> and the dengue data set from the <a href="https://outbreak.sgcharts.com/data">SGCharts: Outbreak</a> website.</p>
+<section id="climate-data" class="level3">
+<h3 class="anchored" data-anchor-id="climate-data">2.2.1 Climate data</h3>
+<p>Historical daily climate records can be downloaded directly from <a href="http://www.weather.gov.sg/climate-historical-daily/">this page</a> in the <a href="http://www.weather.gov.sg/home/">Meteorological Service Singapore</a> web page.</p>
+<p>However, there are several things to note about this data set:</p>
+<ol type="1">
+<li><p>There are a total of 63 weather stations in Singapore, out of which, only 18 of them keeps records of rainfall, temperature, and wind speed. The other 41 only has rainfall records. <u><strong>As such, we will only look at the 18 stations with all records for consistency.</strong></u></p></li>
+<li><p>The oldest data dates back to 1980, but only in a few stations. In fact, from 2009, manual observations were gradually replaced by automated meteorological instruments. <u><strong>Therefore, we will try to keep our analysis limited to data from 2009 where possible.</strong></u></p></li>
+</ol>
+<p>On the more technical side of things, the data can only be downloaded for 1 weather station for 1 month at a time. If we were to download the data for the last 20 years manually, it would take 20years * 12months * 22stations = 5,280 iterations of downloads by hand. To tackle this task efficiently, a script is written to download the data automatically from the url provided.</p>
+<p>This can be done simply by using the <code>data.table::fread</code> function with the url. For example, the code chunk below shows 1 iteration of download for Changi weather station for the month of January in 2024.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/clean_climate_data.csv"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dengue <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/clean_dengue_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">"http://www.weather.gov.sg/files/dailydata/DAILYDATA_S24_202401.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Station Year Month Day Daily Rainfall Total (mm)
+ 1:  Changi 2024     1   1                      49.6
+ 2:  Changi 2024     1   2                       0.4
+ 3:  Changi 2024     1   3                       8.8
+ 4:  Changi 2024     1   4                      80.6
+ 5:  Changi 2024     1   5                       4.2
+ 6:  Changi 2024     1   6                       0.6
+ 7:  Changi 2024     1   7                      64.0
+ 8:  Changi 2024     1   8                       0.0
+ 9:  Changi 2024     1   9                       2.6
+10:  Changi 2024     1  10                      63.2
+11:  Changi 2024     1  11                       0.0
+12:  Changi 2024     1  12                      12.4
+13:  Changi 2024     1  13                       0.0
+14:  Changi 2024     1  14                       0.0
+15:  Changi 2024     1  15                       0.4
+16:  Changi 2024     1  16                      20.6
+17:  Changi 2024     1  17                       5.6
+18:  Changi 2024     1  18                       0.4
+19:  Changi 2024     1  19                      17.0
+20:  Changi 2024     1  20                      23.4
+21:  Changi 2024     1  21                      13.4
+22:  Changi 2024     1  22                       0.0
+23:  Changi 2024     1  23                      43.4
+24:  Changi 2024     1  24                      34.0
+25:  Changi 2024     1  25                      54.6
+26:  Changi 2024     1  26                       0.0
+27:  Changi 2024     1  27                       0.0
+28:  Changi 2024     1  28                       0.4
+29:  Changi 2024     1  29                       0.0
+30:  Changi 2024     1  30                       0.0
+31:  Changi 2024     1  31                       0.0
+    Station Year Month Day Daily Rainfall Total (mm)
+    Highest 30 min Rainfall (mm) Highest 60 min Rainfall (mm)
+ 1:                         24.6                         32.4
+ 2:                          0.4                          0.4
+ 3:                          8.2                          8.8
+ 4:                         17.6                         22.4
+ 5:                          3.0                          3.0
+ 6:                          0.6                          0.6
+ 7:                         12.8                         16.4
+ 8:                          0.0                          0.0
+ 9:                          0.8                          1.0
+10:                         19.0                         29.6
+11:                          0.0                          0.0
+12:                          5.6                          6.0
+13:                          0.0                          0.0
+14:                          0.0                          0.0
+15:                          0.2                          0.2
+16:                         11.6                         14.8
+17:                          4.2                          4.4
+18:                          0.2                          0.2
+19:                          5.2                          7.0
+20:                          4.6                          6.6
+21:                         10.6                         12.8
+22:                          0.0                          0.0
+23:                         35.6                         43.0
+24:                         13.8                         19.4
+25:                         29.4                         42.0
+26:                          0.0                          0.0
+27:                          0.0                          0.0
+28:                          0.2                          0.4
+29:                          0.0                          0.0
+30:                          0.0                          0.0
+31:                          0.0                          0.0
+    Highest 30 min Rainfall (mm) Highest 60 min Rainfall (mm)
+    Highest 120 min Rainfall (mm) Mean Temperature (°C)
+ 1:                          37.2                  25.6
+ 2:                           0.4                  27.3
+ 3:                           8.8                  27.1
+ 4:                          31.6                  24.8
+ 5:                           3.4                  26.6
+ 6:                           0.6                  27.6
+ 7:                          26.0                  24.5
+ 8:                           0.0                  26.7
+ 9:                           1.0                  26.7
+10:                          45.8                  26.3
+11:                           0.0                  27.4
+12:                           6.4                  25.3
+13:                           0.0                  27.0
+14:                           0.0                  27.6
+15:                           0.2                  27.8
+16:                          17.8                  26.6
+17:                           4.6                  27.4
+18:                           0.2                  27.0
+19:                          10.8                  26.3
+20:                           8.6                  24.5
+21:                          13.4                  26.9
+22:                           0.0                  27.6
+23:                          43.4                  27.0
+24:                          24.8                  26.7
+25:                          48.6                  25.7
+26:                           0.0                  28.0
+27:                           0.0                  28.2
+28:                           0.4                  27.8
+29:                           0.0                  28.0
+30:                           0.0                  27.8
+31:                           0.0                  27.7
+    Highest 120 min Rainfall (mm) Mean Temperature (°C)
+    Maximum Temperature (°C) Minimum Temperature (°C) Mean Wind Speed (km/h)
+ 1:                     28.8                     24.2                    9.6
+ 2:                     32.0                     24.7                   12.1
+ 3:                     31.5                     24.5                   10.0
+ 4:                     26.3                     23.4                   10.8
+ 5:                     29.7                     24.4                   14.4
+ 6:                     31.2                     25.4                   10.7
+ 7:                     26.9                     23.2                    8.3
+ 8:                     31.4                     23.4                    9.6
+ 9:                     30.4                     24.6                   10.6
+10:                     29.3                     24.3                    9.4
+11:                     30.0                     25.4                   13.2
+12:                     26.9                     23.4                   10.9
+13:                     31.0                     24.4                    8.3
+14:                     31.1                     25.7                   12.1
+15:                     31.3                     25.5                   15.1
+16:                     30.4                     23.9                   11.6
+17:                     31.2                     24.8                   18.5
+18:                     29.9                     25.5                   12.2
+19:                     30.7                     23.7                    9.3
+20:                     26.1                     23.3                    9.0
+21:                     32.3                     23.4                   10.5
+22:                     31.5                     24.8                   11.1
+23:                     32.9                     23.8                    9.9
+24:                     30.4                     23.9                   11.9
+25:                     30.2                     23.8                   11.0
+26:                     31.6                     25.4                   20.3
+27:                     31.2                     26.7                   20.4
+28:                     31.4                     25.4                   18.1
+29:                     31.2                     26.2                   19.6
+30:                     31.6                     25.6                   15.6
+31:                     32.0                     25.5                   16.1
+    Maximum Temperature (°C) Minimum Temperature (°C) Mean Wind Speed (km/h)
+    Max Wind Speed (km/h)
+ 1:                  35.2
+ 2:                  40.7
+ 3:                  35.2
+ 4:                  31.5
+ 5:                  46.3
+ 6:                  31.5
+ 7:                  33.3
+ 8:                  31.5
+ 9:                  35.2
+10:                  53.7
+11:                  37.0
+12:                  42.6
+13:                  38.9
+14:                  35.2
+15:                  46.3
+16:                  38.9
+17:                  57.4
+18:                  50.0
+19:                  42.6
+20:                  31.5
+21:                  35.2
+22:                  29.6
+23:                  57.4
+24:                  37.0
+25:                  37.0
+26:                  48.2
+27:                  44.4
+28:                  46.3
+29:                  46.3
+30:                  37.0
+31:                  40.7
+    Max Wind Speed (km/h)</code></pre>
+</div>
+</div>
+<p>Now, we want to write a for loop to iterate over all 18 stations. Each station is identified by a unique key value represented in the following list.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"paya lebar"</span> <span class="ot">=</span> <span class="st">"06"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tengah"</span> <span class="ot">=</span> <span class="st">"23"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"changi"</span> <span class="ot">=</span> <span class="st">"24"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"seletar"</span> <span class="ot">=</span> <span class="st">"25"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tai seng"</span> <span class="ot">=</span> <span class="st">"43"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"jurong west"</span> <span class="ot">=</span> <span class="st">"44"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ang mo kio"</span> <span class="ot">=</span> <span class="st">"109"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"clementi"</span> <span class="ot">=</span> <span class="st">"50"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"admiralty"</span> <span class="ot">=</span> <span class="st">"104"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sentosa"</span> <span class="ot">=</span> <span class="st">"60"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"pulau ubin"</span> <span class="ot">=</span> <span class="st">"106"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"east coast parkway"</span> <span class="ot">=</span> <span class="st">"107"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"marina barrage"</span> <span class="ot">=</span> <span class="st">"108"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"newton"</span> <span class="ot">=</span> <span class="st">"111"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tuas south"</span> <span class="ot">=</span> <span class="st">"115"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"pasir panjang"</span> <span class="ot">=</span> <span class="st">"116"</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"jurong island"</span> <span class="ot">=</span> <span class="st">"117"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"choa chu kang south"</span> <span class="ot">=</span> <span class="st">"121"</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We also want to iterate over the years and month number in the url. For now, we will download the last 20 years of data.</p>
+<p>Another issue that we encountered was that some of the column names changed at certain years either due to a different spelling or symbol. There is also many white spaces in the name, which could make coding more tedious later on. As such, I opted to change all the column names to simpler short forms with underscore as the separator instead of space.</p>
+<p>The code chunk below shows the list of old to new column names. A function is also written for the renaming task, to rename the columns as we download the data sets 1 by 1. This helps with the <code>data.table::rbindlist</code> used in the loop as all the column names needs to be the same as the data set before.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Station"</span> <span class="ot">=</span> <span class="st">"Station"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"Year"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Month"</span> <span class="ot">=</span> <span class="st">"Month"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Daily Rainfall Total (mm)"</span> <span class="ot">=</span> <span class="st">"daily_rainfall"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Highest 30 Min Rainfall (mm)"</span> <span class="ot">=</span> <span class="st">"highest_30m_rainfall"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Highest 30 min Rainfall (mm)"</span> <span class="ot">=</span> <span class="st">"highest_30m_rainfall"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Highest 60 Min Rainfall (mm)"</span> <span class="ot">=</span> <span class="st">"highest_60m_rainfall"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Highest 60 min Rainfall (mm)"</span> <span class="ot">=</span> <span class="st">"highest_60m_rainfall"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Highest 120 Min Rainfall (mm)"</span> <span class="ot">=</span> <span class="st">"highest_120m_rainfall"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Highest 120 min Rainfall (mm)"</span> <span class="ot">=</span> <span class="st">"highest_120m_rainfall"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Temperature (°C)"</span> <span class="ot">=</span> <span class="st">"mean_temp"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Temperature (°C)"</span> <span class="ot">=</span> <span class="st">"mean_temp"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Temperature (Â°C)"</span> <span class="ot">=</span> <span class="st">"mean_temp"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Maximum Temperature (°C)"</span> <span class="ot">=</span> <span class="st">"max_temp"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Maximum Temperature (°C)"</span> <span class="ot">=</span> <span class="st">"max_temp"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Maximum Temperature (Â°C)"</span> <span class="ot">=</span> <span class="st">"max_temp"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Minimum Temperature (°C)"</span> <span class="ot">=</span> <span class="st">"min_temp"</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Minimum Temperature (°C)"</span> <span class="ot">=</span> <span class="st">"min_temp"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Minimum Temperature (Â°C)"</span> <span class="ot">=</span> <span class="st">"min_temp"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Wind Speed (km/h)"</span> <span class="ot">=</span> <span class="st">"mean_wind"</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Max Wind Speed (km/h)"</span> <span class="ot">=</span> <span class="st">"max_wind"</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>clean_names <span class="ot">&lt;-</span> <span class="cf">function</span>(df, col_names) {</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="fu">names</span>(col_names)) {</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(df)[<span class="fu">names</span>(df) <span class="sc">==</span> n] <span class="ot">&lt;-</span> col_names[[n]]</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (df)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, we can write our loop. The full code is shown below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pad_zero <span class="ot">&lt;-</span> <span class="cf">function</span>(num) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (num <span class="sc">&lt;</span> <span class="dv">10</span>) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span> (<span class="fu">paste0</span>(<span class="st">"0"</span>, <span class="fu">as.character</span>(num)))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span> (<span class="fu">as.character</span>(num))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.table</span>()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (station <span class="cf">in</span> stations) {</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (y <span class="cf">in</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">23</span>) {</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (m <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) {</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      year <span class="ot">&lt;-</span> <span class="fu">pad_zero</span>(y)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      month <span class="ot">&lt;-</span> <span class="fu">pad_zero</span>(m)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tryCatch</span>(</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>          joining_df <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="fu">paste0</span>(</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>          <span class="st">"http://www.weather.gov.sg/files/dailydata/DAILYDATA_S"</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>          station,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>          <span class="st">"_20"</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>          year,</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>          month,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>          <span class="st">".csv"</span>),</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>          <span class="at">encoding =</span> <span class="st">"Latin-1"</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>          joining_df <span class="ot">&lt;-</span> <span class="fu">clean_names</span>(joining_df, col_names)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>          df <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(<span class="fu">list</span>(df, joining_df), <span class="at">use.names=</span><span class="cn">TRUE</span>, <span class="at">fill=</span><span class="cn">TRUE</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>          <span class="fu">print</span>(e)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After downloading, we save the data in a csv file with the <code>data.table::fwrite</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(df, <span class="st">"data/clean_climate_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="weather-station-data" class="level3">
+<h3 class="anchored" data-anchor-id="weather-station-data">2.2.2 Weather Station data</h3>
+<p>The coordinates of each weather station can be found <a href="http://www.weather.gov.sg/wp-content/uploads/2022/06/Station_Records.pdf">here</a>. Due to the small number, I have manually collated them in a csv file and saved it.</p>
+</section>
+<section id="load-data" class="level3">
+<h3 class="anchored" data-anchor-id="load-data">2.2.3 Load data</h3>
+<p>Assuming we had already saved off the data previously, we will now load the data sets using the <code>readr::read_csv</code> function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">"data/clean_climate_data.csv"</span>, <span class="at">encoding=</span><span class="st">"Latin-1"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/weather_stations.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
-<section id="year-comparison" class="level1">
-<h1>Year Comparison</h1>
+</section>
+<section id="preliminary-eda" class="level1">
+<h1>3. Preliminary EDA</h1>
+<p>In this section, we will perform some preliminary exploratory analysis to understand how our data looks like as a time series. This will help us determine whether each variable can or can not be used, or what additional wrangling that is required to be done before the time series analysis is possible.</p>
+<p>But first, we have to do some additional cleaning as well to prevent errors.</p>
+<section id="remove-unwanted-characters" class="level2">
+<h2 class="anchored" data-anchor-id="remove-unwanted-characters">3.1 Remove unwanted characters</h2>
+<p>There are many observations with “-”. To avoid errors, we will change all of them to 0s.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>my_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(dengue, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">'lon'</span>, <span class="st">'lat'</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">lapply</span>(climate, <span class="cf">function</span>(x) <span class="fu">gsub</span>(<span class="st">"—"</span>, <span class="dv">0</span>, x)), <span class="at">stringsAsFactors=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-type" class="level2">
+<h2 class="anchored" data-anchor-id="data-type">3.2 Data type</h2>
+<p>Next, we want to ensure that all columns are in their correct data type. For Station, Year, Month, and Day, we want them to be factors. The rest should be numerical.</p>
+<p>For those values that were coerced as NA, we will convert them to 0 as well.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>climate[<span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span>)] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(climate[<span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span>)] , factor)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>climate[<span class="sc">!</span><span class="fu">names</span>(climate) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span>)] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(climate[<span class="sc">!</span><span class="fu">names</span>(climate) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span>)] , as.numeric)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>climate[<span class="fu">is.na</span>(climate)] <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="date-column" class="level2">
+<h2 class="anchored" data-anchor-id="date-column">3.3 Date column</h2>
+<p>We also want a date column for easier sorting in chronological order. To do that, we can use the <code>zoo::as.Date</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>climate<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">with</span>(climate, <span class="fu">paste</span>(Year, Month, Day,<span class="at">sep=</span><span class="st">"-"</span>)), <span class="st">"%Y-%m-%d"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="daily-mean-temperature-rainfall-and-wind" class="level2">
+<h2 class="anchored" data-anchor-id="daily-mean-temperature-rainfall-and-wind">3.4 Daily Mean Temperature, Rainfall, and Wind</h2>
+<p>Let us explore how the mean temperature, rainfall, and wind looks like in the past 20 years.</p>
+<p>The code chunk below plots the daily mean temperature over the last 20 years for each weather station. Similar code was used to plot the chart for rainfall and temperature as well.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Temperature</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Rainfall</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Wind</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_temp, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Daily Mean Temperature in last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>daily_rainfall, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Daily rainfall in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_wind, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Daily mean wind speed in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insights
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>The start date of each weather station varies. This should be taken into account when fitting the model, as well as in the date range selection in the Shiny App.</li>
+<li>There are many periods within the time series where the data is 0s or NA, especially so in temperature and wind. <strong>To deal with this, we can</strong> <strong>take the mean value of that month from other years as a filler value</strong>. For example, if jan 2010 is missing, we can use the mean value from jan 2003-2009, and 2011-2023 to fill the gap.</li>
+<li>Daily rainfall has many 0 values, representing days without rain. This however, makes it difficult to model a time series. <strong>Thus, dates will be rolled up to monthly levels and we will analyse mean monthly values instead.</strong> To be consistent, we will use monthly levels for temperature and wind data as well.</li>
+<li>Certain stations such as Sentosa stopped collecting data before 2023. <strong>These stations should be removed.</strong></li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="data-wrangling" class="level1">
+<h1>4. Data Wrangling</h1>
+<section id="remove-incomplete-stations" class="level2">
+<h2 class="anchored" data-anchor-id="remove-incomplete-stations">4.1 Remove incomplete stations</h2>
+<p>As observed above, these stations have data that ended earlier than december 2023, and thus will be removed from the time series analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"temp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "temp"</code></pre>
+</div>
+</div>
+</section>
+<section id="roll-up-to-monthly-levels" class="level2">
+<h2 class="anchored" data-anchor-id="roll-up-to-monthly-levels">4.2 Roll up to Monthly levels</h2>
+<p>As there are many instances of 0s within each month, we will have to ignore them as they will pull down the monthly average temperature or wind. Therefore, a function is written to calculate the non-zero mean value instead. However, this is not needed for rainfall as 0s would mean days with no rain.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>non_zero_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">mean</span>(x[x<span class="sc">!=</span><span class="dv">0</span>])</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (y)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we use the <code>dplyr::group_by</code> and <code>dplyr::summarise</code> functions to calculate the monthly average for all variables. We also re-create the date column as a function of year and month using <code>zoo::as.yearmon</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>monthly_climate <span class="ot">&lt;-</span> climate <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Year, Month) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_temp =</span> <span class="fu">non_zero_mean</span>(mean_temp),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_temp =</span> <span class="fu">non_zero_mean</span>(max_temp),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_temp =</span> <span class="fu">non_zero_mean</span>(min_temp),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_wind =</span> <span class="fu">non_zero_mean</span>(mean_wind),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_wind =</span> <span class="fu">non_zero_mean</span>(max_wind),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_rain =</span> <span class="fu">mean</span>(daily_rainfall),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_30m_rain =</span> <span class="fu">mean</span>(highest_30m_rainfall),</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_60m_rain =</span> <span class="fu">mean</span>(highest_60m_rainfall),</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_120m_rain =</span> <span class="fu">mean</span>(highest_120m_rainfall),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">date =</span> <span class="fu">min</span>(date))</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>monthly_climate<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.yearmon</span>(monthly_climate<span class="sc">$</span>date)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>monthly_climate[<span class="fu">is.na</span>(monthly_climate)] <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="filling-zeros-with-non-zero-means" class="level2">
+<h2 class="anchored" data-anchor-id="filling-zeros-with-non-zero-means">4.3 Filling zeros with non-zero means</h2>
+<p>This task requires several steps which is performed by the code chunk below.</p>
+<p>First, we want to iterate through all relevant temperature and wind variables.</p>
+<p>Next, for each variable, we look at all the stations data.</p>
+<p>Then, for each station, we find the months where all data is missing or 0.</p>
+<p>Lastly, for each of these months, we replace the NA or 0 with the non-zero mean of the same month in other years for that station. For example, if Changi station jan 2010 is missing, then we will replace the value with the non-zero mean from Changi station jan 2003-2009, and 2011-2023.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>replace_zero <span class="ot">&lt;-</span> <span class="cf">function</span>(df, s, y, m, col) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  df[df<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>       df<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>       df<span class="sc">$</span>Month <span class="sc">==</span> m, col][[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">non_zero_mean</span>(df[df<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span> df<span class="sc">$</span>Month <span class="sc">==</span> m, col])</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (df)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>columns <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"mean_temp"</span>, <span class="st">"max_temp"</span>, <span class="st">"min_temp"</span>, <span class="st">"mean_wind"</span>, <span class="st">"max_wind"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (c <span class="cf">in</span> columns) {</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="fu">levels</span>(monthly_climate<span class="sc">$</span>Station)) {</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">levels</span>(monthly_climate<span class="sc">$</span>Year)) {</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (m <span class="cf">in</span> <span class="fu">levels</span>(monthly_climate<span class="sc">$</span>Month)) {</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        value <span class="ot">&lt;-</span> monthly_climate[monthly_climate<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>                                   monthly_climate<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>                                   monthly_climate<span class="sc">$</span>Month <span class="sc">==</span> m, c][[<span class="dv">1</span>]]</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">length</span>(value) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>          monthly_climate <span class="ot">&lt;-</span> <span class="fu">replace_zero</span>(monthly_climate, s, y, m, c)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> <span class="cf">if</span> (value <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>          monthly_climate <span class="ot">&lt;-</span> <span class="fu">replace_zero</span>(monthly_climate, s, y, m, c)</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="final-look-at-data" class="level2">
+<h2 class="anchored" data-anchor-id="final-look-at-data">4.4 Final look at data</h2>
+<p>Let us chart the same variables once more and check if all values are fine now.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Temperature</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Rainfall</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Wind</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_temp, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly Mean Temperature in last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_rain, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly rainfall in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_wind, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly mean wind speed in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="time-series-forecasting" class="level1">
+<h1>5. Time Series Forecasting</h1>
+<p>In this section, we will be using time series econometric models to forecast future climate conditions in Singapore.</p>
+<section id="input-variables" class="level2">
+<h2 class="anchored" data-anchor-id="input-variables">5.1 Input variables</h2>
+<p>This section determines the variable selection done by the user of the Shiny Application. For the purpose of this prototype, it will be hard-coded for now.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>target_station <span class="ot">&lt;-</span> <span class="st">"Newton"</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>target_variable <span class="ot">&lt;-</span> <span class="st">"mean_rain"</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>target_date_start <span class="ot">&lt;-</span> <span class="st">"2009-10"</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>target_date_end <span class="ot">&lt;-</span> <span class="st">"2023-12"</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>target_validation_start <span class="ot">&lt;-</span> <span class="st">"2023-1"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="model-fitting" class="level2">
+<h2 class="anchored" data-anchor-id="model-fitting">5.2 Model Fitting</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> monthly_climate[</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  monthly_climate<span class="sc">$</span>Station <span class="sc">==</span> target_station, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"date"</span>, target_variable)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>target<span class="sc">$</span>cumulative_sum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(target[target_variable])</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>cumulative_sum <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">first</span>(target[<span class="fu">order</span>(target<span class="sc">$</span>date), <span class="st">"Year"</span>])[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">first</span>(target[<span class="fu">order</span>(target<span class="sc">$</span>date), <span class="st">"Month"</span>])[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>dfts <span class="ot">&lt;-</span> <span class="fu">ts</span>(target[target_variable], <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start=</span><span class="fu">c</span>(y, m))</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">window</span>(dfts, <span class="at">start =</span> <span class="fu">c</span>(y,m), <span class="at">end =</span> <span class="fu">c</span>(<span class="dv">2022</span>,<span class="dv">12</span>))</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>validation <span class="ot">&lt;-</span> <span class="fu">window</span>(dfts, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">2023</span>,<span class="dv">1</span>))</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>HW <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(training)</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>validation_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(HW,</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>                            <span class="at">n.ahead =</span> <span class="fu">length</span>(validation))</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>mape <span class="ot">&lt;-</span> <span class="fu">MAPE</span>(validation_preds, validation) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 55.07593</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dfts, <span class="at">ylab=</span>target_variable)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(HW<span class="sc">$</span>fitted[,<span class="dv">1</span>], <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(validation_preds, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot it:</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"view"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(my_sf)<span class="sc">+</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_bubbles</span>(<span class="at">col =</span> <span class="st">"red"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">size =</span> <span class="st">"num_cases"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">border.col =</span> <span class="st">"black"</span>,</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">border.lwd =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>components_dfts <span class="ot">&lt;-</span> <span class="fu">decompose</span>(dfts)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(components_dfts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="model-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="model-tuning">5.2 Model Tuning</h2>
+<p>After fitting the model, users are allowed to view validation results and decide if they wish to further tune the model by adjusting certain variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>gamma <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="model-forecast" class="level2">
+<h2 class="anchored" data-anchor-id="model-forecast">5.3 Model Forecast</h2>
+<p>Lastly, once parameters are confirmed, we can proceed to make predictions and plot them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># https://www.r-bloggers.com/2012/07/holt-winters-forecast-using-ggplot2/</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>HWplot <span class="ot">&lt;-</span> <span class="cf">function</span>(ts_object, </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n.ahead =</span> <span class="dv">4</span>, </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">CI =</span> .<span class="dv">95</span>, </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">error.ribbon =</span> <span class="st">'green'</span>, </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">line.size =</span> <span class="dv">1</span>) {</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    hw_object <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(ts_object)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    forecast <span class="ot">&lt;-</span> <span class="fu">predict</span>(hw_object,  </span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">n.ahead =</span> n.ahead,  </span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">prediction.interval =</span> T,  </span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">level =</span> CI)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(forecast)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    for_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(forecast), <span class="dv">3</span>),  </span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">value_forecast =</span> df<span class="sc">$</span>fit,  </span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>                             <span class="at">dev =</span> df<span class="sc">$</span>upr <span class="sc">-</span> df<span class="sc">$</span>fit)</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    fitted_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(hw_object<span class="sc">$</span>fitted), <span class="dv">3</span>),</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>                                <span class="at">fitted =</span> <span class="fu">as.data.frame</span>(hw_object<span class="sc">$</span>fitted)<span class="sc">$</span>xhat)</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>    actual_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(hw_object<span class="sc">$</span>x), <span class="dv">3</span>),</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Actual =</span> <span class="fu">c</span>(hw_object<span class="sc">$</span>x))</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    graphset <span class="ot">&lt;-</span> <span class="fu">merge</span>(actual_values,  fitted_values,  <span class="at">by=</span><span class="st">'time'</span>,  <span class="at">all=</span><span class="cn">TRUE</span>)</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    graphset <span class="ot">&lt;-</span> <span class="fu">merge</span>(graphset,  for_values,  <span class="at">all=</span><span class="cn">TRUE</span>,  <span class="at">by=</span><span class="st">'time'</span>)</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    graphset[<span class="fu">is.na</span>(graphset<span class="sc">$</span>dev),  ]<span class="sc">$</span>dev <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>    graphset<span class="sc">$</span>Fitted <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>,  <span class="fu">NROW</span>(graphset) <span class="sc">-</span> (<span class="fu">NROW</span>(for_values) <span class="sc">+</span> <span class="fu">NROW</span>(fitted_values))),  fitted_values<span class="sc">$</span>fitted,  for_values<span class="sc">$</span>value_forecast)</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    graphset.melt <span class="ot">&lt;-</span> <span class="fu">melt</span>(graphset[, <span class="fu">c</span>(<span class="st">'time'</span>, <span class="st">'Actual'</span>, <span class="st">'Fitted'</span>)], <span class="at">id=</span><span class="st">'time'</span>)</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(graphset.melt,  </span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x=</span>time,  <span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>graphset, </span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">aes</span>(<span class="at">x=</span>time, </span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y=</span>Fitted, </span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>                      <span class="at">ymin=</span>Fitted<span class="sc">-</span>dev,  </span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>                      <span class="at">ymax=</span>Fitted <span class="sc">+</span> dev),  </span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>                  <span class="at">alpha=</span>.<span class="dv">2</span>,  </span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fill=</span>error.ribbon) <span class="sc">+</span> </span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">colour=</span>variable), </span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>                <span class="at">linewidth=</span>line.size) <span class="sc">+</span> </span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">max</span>(actual_values<span class="sc">$</span>time),  </span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">'Time'</span>) <span class="sc">+</span> </span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">'Value'</span>) <span class="sc">+</span> </span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">'bottom'</span>) <span class="sc">+</span> </span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_colour_hue</span>(<span class="st">''</span>)</span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(p)</span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HWplot</span>(dfts, <span class="at">n.ahead=</span><span class="dv">36</span>, <span class="at">CI=</span>.<span class="dv">95</span>, <span class="at">error.ribbon=</span><span class="st">'green'</span>,<span class="at">line.size=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
