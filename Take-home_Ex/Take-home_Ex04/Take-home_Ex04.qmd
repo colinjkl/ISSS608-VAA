@@ -207,7 +207,7 @@ But first, we have to do some additional cleaning as well to prevent errors.
 There are many observations with "-". To avoid errors, we will change all of them to 0s.
 
 ```{r}
-climate <- data.frame(lapply(climate, function(x) gsub("—", 0, x)), stringsAsFactors=F)
+climate <- data.frame(lapply(climate, function(x) gsub("—", NA, x)), stringsAsFactors=F)
 ```
 
 ## 3.2 Data type
@@ -221,7 +221,7 @@ climate[c("Station", "Year", "Month", "Day")] <- lapply(climate[c("Station", "Ye
 
 climate[!names(climate) %in% c("Station", "Year", "Month", "Day")] <- lapply(climate[!names(climate) %in% c("Station", "Year", "Month", "Day")] , as.numeric)
 
-climate[is.na(climate)] <- 0
+#climate[is.na(climate)] <- 0
 ```
 
 ## 3.3 Date column
@@ -230,6 +230,8 @@ We also want a date column for easier sorting in chronological order. To do that
 
 ```{r}
 climate$date <- as.Date(with(climate, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
+
+climate <- climate[order(climate$date), ]
 ```
 
 ## 3.4 Daily Mean Temperature, Rainfall, and Wind
@@ -282,20 +284,11 @@ ggplot() +
 1.  The start date of each weather station varies. This should be taken into account when fitting the model, as well as in the date range selection in the Shiny App.
 2.  There are many periods within the time series where the data is 0s or NA, especially so in temperature and wind. **To deal with this, we can** **take the mean value of that month from other years as a filler value**. For example, if jan 2010 is missing, we can use the mean value from jan 2003-2009, and 2011-2023 to fill the gap.
 3.  Daily rainfall has many 0 values, representing days without rain. This however, makes it difficult to model a time series. **Thus, dates will be rolled up to monthly levels and we will analyse mean monthly values instead.** To be consistent, we will use monthly levels for temperature and wind data as well.
-4.  Certain stations such as Sentosa stopped collecting data before 2023. **These stations should be removed.**
 :::
 
 # 4. Data Wrangling
 
-## 4.1 Remove incomplete stations
-
-As observed above, these stations have data that ended earlier than december 2023, and thus will be removed from the time series analysis.
-
-```{r}
-print("temp")
-```
-
-## 4.2 Roll up to Monthly levels
+## 4.1 Roll up to Monthly levels
 
 As there are many instances of 0s within each month, we will have to ignore them as they will pull down the monthly average temperature or wind. Therefore, a function is written to calculate the non-zero mean value instead. However, this is not needed for rainfall as 0s would mean days with no rain.
 
@@ -327,7 +320,7 @@ monthly_climate$date <- as.yearmon(monthly_climate$date)
 monthly_climate[is.na(monthly_climate)] <- 0
 ```
 
-## 4.3 Filling zeros with non-zero means
+## 4.2 Filling gaps with non-zero means
 
 This task requires several steps which is performed by the code chunk below.
 
@@ -335,7 +328,7 @@ First, we want to iterate through all relevant temperature and wind variables.
 
 Next, for each variable, we look at all the stations data.
 
-Then, for each station, we find the months where all data is missing or 0.
+Then, for each station, we find the months where all data is missing.
 
 Lastly, for each of these months, we replace the NA or 0 with the non-zero mean of the same month in other years for that station. For example, if Changi station jan 2010 is missing, then we will replace the value with the non-zero mean from Changi station jan 2003-2009, and 2011-2023.
 
@@ -370,7 +363,68 @@ for (c in columns) {
 }
 ```
 
-## 4.4 Final look at data
+```{r}
+replace_zero <- function(df, s, y, m, col) {
+  df[df$Station == s &
+       df$Year == y &
+       df$Month == m, col][[1]] <- non_zero_mean(df[df$Station == s & df$Month == m, col])
+  
+  return (df)
+}
+
+columns = c("mean_temp", "max_temp", "min_temp", "mean_wind", "max_wind")
+
+filled_monthly_climate <- monthly_climate
+
+for (c in columns) {
+  for (s in levels(monthly_climate$Station)) {
+    
+    temp <- monthly_climate[monthly_climate$Station == s, 
+                            c("Station", "Year", "Month", "date", c)]
+    
+    temp <- temp[order(temp$date), ]
+    
+    temp$cum_sum <- cumsum(temp[c])
+    
+    for (y in levels(temp$Year)) {
+      for (m in levels(temp$Month)) {
+        
+        value <- temp[temp$Year == y &
+                      temp$Month == m, c][[1]]
+        
+        cum_sum <- temp[temp$Year == y &
+                      temp$Month == m, "cum_sum"][[1]]
+        
+        if (length(value) == 0) next
+        
+        if (value == 0 & cum_sum > 0) {
+          temp <- replace_zero(temp, s, y, m, c)
+        }
+        
+        if (cum_sum == 0) {
+          temp[
+            temp$Year == y &
+              temp$Month == m,
+            c
+          ] <- NaN
+        }
+        
+        new_value <- temp[temp$Year == y &
+                      temp$Month == m, c][[1]]
+        
+        filled_monthly_climate[
+          filled_monthly_climate$Station == s &
+            filled_monthly_climate$Year == y &
+            filled_monthly_climate$Month == m,
+          c
+        ] <- new_value
+      }
+    }
+  }
+}
+```
+
+## 4.3 Final look at data
 
 Let us chart the same variables once more and check if all values are fine now.
 
@@ -394,7 +448,7 @@ ggplot() +
 #| code-summary: Show code
 
 ggplot() + 
-  geom_line(data = monthly_climate, aes(x=date, y=mean_rain, colour=Station)) + 
+  geom_line(data = filled_monthly_climate, aes(x=date, y=mean_rain, colour=Station)) + 
   facet_wrap(~Station) +
   ggtitle("Monthly rainfall in the last 20 years")
 ```
@@ -406,7 +460,7 @@ ggplot() +
 #| code-summary: Show code
 
 ggplot() + 
-  geom_line(data = monthly_climate, aes(x=date, y=mean_wind, colour=Station)) + 
+  geom_line(data = filled_monthly_climate, aes(x=date, y=mean_wind, colour=Station)) + 
   facet_wrap(~Station) +
   ggtitle("Monthly mean wind speed in the last 20 years")
 ```
@@ -418,26 +472,32 @@ In this section, we will be using time series econometric models to forecast fut
 
 ## 5.1 Input variables
 
-This section determines the variable selection done by the user of the Shiny Application. For the purpose of this prototype, it will be hard-coded for now.
+This section determines the variable selection done by the user of the Shiny Application. It is split into 2 phases.
+
+Phase 1
+
+1.  User selects weather station and climate variable using drop-down list.
+
+2.  The code will filter out the selected weather station and climate variable, and obtain the earliest start date available.
 
 ```{r}
-target_station <- "Newton"
-target_variable <- "mean_rain"
-target_date_start <- "2009-10"
-target_date_end <- "2023-12"
-target_validation_start <- "2023-1"
+# User Input
+target_station <- "Paya Lebar"
+target_variable <- "mean_temp"
 ```
 
-## 5.2 Model Fitting
-
 ```{r}
-
-
-target <- monthly_climate[
-  monthly_climate$Station == target_station, 
+# Filter out target data from monthly_climate
+target <- filled_monthly_climate[
+  filled_monthly_climate$Station == target_station, 
   c("Station", "Year", "Month", "date", target_variable)
 ]
 
+# Convert NAs back to zero for sorting and cumsum
+target[is.na(target)] <- 0
+target <- target[order(target$date), ]
+
+# Finding earliest start date using cumulative sum
 target$cumulative_sum <- cumsum(target[target_variable])
 
 target <- target[target$cumulative_sum > 0, ]
@@ -449,28 +509,109 @@ m <- dplyr::first(target[order(target$date), "Month"])[[1]] %>%
   as.character() %>% 
   as.numeric()
 
-dfts <- ts(target[target_variable], frequency = 12, start=c(y, m))
+print(paste0("Earliest start date: ", as.character(y), "-", as.character(m)))
+```
 
-training <- window(dfts, start = c(y,m), end = c(2022,12))
-validation <- window(dfts, start = c(2023,1))
+Phase 2
 
-HW <- HoltWinters(training)
+1.  User selects the start and end date using a slider (slider start date defined in step 2, end date is always Dec 2023), as well as training to test set ratio.
 
-validation_preds <- predict(HW,
-                            n.ahead = length(validation))
+2.  The code will slice the data according to the defined dates.
 
-mape <- MAPE(validation_preds, validation) * 100
-
-print(mape)
-
-plot(dfts, ylab=target_variable)
-lines(HW$fitted[,1], lty=2, col="blue")
-lines(validation_preds, lty=2, col="red")
+```{r}
+# User Input
+target_date_start <- "2018-3"
+target_date_end <- "2023-12"
+train_test_split <- 0.8
 ```
 
 ```{r}
-components_dfts <- decompose(dfts)
+# Filter out defined time period
+target <- target[target$date >= target_date_start, ]
+target <- target[target$date <= target_date_end, ]
+
+# Find row number when training ends and validation starts
+split_train_end <- round(train_test_split*nrow(target)) - 1
+split_val_start <- round(train_test_split*nrow(target))
+
+# Check if there is no test, ie: train_test_split == 1 
+# if (target_date_end == target$date[split_val_start])
+if (train_test_split == 1) {
+  validation = FALSE
+} else {
+  validation = TRUE
+}
+
+# Create time series object
+train_ts <- ts(target[target_variable], 
+               frequency = 12,
+               start = c(
+                 strsplit(target_date_start, "-")[[1]][1],
+                 strsplit(target_date_end, "-")[[1]][2]
+               ),
+               end = c(
+                 as.numeric(year(target$date[split_train_end])),
+                 as.numeric(month(target$date[split_train_end]))
+               ))
+```
+
+## 5.2 Model Fitting
+
+In this section, we will use the inputs provided by the user to define the data that we will be using to fit the Holt Winters model.
+
+```{r}
+
+HW <- HoltWinters(train_ts)
+
+result_df <- target[,c("date",target_variable)]
+
+
+if (validation) {
+  
+  val_period <- nrow(target) - split_val_start
+  
+  validation_preds <- predict(HW,
+                              n.ahead = val_period)
+  
+  result_df$fit <- NA
+  result_df$fit[13:(nrow(result_df)-val_period)] <- as.data.frame(HW$fitted)$xhat
+  
+  result_df$val <- NA
+  result_df$val[(nrow(result_df)-val_period+1):nrow(result_df)] <- validation_preds
+
+} else {
+  
+  result_df$fit <- NA
+  result_df$fit[13:nrow(result_df)] <- as.data.frame(HW$fitted)$xhat
+  
+}
+```
+
+```{r}
+g <- ggplot(data = result_df) + 
+  geom_line(aes(x=date, y=.data[[target_variable]])) +
+  geom_line(aes(x=date, y=fit), color="blue")
+
+if (validation) {
+  g <- g + geom_line(aes(x=date, y=val), color="red")
+}
+
+g
+```
+
+```{r}
+components_dfts <- decompose(train_ts)
 plot(components_dfts)
+```
+
+```{r}
+components_dfts$seasonal %>% data.frame()
+```
+
+```{r}
+mape <- MAPE(validation_preds, validation) * 100
+
+print(mape)
 ```
 
 ## 5.2 Model Tuning
