@@ -205,6 +205,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex06/In-class_Ex06.html" rel="" target="">
  <span class="dropdown-text">In-class Exercise 6</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex07/In-class_Ex07.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 7</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -223,6 +227,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html" rel="" target="">
  <span class="dropdown-text">Take-home Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex04/Take-home_Ex04.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 4</span></a>
   </li>  
     </ul>
   </li>
@@ -272,10 +280,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">4. Data Wrangling</a>
   <ul class="collapse">
-  <li><a href="#remove-incomplete-stations" id="toc-remove-incomplete-stations" class="nav-link" data-scroll-target="#remove-incomplete-stations">4.1 Remove incomplete stations</a></li>
-  <li><a href="#roll-up-to-monthly-levels" id="toc-roll-up-to-monthly-levels" class="nav-link" data-scroll-target="#roll-up-to-monthly-levels">4.2 Roll up to Monthly levels</a></li>
-  <li><a href="#filling-zeros-with-non-zero-means" id="toc-filling-zeros-with-non-zero-means" class="nav-link" data-scroll-target="#filling-zeros-with-non-zero-means">4.3 Filling zeros with non-zero means</a></li>
-  <li><a href="#final-look-at-data" id="toc-final-look-at-data" class="nav-link" data-scroll-target="#final-look-at-data">4.4 Final look at data</a></li>
+  <li><a href="#roll-up-to-monthly-levels" id="toc-roll-up-to-monthly-levels" class="nav-link" data-scroll-target="#roll-up-to-monthly-levels">4.1 Roll up to Monthly levels</a></li>
+  <li><a href="#filling-missing-data-with-non-zero-means" id="toc-filling-missing-data-with-non-zero-means" class="nav-link" data-scroll-target="#filling-missing-data-with-non-zero-means">4.2 Filling missing data with non-zero means</a></li>
+  <li><a href="#final-look-at-data" id="toc-final-look-at-data" class="nav-link" data-scroll-target="#final-look-at-data">4.3 Final look at data</a></li>
   </ul></li>
   <li><a href="#time-series-forecasting" id="toc-time-series-forecasting" class="nav-link" data-scroll-target="#time-series-forecasting">5. Time Series Forecasting</a>
   <ul class="collapse">
@@ -283,6 +290,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting">5.2 Model Fitting</a></li>
   <li><a href="#model-tuning" id="toc-model-tuning" class="nav-link" data-scroll-target="#model-tuning">5.2 Model Tuning</a></li>
   <li><a href="#model-forecast" id="toc-model-forecast" class="nav-link" data-scroll-target="#model-forecast">5.3 Model Forecast</a></li>
+  </ul></li>
+  <li><a href="#storyboard-ui" id="toc-storyboard-ui" class="nav-link" data-scroll-target="#storyboard-ui">6. Storyboard UI</a>
+  <ul class="collapse">
+  <li><a href="#user-input" id="toc-user-input" class="nav-link" data-scroll-target="#user-input">6.1 User input</a></li>
+  <li><a href="#time-frame-and-validation" id="toc-time-frame-and-validation" class="nav-link" data-scroll-target="#time-frame-and-validation">6.2 Time frame and validation</a></li>
+  <li><a href="#model-fit" id="toc-model-fit" class="nav-link" data-scroll-target="#model-fit">6.3 Model Fit</a></li>
+  <li><a href="#model-tuning-1" id="toc-model-tuning-1" class="nav-link" data-scroll-target="#model-tuning-1">6.4 Model Tuning</a></li>
+  <li><a href="#model-forecast-1" id="toc-model-forecast-1" class="nav-link" data-scroll-target="#model-forecast-1">6.5 Model forecast</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -316,7 +331,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 5, 2024</p>
+      <p class="date-modified">March 9, 2024</p>
     </div>
   </div>
     
@@ -592,6 +607,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Finally, we can write our loop. The full code is shown below.</p>
 <div class="cell">
+<details>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pad_zero <span class="ot">&lt;-</span> <span class="cf">function</span>(num) {</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (num <span class="sc">&lt;</span> <span class="dv">10</span>) {</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span> (<span class="fu">paste0</span>(<span class="st">"0"</span>, <span class="fu">as.character</span>(num)))</span>
@@ -628,6 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>After downloading, we save the data in a csv file with the <code>data.table::fwrite</code> function.</p>
 <div class="cell">
@@ -642,9 +660,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="load-data">2.2.3 Load data</h3>
 <p>Assuming we had already saved off the data previously, we will now load the data sets using the <code>readr::read_csv</code> function</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">"data/clean_climate_data.csv"</span>, <span class="at">encoding=</span><span class="st">"Latin-1"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/weather_stations.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">"data/clean_climate_data.csv"</span>, <span class="at">encoding=</span><span class="st">"Latin-1"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -676,7 +692,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="date-column">3.3 Date column</h2>
 <p>We also want a date column for easier sorting in chronological order. To do that, we can use the <code>zoo::as.Date</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>climate<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">with</span>(climate, <span class="fu">paste</span>(Year, Month, Day,<span class="at">sep=</span><span class="st">"-"</span>)), <span class="st">"%Y-%m-%d"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>climate<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">with</span>(climate, <span class="fu">paste</span>(Year, Month, Day,<span class="at">sep=</span><span class="st">"-"</span>)), <span class="st">"%Y-%m-%d"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> climate[<span class="fu">order</span>(climate<span class="sc">$</span>date), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="daily-mean-temperature-rainfall-and-wind" class="level2">
@@ -688,10 +706,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
+<details>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_temp, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span> </span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Daily Mean Temperature in last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -699,10 +720,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
+<details>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>daily_rainfall, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Daily rainfall in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -710,10 +734,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <div class="cell">
+<details>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_wind, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Daily mean wind speed in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -733,129 +760,203 @@ Insights
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>The start date of each weather station varies. This should be taken into account when fitting the model, as well as in the date range selection in the Shiny App.</li>
-<li>There are many periods within the time series where the data is 0s or NA, especially so in temperature and wind. <strong>To deal with this, we can</strong> <strong>take the mean value of that month from other years as a filler value</strong>. For example, if jan 2010 is missing, we can use the mean value from jan 2003-2009, and 2011-2023 to fill the gap.</li>
+<li>There are many periods within the time series where the data is missing, especially so in temperature and wind. <strong>To deal with this, we can</strong> <strong>take the mean value of that month from other years as a filler value</strong>. For example, if jan 2010 is missing, we can use the mean value from jan 2003-2009, and 2011-2023 to fill the gap.</li>
 <li>Daily rainfall has many 0 values, representing days without rain. This however, makes it difficult to model a time series. <strong>Thus, dates will be rolled up to monthly levels and we will analyse mean monthly values instead.</strong> To be consistent, we will use monthly levels for temperature and wind data as well.</li>
-<li>Certain stations such as Sentosa stopped collecting data before 2023. <strong>These stations should be removed.</strong></li>
 </ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Non-Captured v.s Missing data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Non-captured data refers to the missing data before the date when the weather station started collecting that data. We do not want to modify non-captured data.</p></li>
+<li><p>Missing data refers to the data after the start date that is captured but missing for whatever reasons. We want to fill these gaps with appropriate estimation techniques.</p></li>
+</ul>
 </div>
 </div>
 </section>
 </section>
 <section id="data-wrangling" class="level1">
 <h1>4. Data Wrangling</h1>
-<section id="remove-incomplete-stations" class="level2">
-<h2 class="anchored" data-anchor-id="remove-incomplete-stations">4.1 Remove incomplete stations</h2>
-<p>As observed above, these stations have data that ended earlier than december 2023, and thus will be removed from the time series analysis.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"temp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "temp"</code></pre>
-</div>
-</div>
-</section>
 <section id="roll-up-to-monthly-levels" class="level2">
-<h2 class="anchored" data-anchor-id="roll-up-to-monthly-levels">4.2 Roll up to Monthly levels</h2>
+<h2 class="anchored" data-anchor-id="roll-up-to-monthly-levels">4.1 Roll up to Monthly levels</h2>
 <p>As there are many instances of 0s within each month, we will have to ignore them as they will pull down the monthly average temperature or wind. Therefore, a function is written to calculate the non-zero mean value instead. However, this is not needed for rainfall as 0s would mean days with no rain.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>non_zero_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">mean</span>(x[x<span class="sc">!=</span><span class="dv">0</span>])</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (y)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to find non-zero mean from a dateframe column</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>non_zero_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">mean</span>(x[x<span class="sc">!=</span><span class="dv">0</span>])</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (y)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we use the <code>dplyr::group_by</code> and <code>dplyr::summarise</code> functions to calculate the monthly average for all variables. We also re-create the date column as a function of year and month using <code>zoo::as.yearmon</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>monthly_climate <span class="ot">&lt;-</span> climate <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Year, Month) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_temp =</span> <span class="fu">non_zero_mean</span>(mean_temp),</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_temp =</span> <span class="fu">non_zero_mean</span>(max_temp),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_temp =</span> <span class="fu">non_zero_mean</span>(min_temp),</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_wind =</span> <span class="fu">non_zero_mean</span>(mean_wind),</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_wind =</span> <span class="fu">non_zero_mean</span>(max_wind),</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_rain =</span> <span class="fu">mean</span>(daily_rainfall),</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_30m_rain =</span> <span class="fu">mean</span>(highest_30m_rainfall),</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_60m_rain =</span> <span class="fu">mean</span>(highest_60m_rainfall),</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_120m_rain =</span> <span class="fu">mean</span>(highest_120m_rainfall),</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">date =</span> <span class="fu">min</span>(date))</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>monthly_climate<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.yearmon</span>(monthly_climate<span class="sc">$</span>date)</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>monthly_climate[<span class="fu">is.na</span>(monthly_climate)] <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply non-zero means to monthly temp and wind variables</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply mean to monthly rain variables</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>monthly_climate <span class="ot">&lt;-</span> climate <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Year, Month) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_temp =</span> <span class="fu">non_zero_mean</span>(mean_temp),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_temp =</span> <span class="fu">non_zero_mean</span>(max_temp),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_temp =</span> <span class="fu">non_zero_mean</span>(min_temp),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_wind =</span> <span class="fu">non_zero_mean</span>(mean_wind),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_wind =</span> <span class="fu">non_zero_mean</span>(max_wind),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_rain =</span> <span class="fu">mean</span>(daily_rainfall),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_30m_rain =</span> <span class="fu">mean</span>(highest_30m_rainfall),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_60m_rain =</span> <span class="fu">mean</span>(highest_60m_rainfall),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_120m_rain =</span> <span class="fu">mean</span>(highest_120m_rainfall),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">date =</span> <span class="fu">min</span>(date))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Format date column as yearmon format</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>monthly_climate<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.yearmon</span>(monthly_climate<span class="sc">$</span>date)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Change any NAs to 0</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>monthly_climate[<span class="fu">is.na</span>(monthly_climate)] <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="filling-zeros-with-non-zero-means" class="level2">
-<h2 class="anchored" data-anchor-id="filling-zeros-with-non-zero-means">4.3 Filling zeros with non-zero means</h2>
+<section id="filling-missing-data-with-non-zero-means" class="level2">
+<h2 class="anchored" data-anchor-id="filling-missing-data-with-non-zero-means">4.2 Filling missing data with non-zero means</h2>
 <p>This task requires several steps which is performed by the code chunk below.</p>
-<p>First, we want to iterate through all relevant temperature and wind variables.</p>
-<p>Next, for each variable, we look at all the stations data.</p>
-<p>Then, for each station, we find the months where all data is missing or 0.</p>
-<p>Lastly, for each of these months, we replace the NA or 0 with the non-zero mean of the same month in other years for that station. For example, if Changi station jan 2010 is missing, then we will replace the value with the non-zero mean from Changi station jan 2003-2009, and 2011-2023.</p>
+<ol type="1">
+<li><p>Iterate through all relevant temperature and wind variables.</p></li>
+<li><p>For each variable, iterate through all the stations.</p></li>
+<li><p>For each station, find the months where all data is missing.</p></li>
+<li><p>Lastly, for each of these months, we replace the NA or 0 with the non-zero mean of the same month in other years for that station. For example, if Changi station jan 2010 is missing, then we will replace the value with the non-zero mean from Changi station jan 2003-2009, and 2011-2023.</p></li>
+</ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>replace_zero <span class="ot">&lt;-</span> <span class="cf">function</span>(df, s, y, m, col) {</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  df[df<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>       df<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>       df<span class="sc">$</span>Month <span class="sc">==</span> m, col][[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">non_zero_mean</span>(df[df<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span> df<span class="sc">$</span>Month <span class="sc">==</span> m, col])</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (df)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>columns <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"mean_temp"</span>, <span class="st">"max_temp"</span>, <span class="st">"min_temp"</span>, <span class="st">"mean_wind"</span>, <span class="st">"max_wind"</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (c <span class="cf">in</span> columns) {</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="fu">levels</span>(monthly_climate<span class="sc">$</span>Station)) {</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">levels</span>(monthly_climate<span class="sc">$</span>Year)) {</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (m <span class="cf">in</span> <span class="fu">levels</span>(monthly_climate<span class="sc">$</span>Month)) {</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        value <span class="ot">&lt;-</span> monthly_climate[monthly_climate<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>                                   monthly_climate<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>                                   monthly_climate<span class="sc">$</span>Month <span class="sc">==</span> m, c][[<span class="dv">1</span>]]</span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">length</span>(value) <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>          monthly_climate <span class="ot">&lt;-</span> <span class="fu">replace_zero</span>(monthly_climate, s, y, m, c)</span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> <span class="cf">if</span> (value <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>          monthly_climate <span class="ot">&lt;-</span> <span class="fu">replace_zero</span>(monthly_climate, s, y, m, c)</span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to replace missing data with non-zero mean</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>replace_zero <span class="ot">&lt;-</span> <span class="cf">function</span>(df, s, y, m, col) {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  df[df<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>       df<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>       df<span class="sc">$</span>Month <span class="sc">==</span> m, col][[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">non_zero_mean</span>(df[df<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span> df<span class="sc">$</span>Month <span class="sc">==</span> m, col])</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (df)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define temp and wind variables in list</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>columns <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"mean_temp"</span>, <span class="st">"max_temp"</span>, <span class="st">"min_temp"</span>, <span class="st">"mean_wind"</span>, <span class="st">"max_wind"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create results data frame as a copy of monthly_climate</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># We will fill in the new non-zero values </span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>filled_monthly_climate <span class="ot">&lt;-</span> monthly_climate</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop to find missing data</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (c <span class="cf">in</span> columns) {</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="fu">levels</span>(monthly_climate<span class="sc">$</span>Station)) {</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Isolate data for station and climate variable</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    temp <span class="ot">&lt;-</span> monthly_climate[monthly_climate<span class="sc">$</span>Station <span class="sc">==</span> s, </span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"date"</span>, c)]</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sort by date</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    temp <span class="ot">&lt;-</span> temp[<span class="fu">order</span>(temp<span class="sc">$</span>date), ]</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get cumulative sum to find start date</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    temp<span class="sc">$</span>cum_sum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(temp[c])</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop years and months to find missing months</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">levels</span>(temp<span class="sc">$</span>Year)) {</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (m <span class="cf">in</span> <span class="fu">levels</span>(temp<span class="sc">$</span>Month)) {</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Extract value and cumulative sum</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>        value <span class="ot">&lt;-</span> temp[temp<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>                      temp<span class="sc">$</span>Month <span class="sc">==</span> m, c][[<span class="dv">1</span>]]</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>        cum_sum <span class="ot">&lt;-</span> temp[temp<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>                      temp<span class="sc">$</span>Month <span class="sc">==</span> m, <span class="st">"cum_sum"</span>][[<span class="dv">1</span>]]</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># If value is numeric(0), next</span></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>        <span class="co"># This usually occurs for rows with non-captured data</span></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">length</span>(value) <span class="sc">==</span> <span class="dv">0</span>) <span class="cf">next</span></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># If value == 0 and is after start date (cumulative sum &gt; 0)</span></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Replace zero with non-zero means</span></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (value <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> cum_sum <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>          temp <span class="ot">&lt;-</span> <span class="fu">replace_zero</span>(temp, s, y, m, c)</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>        <span class="co"># If value is before start date, replace 0 with NA</span></span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>        <span class="co"># This will prevent ggplot from plotting a 0 value for </span></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>        <span class="co"># data points before the start date</span></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (cum_sum <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>          temp[</span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>            temp<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>              temp<span class="sc">$</span>Month <span class="sc">==</span> m,</span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>            c</span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>          ] <span class="ot">&lt;-</span> <span class="cn">NaN</span></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Extract filled value from temp</span></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>        new_value <span class="ot">&lt;-</span> temp[temp<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>                      temp<span class="sc">$</span>Month <span class="sc">==</span> m, c][[<span class="dv">1</span>]]</span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Assign to results data frame</span></span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>        filled_monthly_climate[</span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>          filled_monthly_climate<span class="sc">$</span>Station <span class="sc">==</span> s <span class="sc">&amp;</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a>            filled_monthly_climate<span class="sc">$</span>Year <span class="sc">==</span> y <span class="sc">&amp;</span></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a>            filled_monthly_climate<span class="sc">$</span>Month <span class="sc">==</span> m,</span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>          c</span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>        ] <span class="ot">&lt;-</span> new_value</span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="final-look-at-data" class="level2">
-<h2 class="anchored" data-anchor-id="final-look-at-data">4.4 Final look at data</h2>
+<h2 class="anchored" data-anchor-id="final-look-at-data">4.3 Final look at data</h2>
 <p>Let us chart the same variables once more and check if all values are fine now.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Temperature</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Rainfall</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Wind</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_temp, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span> </span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly Mean Temperature in last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> filled_monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_temp, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly Mean Temperature in last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_rain, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly rainfall in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> filled_monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_rain, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly rainfall in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_wind, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly mean wind speed in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> filled_monthly_climate, <span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>mean_wind, <span class="at">colour=</span>Station)) <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Station) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Monthly mean wind speed in the last 20 years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -868,62 +969,197 @@ Insights
 <p>In this section, we will be using time series econometric models to forecast future climate conditions in Singapore.</p>
 <section id="input-variables" class="level2">
 <h2 class="anchored" data-anchor-id="input-variables">5.1 Input variables</h2>
-<p>This section determines the variable selection done by the user of the Shiny Application. For the purpose of this prototype, it will be hard-coded for now.</p>
+<p>This section determines the variable selection done by the user of the Shiny Application. It is split into 2 phases.</p>
+<p>Phase 1</p>
+<ol type="1">
+<li><p>User selects weather station and climate variable using drop-down list.</p></li>
+<li><p>The code will filter out the selected weather station and climate variable, and obtain the earliest start date available.</p></li>
+</ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>target_station <span class="ot">&lt;-</span> <span class="st">"Newton"</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>target_variable <span class="ot">&lt;-</span> <span class="st">"mean_rain"</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>target_date_start <span class="ot">&lt;-</span> <span class="st">"2009-10"</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>target_date_end <span class="ot">&lt;-</span> <span class="st">"2023-12"</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>target_validation_start <span class="ot">&lt;-</span> <span class="st">"2023-1"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># User Input</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>target_station <span class="ot">&lt;-</span> <span class="st">"Paya Lebar"</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>target_variable <span class="ot">&lt;-</span> <span class="st">"mean_temp"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out target data from monthly_climate</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> filled_monthly_climate[</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  filled_monthly_climate<span class="sc">$</span>Station <span class="sc">==</span> target_station, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"date"</span>, target_variable)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert NAs back to zero for sorting and cumsum</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>target[<span class="fu">is.na</span>(target)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> target[<span class="fu">order</span>(target<span class="sc">$</span>date), ]</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding earliest start date using cumulative sum</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>target<span class="sc">$</span>cumulative_sum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(target[target_variable])</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>cumulative_sum <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">first</span>(target[<span class="fu">order</span>(target<span class="sc">$</span>date), <span class="st">"Year"</span>])[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">first</span>(target[<span class="fu">order</span>(target<span class="sc">$</span>date), <span class="st">"Month"</span>])[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"Earliest start date: "</span>, <span class="fu">as.character</span>(y), <span class="st">"-"</span>, <span class="fu">as.character</span>(m)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Earliest start date: 2017-9"</code></pre>
+</div>
+</div>
+<p>Phase 2</p>
+<ol type="1">
+<li><p>User selects the start and end date using a slider (slider start date defined in step 2, end date is always Dec 2023), as well as training to test set ratio.</p></li>
+<li><p>The code will slice the data according to the defined dates.</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># User Input</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>target_date_start <span class="ot">&lt;-</span> <span class="st">"2018-3"</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>target_date_end <span class="ot">&lt;-</span> <span class="st">"2023-12"</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>train_test_split <span class="ot">&lt;-</span> <span class="fl">0.8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out defined time period</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>date <span class="sc">&gt;=</span> target_date_start, ]</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>date <span class="sc">&lt;=</span> target_date_end, ]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Find row number when training ends and validation starts</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>split_train_end <span class="ot">&lt;-</span> <span class="fu">round</span>(train_test_split<span class="sc">*</span><span class="fu">nrow</span>(target)) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>split_val_start <span class="ot">&lt;-</span> <span class="fu">round</span>(train_test_split<span class="sc">*</span><span class="fu">nrow</span>(target))</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if there is no test, ie: train_test_split == 1 </span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># if (target_date_end == target$date[split_val_start])</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (train_test_split <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  validation <span class="ot">=</span> <span class="cn">FALSE</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  validation <span class="ot">=</span> <span class="cn">TRUE</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create time series object</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>train_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(target[target_variable], </span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">frequency =</span> <span class="dv">12</span>,</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">start =</span> <span class="fu">c</span>(</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">strsplit</span>(target_date_start, <span class="st">"-"</span>)[[<span class="dv">1</span>]][<span class="dv">1</span>],</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">strsplit</span>(target_date_end, <span class="st">"-"</span>)[[<span class="dv">1</span>]][<span class="dv">2</span>]</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>               ),</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>               <span class="at">end =</span> <span class="fu">c</span>(</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">as.numeric</span>(<span class="fu">year</span>(target<span class="sc">$</span>date[split_train_end])),</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">as.numeric</span>(<span class="fu">month</span>(target<span class="sc">$</span>date[split_train_end]))</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>               ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="model-fitting" class="level2">
 <h2 class="anchored" data-anchor-id="model-fitting">5.2 Model Fitting</h2>
+<p>In this section, we will use the inputs provided by the user to define the data that we will be using to fit the Holt Winters model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> monthly_climate[</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  monthly_climate<span class="sc">$</span>Station <span class="sc">==</span> target_station, </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"date"</span>, target_variable)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>target<span class="sc">$</span>cumulative_sum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(target[target_variable])</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>cumulative_sum <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">first</span>(target[<span class="fu">order</span>(target<span class="sc">$</span>date), <span class="st">"Year"</span>])[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">first</span>(target[<span class="fu">order</span>(target<span class="sc">$</span>date), <span class="st">"Month"</span>])[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>dfts <span class="ot">&lt;-</span> <span class="fu">ts</span>(target[target_variable], <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start=</span><span class="fu">c</span>(y, m))</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">window</span>(dfts, <span class="at">start =</span> <span class="fu">c</span>(y,m), <span class="at">end =</span> <span class="fu">c</span>(<span class="dv">2022</span>,<span class="dv">12</span>))</span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>validation <span class="ot">&lt;-</span> <span class="fu">window</span>(dfts, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">2023</span>,<span class="dv">1</span>))</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>HW <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(training)</span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>validation_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(HW,</span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>                            <span class="at">n.ahead =</span> <span class="fu">length</span>(validation))</span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>mape <span class="ot">&lt;-</span> <span class="fu">MAPE</span>(validation_preds, validation) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>HW <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(train_ts)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>result_df <span class="ot">&lt;-</span> target[,<span class="fu">c</span>(<span class="st">"date"</span>,target_variable)]</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (validation) {</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  val_period <span class="ot">&lt;-</span> <span class="fu">nrow</span>(target) <span class="sc">-</span> split_val_start</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  validation_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(HW,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">n.ahead =</span> val_period)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  result_df<span class="sc">$</span>fit <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  result_df<span class="sc">$</span>fit[<span class="dv">13</span><span class="sc">:</span>(<span class="fu">nrow</span>(result_df)<span class="sc">-</span>val_period)] <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(HW<span class="sc">$</span>fitted)<span class="sc">$</span>xhat</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  result_df<span class="sc">$</span>val <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  result_df<span class="sc">$</span>val[(<span class="fu">nrow</span>(result_df)<span class="sc">-</span>val_period<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span><span class="fu">nrow</span>(result_df)] <span class="ot">&lt;-</span> validation_preds</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  result_df<span class="sc">$</span>fit <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>  result_df<span class="sc">$</span>fit[<span class="dv">13</span><span class="sc">:</span><span class="fu">nrow</span>(result_df)] <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(HW<span class="sc">$</span>fitted)<span class="sc">$</span>xhat</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> result_df) <span class="sc">+</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>.data[[target_variable]]), <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>fit), <span class="at">color=</span><span class="st">"darkturquoise"</span>, <span class="at">linewidth=</span><span class="dv">1</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (validation) {</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">&lt;-</span> g <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>date, <span class="at">y=</span>val), <span class="at">color=</span><span class="st">"coral"</span>, <span class="at">linewidth=</span><span class="dv">1</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> g <span class="sc">+</span> </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Actual vs Predicted"</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Date"</span>) <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">str_to_title</span>(<span class="fu">gsub</span>(<span class="st">"_"</span>, <span class="st">" "</span>, target_variable)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data.frame(result_df[1], stack(result_df[2:ncol(result_df)]))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>components_dfts <span class="ot">&lt;-</span> <span class="fu">decompose</span>(train_ts)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(components_dfts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>components_dfts<span class="sc">$</span>seasonal <span class="sc">%&gt;%</span> <span class="fu">data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 55.07593</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dfts, <span class="at">ylab=</span>target_variable)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(HW<span class="sc">$</span>fitted[,<span class="dv">1</span>], <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(validation_preds, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<pre><code>             .
+1   0.35069739
+2   0.51637874
+3   0.78184546
+4   0.10795081
+5   0.15214565
+6   0.39058651
+7  -0.04180193
+8   0.15336817
+9  -0.38469650
+10 -0.76866902
+11 -0.91787452
+12 -0.33993077
+13  0.35069739
+14  0.51637874
+15  0.78184546
+16  0.10795081
+17  0.15214565
+18  0.39058651
+19 -0.04180193
+20  0.15336817
+21 -0.38469650
+22 -0.76866902
+23 -0.91787452
+24 -0.33993077
+25  0.35069739
+26  0.51637874
+27  0.78184546
+28  0.10795081
+29  0.15214565
+30  0.39058651
+31 -0.04180193
+32  0.15336817
+33 -0.38469650
+34 -0.76866902
+35 -0.91787452
+36 -0.33993077
+37  0.35069739
+38  0.51637874
+39  0.78184546
+40  0.10795081
+41  0.15214565
+42  0.39058651
+43 -0.04180193
+44  0.15336817
+45 -0.38469650
+46 -0.76866902</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>components_dfts <span class="ot">&lt;-</span> <span class="fu">decompose</span>(dfts)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(components_dfts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>mape <span class="ot">&lt;-</span> <span class="fu">MAPE</span>(validation_preds, validation) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2770.858</code></pre>
 </div>
 </div>
 </section>
@@ -931,79 +1167,118 @@ Insights
 <h2 class="anchored" data-anchor-id="model-tuning">5.2 Model Tuning</h2>
 <p>After fitting the model, users are allowed to view validation results and decide if they wish to further tune the model by adjusting certain variables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>gamma <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>gamma <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="model-forecast" class="level2">
 <h2 class="anchored" data-anchor-id="model-forecast">5.3 Model Forecast</h2>
 <p>Lastly, once parameters are confirmed, we can proceed to make predictions and plot them.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># https://www.r-bloggers.com/2012/07/holt-winters-forecast-using-ggplot2/</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>HWplot <span class="ot">&lt;-</span> <span class="cf">function</span>(ts_object, </span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n.ahead =</span> <span class="dv">4</span>, </span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">CI =</span> .<span class="dv">95</span>, </span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">error.ribbon =</span> <span class="st">'green'</span>, </span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">line.size =</span> <span class="dv">1</span>) {</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    hw_object <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(ts_object)</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    forecast <span class="ot">&lt;-</span> <span class="fu">predict</span>(hw_object,  </span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">n.ahead =</span> n.ahead,  </span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">prediction.interval =</span> T,  </span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">level =</span> CI)</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(forecast)</span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    for_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(forecast), <span class="dv">3</span>),  </span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">value_forecast =</span> df<span class="sc">$</span>fit,  </span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>                             <span class="at">dev =</span> df<span class="sc">$</span>upr <span class="sc">-</span> df<span class="sc">$</span>fit)</span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    fitted_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(hw_object<span class="sc">$</span>fitted), <span class="dv">3</span>),</span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>                                <span class="at">fitted =</span> <span class="fu">as.data.frame</span>(hw_object<span class="sc">$</span>fitted)<span class="sc">$</span>xhat)</span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>    actual_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(hw_object<span class="sc">$</span>x), <span class="dv">3</span>),</span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Actual =</span> <span class="fu">c</span>(hw_object<span class="sc">$</span>x))</span>
-<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    graphset <span class="ot">&lt;-</span> <span class="fu">merge</span>(actual_values,  fitted_values,  <span class="at">by=</span><span class="st">'time'</span>,  <span class="at">all=</span><span class="cn">TRUE</span>)</span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    graphset <span class="ot">&lt;-</span> <span class="fu">merge</span>(graphset,  for_values,  <span class="at">all=</span><span class="cn">TRUE</span>,  <span class="at">by=</span><span class="st">'time'</span>)</span>
-<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    graphset[<span class="fu">is.na</span>(graphset<span class="sc">$</span>dev),  ]<span class="sc">$</span>dev <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>    graphset<span class="sc">$</span>Fitted <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>,  <span class="fu">NROW</span>(graphset) <span class="sc">-</span> (<span class="fu">NROW</span>(for_values) <span class="sc">+</span> <span class="fu">NROW</span>(fitted_values))),  fitted_values<span class="sc">$</span>fitted,  for_values<span class="sc">$</span>value_forecast)</span>
-<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    graphset.melt <span class="ot">&lt;-</span> <span class="fu">melt</span>(graphset[, <span class="fu">c</span>(<span class="st">'time'</span>, <span class="st">'Actual'</span>, <span class="st">'Fitted'</span>)], <span class="at">id=</span><span class="st">'time'</span>)</span>
-<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(graphset.melt,  </span>
-<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x=</span>time,  <span class="at">y=</span>value)) <span class="sc">+</span> </span>
-<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>graphset, </span>
-<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">aes</span>(<span class="at">x=</span>time, </span>
-<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y=</span>Fitted, </span>
-<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>                      <span class="at">ymin=</span>Fitted<span class="sc">-</span>dev,  </span>
-<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>                      <span class="at">ymax=</span>Fitted <span class="sc">+</span> dev),  </span>
-<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>                  <span class="at">alpha=</span>.<span class="dv">2</span>,  </span>
-<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fill=</span>error.ribbon) <span class="sc">+</span> </span>
-<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">colour=</span>variable), </span>
-<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>                <span class="at">linewidth=</span>line.size) <span class="sc">+</span> </span>
-<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">max</span>(actual_values<span class="sc">$</span>time),  </span>
-<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span> </span>
-<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">'Time'</span>) <span class="sc">+</span> </span>
-<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">'Value'</span>) <span class="sc">+</span> </span>
-<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">'bottom'</span>) <span class="sc">+</span> </span>
-<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_colour_hue</span>(<span class="st">''</span>)</span>
-<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(p)</span>
-<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># https://www.r-bloggers.com/2012/07/holt-winters-forecast-using-ggplot2/</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>HWplot <span class="ot">&lt;-</span> <span class="cf">function</span>(ts_object, </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n.ahead =</span> <span class="dv">4</span>, </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">CI =</span> .<span class="dv">95</span>, </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">error.ribbon =</span> <span class="st">'green'</span>, </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">line.size =</span> <span class="dv">1</span>) {</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    hw_object <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(ts_object)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    forecast <span class="ot">&lt;-</span> <span class="fu">predict</span>(hw_object,  </span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">n.ahead =</span> n.ahead,  </span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">prediction.interval =</span> T,  </span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">level =</span> CI)</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(forecast)</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>    for_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(forecast), <span class="dv">3</span>),  </span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">value_forecast =</span> df<span class="sc">$</span>fit,  </span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>                             <span class="at">dev =</span> df<span class="sc">$</span>upr <span class="sc">-</span> df<span class="sc">$</span>fit)</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>    fitted_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(hw_object<span class="sc">$</span>fitted), <span class="dv">3</span>),</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>                                <span class="at">fitted =</span> <span class="fu">as.data.frame</span>(hw_object<span class="sc">$</span>fitted)<span class="sc">$</span>xhat)</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    actual_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="fu">round</span>(<span class="fu">time</span>(hw_object<span class="sc">$</span>x), <span class="dv">3</span>),</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Actual =</span> <span class="fu">c</span>(hw_object<span class="sc">$</span>x))</span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>    graphset <span class="ot">&lt;-</span> <span class="fu">merge</span>(actual_values,  fitted_values,  <span class="at">by=</span><span class="st">'time'</span>,  <span class="at">all=</span><span class="cn">TRUE</span>)</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>    graphset <span class="ot">&lt;-</span> <span class="fu">merge</span>(graphset,  for_values,  <span class="at">all=</span><span class="cn">TRUE</span>,  <span class="at">by=</span><span class="st">'time'</span>)</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>    graphset[<span class="fu">is.na</span>(graphset<span class="sc">$</span>dev),  ]<span class="sc">$</span>dev <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>    graphset<span class="sc">$</span>Fitted <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>,  <span class="fu">NROW</span>(graphset) <span class="sc">-</span> (<span class="fu">NROW</span>(for_values) <span class="sc">+</span> <span class="fu">NROW</span>(fitted_values))),  fitted_values<span class="sc">$</span>fitted,  for_values<span class="sc">$</span>value_forecast)</span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>    graphset.melt <span class="ot">&lt;-</span> <span class="fu">melt</span>(graphset[, <span class="fu">c</span>(<span class="st">'time'</span>, <span class="st">'Actual'</span>, <span class="st">'Fitted'</span>)], <span class="at">id=</span><span class="st">'time'</span>)</span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(graphset.melt,  </span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x=</span>time,  <span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>graphset, </span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">aes</span>(<span class="at">x=</span>time, </span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y=</span>Fitted, </span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>                      <span class="at">ymin=</span>Fitted<span class="sc">-</span>dev,  </span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>                      <span class="at">ymax=</span>Fitted <span class="sc">+</span> dev),  </span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>                  <span class="at">alpha=</span>.<span class="dv">2</span>,  </span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fill=</span>error.ribbon) <span class="sc">+</span> </span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">colour=</span>variable), </span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>                <span class="at">linewidth=</span>line.size) <span class="sc">+</span> </span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">max</span>(actual_values<span class="sc">$</span>time),  </span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">'Time'</span>) <span class="sc">+</span> </span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">'Value'</span>) <span class="sc">+</span> </span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">'bottom'</span>) <span class="sc">+</span> </span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_colour_hue</span>(<span class="st">''</span>)</span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(p)</span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HWplot</span>(dfts, <span class="at">n.ahead=</span><span class="dv">36</span>, <span class="at">CI=</span>.<span class="dv">95</span>, <span class="at">error.ribbon=</span><span class="st">'green'</span>,<span class="at">line.size=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HWplot</span>(train_ts, <span class="at">n.ahead=</span><span class="dv">36</span>, <span class="at">CI=</span>.<span class="dv">95</span>, <span class="at">error.ribbon=</span><span class="st">'green'</span>,<span class="at">line.size=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</section>
+</section>
+<section id="storyboard-ui" class="level1">
+<h1>6. Storyboard UI</h1>
+<p>This section describes the UI design and the intended work flow for users.</p>
+<section id="user-input" class="level2">
+<h2 class="anchored" data-anchor-id="user-input">6.1 User input</h2>
+<p>The user starts by selecting the weather station and climate variable of interest. These are selected from a pre-defined drop down list.</p>
+</section>
+<section id="time-frame-and-validation" class="level2">
+<h2 class="anchored" data-anchor-id="time-frame-and-validation">6.2 Time frame and validation</h2>
+<p>After the step in 6.1, the user will be prompted to select the time period as well as train test split.</p>
+<p>The time period is selected using a slider. The start and end date of the slider is specific to the weather station and climate variable chosen earlier.</p>
+<p>The train test split is a floating number between 0.5 and 1.</p>
+</section>
+<section id="model-fit" class="level2">
+<h2 class="anchored" data-anchor-id="model-fit">6.3 Model Fit</h2>
+<p>Next, the user will click the “Fit Model” button. This will trigger a couple of events.</p>
+<p>Firstly, this fits a Holts Winter model over the filtered data set based on the selected variables in 6.1 and 6.2. In addition, predictions will be made for the validation period with the fitted model.</p>
+<p>Secondly, left panel 3 and 4 will be revealed to the user. I will elaborate on these 2 panels in the following sections.</p>
+<p>The main screen’s first tab will now display a Actual vs Predicted plot. Predicted lines for training period and validation period will be in different colours.</p>
+<p>The second tab will show a plot of the decomposed elements of the model, namely:</p>
+<ul>
+<li><p>Observed</p></li>
+<li><p>Trend</p></li>
+<li><p>Season</p></li>
+<li><p>Random</p></li>
+</ul>
+<p>At the bottom of the screen, the training and validation MAPE and MAE will be shown in 4 separate boxes.</p>
+</section>
+<section id="model-tuning-1" class="level2">
+<h2 class="anchored" data-anchor-id="model-tuning-1">6.4 Model Tuning</h2>
+<p>Left panel 3 shows the default parameters used in the Holts Winter model. Users will be allowed to change these parameters within their respective allowable limits and re-fit the model using the “Fit Model” button to observe the new changes.</p>
+</section>
+<section id="model-forecast-1" class="level2">
+<h2 class="anchored" data-anchor-id="model-forecast-1">6.5 Model forecast</h2>
+<p>Left panel 4 is used for forecasting. Once users are satisfied with the tuned parameters, they can input the number of periods to be forecasted and click the “Forecast” button to generate the forecast results.</p>
+<p>This will populate the Right screen tab 1 with the forecast plot.</p>
+<p>Right screen tab 2 contains a cycle plot which shows the results from a month by month view.</p>
 
 
 </section>

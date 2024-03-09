@@ -192,8 +192,6 @@ Assuming we had already saved off the data previously, we will now load the data
 
 ```{r}
 climate <- data.table::fread("data/clean_climate_data.csv", encoding="Latin-1") %>% as.data.frame()
-
-stations <- read_csv("data/weather_stations.csv")
 ```
 
 # 3. Preliminary EDA
@@ -207,7 +205,7 @@ But first, we have to do some additional cleaning as well to prevent errors.
 There are many observations with "-". To avoid errors, we will change all of them to 0s.
 
 ```{r}
-climate <- data.frame(lapply(climate, function(x) gsub("—", NA, x)), stringsAsFactors=F)
+climate <- data.frame(lapply(climate, function(x) gsub("—", 0, x)), stringsAsFactors=F)
 ```
 
 ## 3.2 Data type
@@ -221,7 +219,7 @@ climate[c("Station", "Year", "Month", "Day")] <- lapply(climate[c("Station", "Ye
 
 climate[!names(climate) %in% c("Station", "Year", "Month", "Day")] <- lapply(climate[!names(climate) %in% c("Station", "Year", "Month", "Day")] , as.numeric)
 
-#climate[is.na(climate)] <- 0
+climate[is.na(climate)] <- 0
 ```
 
 ## 3.3 Date column
@@ -282,8 +280,16 @@ ggplot() +
 ### Insights
 
 1.  The start date of each weather station varies. This should be taken into account when fitting the model, as well as in the date range selection in the Shiny App.
-2.  There are many periods within the time series where the data is 0s or NA, especially so in temperature and wind. **To deal with this, we can** **take the mean value of that month from other years as a filler value**. For example, if jan 2010 is missing, we can use the mean value from jan 2003-2009, and 2011-2023 to fill the gap.
+2.  There are many periods within the time series where the data is missing, especially so in temperature and wind. **To deal with this, we can** **take the mean value of that month from other years as a filler value**. For example, if jan 2010 is missing, we can use the mean value from jan 2003-2009, and 2011-2023 to fill the gap.
 3.  Daily rainfall has many 0 values, representing days without rain. This however, makes it difficult to model a time series. **Thus, dates will be rolled up to monthly levels and we will analyse mean monthly values instead.** To be consistent, we will use monthly levels for temperature and wind data as well.
+:::
+
+::: callout-warning
+## Non-Captured v.s Missing data
+
+-   Non-captured data refers to the missing data before the date when the weather station started collecting that data. We do not want to modify non-captured data.
+
+-   Missing data refers to the data after the start date that is captured but missing for whatever reasons. We want to fill these gaps with appropriate estimation techniques.
 :::
 
 # 4. Data Wrangling
@@ -293,6 +299,7 @@ ggplot() +
 As there are many instances of 0s within each month, we will have to ignore them as they will pull down the monthly average temperature or wind. Therefore, a function is written to calculate the non-zero mean value instead. However, this is not needed for rainfall as 0s would mean days with no rain.
 
 ```{r}
+# Function to find non-zero mean from a dateframe column
 non_zero_mean <- function(x) {
   y <- mean(x[x!=0])
   return (y)
@@ -302,6 +309,9 @@ non_zero_mean <- function(x) {
 Next, we use the `dplyr::group_by` and `dplyr::summarise` functions to calculate the monthly average for all variables. We also re-create the date column as a function of year and month using `zoo::as.yearmon`.
 
 ```{r}
+
+# Apply non-zero means to monthly temp and wind variables
+# Apply mean to monthly rain variables
 monthly_climate <- climate %>% 
   group_by(Station, Year, Month) %>% 
   summarise(mean_temp = non_zero_mean(mean_temp),
@@ -315,24 +325,30 @@ monthly_climate <- climate %>%
             mean_120m_rain = mean(highest_120m_rainfall),
             date = min(date))
 
+# Format date column as yearmon format
 monthly_climate$date <- as.yearmon(monthly_climate$date)
 
+# Change any NAs to 0
 monthly_climate[is.na(monthly_climate)] <- 0
 ```
 
-## 4.2 Filling gaps with non-zero means
+## 4.2 Filling missing data with non-zero means
 
 This task requires several steps which is performed by the code chunk below.
 
-First, we want to iterate through all relevant temperature and wind variables.
+1.  Iterate through all relevant temperature and wind variables.
 
-Next, for each variable, we look at all the stations data.
+2.  For each variable, iterate through all the stations.
 
-Then, for each station, we find the months where all data is missing.
+3.  For each station, find the months where all data is missing.
 
-Lastly, for each of these months, we replace the NA or 0 with the non-zero mean of the same month in other years for that station. For example, if Changi station jan 2010 is missing, then we will replace the value with the non-zero mean from Changi station jan 2003-2009, and 2011-2023.
+4.  Lastly, for each of these months, we replace the NA or 0 with the non-zero mean of the same month in other years for that station. For example, if Changi station jan 2010 is missing, then we will replace the value with the non-zero mean from Changi station jan 2003-2009, and 2011-2023.
 
 ```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+# Function to replace missing data with non-zero mean
 replace_zero <- function(df, s, y, m, col) {
   df[df$Station == s &
        df$Year == y &
@@ -341,66 +357,52 @@ replace_zero <- function(df, s, y, m, col) {
   return (df)
 }
 
+# Define temp and wind variables in list
 columns = c("mean_temp", "max_temp", "min_temp", "mean_wind", "max_wind")
 
-for (c in columns) {
-  for (s in levels(monthly_climate$Station)) {
-    for (y in levels(monthly_climate$Year)) {
-      for (m in levels(monthly_climate$Month)) {
-        
-        value <- monthly_climate[monthly_climate$Station == s &
-                                   monthly_climate$Year == y &
-                                   monthly_climate$Month == m, c][[1]]
-        
-        if (length(value) == 0) {
-          monthly_climate <- replace_zero(monthly_climate, s, y, m, c)
-        } else if (value == 0) {
-          monthly_climate <- replace_zero(monthly_climate, s, y, m, c)
-        }
-      }
-    }
-  }
-}
-```
-
-```{r}
-replace_zero <- function(df, s, y, m, col) {
-  df[df$Station == s &
-       df$Year == y &
-       df$Month == m, col][[1]] <- non_zero_mean(df[df$Station == s & df$Month == m, col])
-  
-  return (df)
-}
-
-columns = c("mean_temp", "max_temp", "min_temp", "mean_wind", "max_wind")
-
+# Create results data frame as a copy of monthly_climate
+# We will fill in the new non-zero values 
 filled_monthly_climate <- monthly_climate
 
+
+# Loop to find missing data
 for (c in columns) {
   for (s in levels(monthly_climate$Station)) {
     
+    # Isolate data for station and climate variable
     temp <- monthly_climate[monthly_climate$Station == s, 
                             c("Station", "Year", "Month", "date", c)]
     
+    # Sort by date
     temp <- temp[order(temp$date), ]
     
+    # Get cumulative sum to find start date
     temp$cum_sum <- cumsum(temp[c])
     
+    # Loop years and months to find missing months
     for (y in levels(temp$Year)) {
       for (m in levels(temp$Month)) {
         
+        # Extract value and cumulative sum
         value <- temp[temp$Year == y &
                       temp$Month == m, c][[1]]
         
         cum_sum <- temp[temp$Year == y &
                       temp$Month == m, "cum_sum"][[1]]
         
+        # If value is numeric(0), next
+        # This usually occurs for rows with non-captured data
         if (length(value) == 0) next
         
+        # If value == 0 and is after start date (cumulative sum > 0)
+        # Replace zero with non-zero means
         if (value == 0 & cum_sum > 0) {
           temp <- replace_zero(temp, s, y, m, c)
         }
         
+        # If value is before start date, replace 0 with NA
+        # This will prevent ggplot from plotting a 0 value for 
+        # data points before the start date
         if (cum_sum == 0) {
           temp[
             temp$Year == y &
@@ -409,9 +411,11 @@ for (c in columns) {
           ] <- NaN
         }
         
+        # Extract filled value from temp
         new_value <- temp[temp$Year == y &
                       temp$Month == m, c][[1]]
         
+        # Assign to results data frame
         filled_monthly_climate[
           filled_monthly_climate$Station == s &
             filled_monthly_climate$Year == y &
@@ -436,7 +440,7 @@ Let us chart the same variables once more and check if all values are fine now.
 #| code-summary: Show code
 
 ggplot() + 
-  geom_line(data = monthly_climate, aes(x=date, y=mean_temp, colour=Station)) + 
+  geom_line(data = filled_monthly_climate, aes(x=date, y=mean_temp, colour=Station)) + 
   facet_wrap(~Station) + 
   ggtitle("Monthly Mean Temperature in last 20 years")
 ```
@@ -589,14 +593,21 @@ if (validation) {
 
 ```{r}
 g <- ggplot(data = result_df) + 
-  geom_line(aes(x=date, y=.data[[target_variable]])) +
-  geom_line(aes(x=date, y=fit), color="blue")
+  geom_line(aes(x=date, y=.data[[target_variable]]), linewidth=1) +
+  geom_line(aes(x=date, y=fit), color="darkturquoise", linewidth=1)
 
 if (validation) {
-  g <- g + geom_line(aes(x=date, y=val), color="red")
+  g <- g + geom_line(aes(x=date, y=val), color="coral", linewidth=1)
 }
 
-g
+g <- g + 
+  ggtitle("Actual vs Predicted") +
+  xlab("Date") +
+  ylab(str_to_title(gsub("_", " ", target_variable)))
+```
+
+```{r}
+# data.frame(result_df[1], stack(result_df[2:ncol(result_df)]))
 ```
 
 ```{r}
@@ -691,9 +702,59 @@ HWplot <- function(ts_object,
 ```
 
 ```{r}
-HWplot(dfts, n.ahead=36, CI=.95, error.ribbon='green',line.size=1)
+HWplot(train_ts, n.ahead=36, CI=.95, error.ribbon='green',line.size=1)
 ```
 
 ```{r}
 
 ```
+
+# 6. Storyboard UI
+
+This section describes the UI design and the intended work flow for users.
+
+## 6.1 User input
+
+The user starts by selecting the weather station and climate variable of interest. These are selected from a pre-defined drop down list.
+
+## 6.2 Time frame and validation
+
+After the step in 6.1, the user will be prompted to select the time period as well as train test split.
+
+The time period is selected using a slider. The start and end date of the slider is specific to the weather station and climate variable chosen earlier.
+
+The train test split is a floating number between 0.5 and 1.
+
+## 6.3 Model Fit
+
+Next, the user will click the "Fit Model" button. This will trigger a couple of events.
+
+Firstly, this fits a Holts Winter model over the filtered data set based on the selected variables in 6.1 and 6.2. In addition, predictions will be made for the validation period with the fitted model.
+
+Secondly, left panel 3 and 4 will be revealed to the user. I will elaborate on these 2 panels in the following sections.
+
+The main screen's first tab will now display a Actual vs Predicted plot. Predicted lines for training period and validation period will be in different colours.
+
+The second tab will show a plot of the decomposed elements of the model, namely:
+
+-   Observed
+
+-   Trend
+
+-   Season
+
+-   Random
+
+At the bottom of the screen, the training and validation MAPE and MAE will be shown in 4 separate boxes.
+
+## 6.4 Model Tuning
+
+Left panel 3 shows the default parameters used in the Holts Winter model. Users will be allowed to change these parameters within their respective allowable limits and re-fit the model using the "Fit Model" button to observe the new changes.
+
+## 6.5 Model forecast
+
+Left panel 4 is used for forecasting. Once users are satisfied with the tuned parameters, they can input the number of periods to be forecasted and click the "Forecast" button to generate the forecast results.
+
+This will populate the Right screen tab 1 with the forecast plot.
+
+Right screen tab 2 contains a cycle plot which shows the results from a month by month view.
