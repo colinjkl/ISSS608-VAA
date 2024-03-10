@@ -1,5 +1,5 @@
 ---
-title: "Climate and Dengue in Singapore"
+title: "Climate Forecast in Singapore"
 author: "Colin Jiang Kelin"
 date: "February 27, 2024"
 date-modified: "last-modified"
@@ -31,13 +31,16 @@ pacman::p_load(
   zoo,
   ggfortify,
   reshape,
-  MLmetrics
+  MLmetrics,
+  plotly,
+  patchwork,
+  ggiraph
 )
 ```
 
 ## 2.2 Data import
 
-For this exercise, we will be using the climate data sets from the [Meteorological Service Singapore](http://www.weather.gov.sg/home/) and the dengue data set from the [SGCharts: Outbreak](https://outbreak.sgcharts.com/data) website.
+For this exercise, we will be using the climate data sets from the [Meteorological Service Singapore](http://www.weather.gov.sg/home/).
 
 ### 2.2.1 Climate data
 
@@ -47,19 +50,23 @@ However, there are several things to note about this data set:
 
 1.  There are a total of 63 weather stations in Singapore, out of which, only 18 of them keeps records of rainfall, temperature, and wind speed. The other 41 only has rainfall records. [**As such, we will only look at the 18 stations with all records for consistency.**]{.underline}
 
-2.  The oldest data dates back to 1980, but only in a few stations. In fact, from 2009, manual observations were gradually replaced by automated meteorological instruments. [**Therefore, we will try to keep our analysis limited to data from 2009 where possible.**]{.underline}
+2.  The oldest data dates back to 1980, but only in a few stations. In fact, from 2009, manual observations were gradually replaced by automated meteorological instruments.
 
-On the more technical side of things, the data can only be downloaded for 1 weather station for 1 month at a time. If we were to download the data for the last 20 years manually, it would take 20years \* 12months \* 22stations = 5,280 iterations of downloads by hand. To tackle this task efficiently, a script is written to download the data automatically from the url provided.
+On the more technical side of things, the data can only be downloaded for 1 weather station for 1 month at a time. If we were to download the data for the last 20 years manually, it would take 20years \* 12months \* 18stations = 4,320 iterations of downloads by hand. To tackle this task efficiently, a script is written to download the data automatically from the url provided.
 
 This can be done simply by using the `data.table::fread` function with the url. For example, the code chunk below shows 1 iteration of download for Changi weather station for the month of January in 2024.
 
 ```{r}
+#| eval: false
+
 data.table::fread("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S24_202401.csv")
 ```
 
 Now, we want to write a for loop to iterate over all 18 stations. Each station is identified by a unique key value represented in the following list.
 
 ```{r}
+#| code-fold: true
+#| code-summary: Show code
 #| eval: false
 
 stations = c(
@@ -91,6 +98,8 @@ Another issue that we encountered was that some of the column names changed at c
 The code chunk below shows the list of old to new column names. A function is also written for the renaming task, to rename the columns as we download the data sets 1 by 1. This helps with the `data.table::rbindlist` used in the loop as all the column names needs to be the same as the data set before.
 
 ```{r}
+#| code-fold: true
+#| code-summary: Show code
 #| eval: false
 
 col_names = c(
@@ -188,25 +197,36 @@ The coordinates of each weather station can be found [here](http://www.weather.g
 
 ### 2.2.3 Load data
 
-Assuming we had already saved off the data previously, we will now load the data sets using the `readr::read_csv` function
+Assuming we had already saved off the data previously, we will now load the data sets using the `data.table::fread` function.
 
 ```{r}
+#| message: false
+
 climate <- data.table::fread("data/clean_climate_data.csv", encoding="Latin-1") %>% as.data.frame()
 ```
 
+::: callout-tip
+We will need to use encoding = "Latin-1" here to identify some of the symbols present in the data set. Otherwise, the data set will be unreadable.
+:::
+
 # 3. Preliminary EDA
 
-In this section, we will perform some preliminary exploratory analysis to understand how our data looks like as a time series. This will help us determine whether each variable can or can not be used, or what additional wrangling that is required to be done before the time series analysis is possible.
+In this section, we will perform some preliminary exploratory analysis to understand how our data looks like as a time series. This will help us determine whether each variable can or can not be used, or any additional wrangling that is required to be done before the time series analysis is possible.
 
-But first, we have to do some additional cleaning as well to prevent errors.
+But first, let us do some additional cleaning to prevent errors.
 
 ## 3.1 Remove unwanted characters
 
-There are many observations with "-". To avoid errors, we will change all of them to 0s.
+There are many observations with special symbol "—". This is different from the usual dash "-" that we normally find on our keyboards. To avoid errors, we will change all of them to 0s.
 
 ```{r}
+# lapply gsub function
 climate <- data.frame(lapply(climate, function(x) gsub("—", 0, x)), stringsAsFactors=F)
 ```
+
+::: callout-tip
+`lapply` refers to list apply. You can think of a data.frame object as a list of columns. `lapply` iterates through that list, and applies the function to each column one by one.
+:::
 
 ## 3.2 Data type
 
@@ -215,10 +235,13 @@ Next, we want to ensure that all columns are in their correct data type. For Sta
 For those values that were coerced as NA, we will convert them to 0 as well.
 
 ```{r}
+# Change factor data's type to factor
 climate[c("Station", "Year", "Month", "Day")] <- lapply(climate[c("Station", "Year", "Month", "Day")] , factor)
 
+# Change non-factor data to numeric
 climate[!names(climate) %in% c("Station", "Year", "Month", "Day")] <- lapply(climate[!names(climate) %in% c("Station", "Year", "Month", "Day")] , as.numeric)
 
+# NA introduced by coercion will be changed back to 0
 climate[is.na(climate)] <- 0
 ```
 
@@ -227,8 +250,10 @@ climate[is.na(climate)] <- 0
 We also want a date column for easier sorting in chronological order. To do that, we can use the `zoo::as.Date` function.
 
 ```{r}
+# Create date column
 climate$date <- as.Date(with(climate, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
 
+# Sort by date
 climate <- climate[order(climate$date), ]
 ```
 
@@ -276,7 +301,7 @@ ggplot() +
 ```
 :::
 
-::: callout-note
+::: callout-tip
 ### Insights
 
 1.  The start date of each weather station varies. This should be taken into account when fitting the model, as well as in the date range selection in the Shiny App.
@@ -296,7 +321,7 @@ ggplot() +
 
 ## 4.1 Roll up to Monthly levels
 
-As there are many instances of 0s within each month, we will have to ignore them as they will pull down the monthly average temperature or wind. Therefore, a function is written to calculate the non-zero mean value instead. However, this is not needed for rainfall as 0s would mean days with no rain.
+What we want to do now is to group the data by month and aggregate them using their monthly mean. However, there may be many instances of 0s (missing data) within each month which will pull down the monthly average temperature or wind. Therefore, a function is written to calculate the non-zero mean value instead. However, this is not needed for rainfall as 0s would mean days with no rain.
 
 ```{r}
 # Function to find non-zero mean from a dateframe column
@@ -333,6 +358,8 @@ monthly_climate[is.na(monthly_climate)] <- 0
 ```
 
 ## 4.2 Filling missing data with non-zero means
+
+At this point, we note that even after aggregating to a monthly level, there are still missing values. This is probably because the entire month of data was missing, and taking the non-zero mean of that month would result in NAs that are later converted to 0. Therefore, we will fill these months with estimated values as described below.
 
 This task requires several steps which is performed by the code chunk below.
 
@@ -474,15 +501,11 @@ ggplot() +
 
 In this section, we will be using time series econometric models to forecast future climate conditions in Singapore.
 
-## 5.1 Input variables
+## 5.1 Model Initialization
 
-This section determines the variable selection done by the user of the Shiny Application. It is split into 2 phases.
+This section describes the model initialization.
 
-Phase 1
-
-1.  User selects weather station and climate variable using drop-down list.
-
-2.  The code will filter out the selected weather station and climate variable, and obtain the earliest start date available.
+Firstly, user selects weather station and climate variable using drop-down list.
 
 ```{r}
 # User Input
@@ -490,7 +513,12 @@ target_station <- "Paya Lebar"
 target_variable <- "mean_temp"
 ```
 
+Then, the code will filter out the selected weather station and climate variable, and obtain the earliest start date available.
+
 ```{r}
+#| code-fold: true
+#| code-summary: Show code
+
 # Filter out target data from monthly_climate
 target <- filled_monthly_climate[
   filled_monthly_climate$Station == target_station, 
@@ -516,20 +544,273 @@ m <- dplyr::first(target[order(target$date), "Month"])[[1]] %>%
 print(paste0("Earliest start date: ", as.character(y), "-", as.character(m)))
 ```
 
-Phase 2
+Next, the code will fit the Holt Winters model based on default parameters
 
-1.  User selects the start and end date using a slider (slider start date defined in step 2, end date is always Dec 2023), as well as training to test set ratio.
+i.  Full time period available for the selected weather station and climate variable
 
-2.  The code will slice the data according to the defined dates.
+ii. Default train test split of 0.8
+
+iii. Default Holt Winters parameters which is automatically calculated by the model
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+# Default values
+train_test_split <- 0.8
+
+# Find row number when training ends and validation starts
+split_train_end <- round(train_test_split*nrow(target)) - 1
+split_val_start <- round(train_test_split*nrow(target))
+
+# Check if there is no test, ie: train_test_split == 1 
+# if (target_date_end == target$date[split_val_start])
+if (train_test_split == 1) {
+  validation = FALSE
+  split_train_end <- split_val_start
+} else {
+  validation = TRUE
+}
+
+# Create time series object
+train_ts <- ts(target[target_variable], 
+               frequency = 12,
+               start = c(
+                 y,
+                 m
+               ),
+               end = c(
+                 as.numeric(year(target$date[split_train_end])),
+                 as.numeric(month(target$date[split_train_end]))
+               ))
+
+# Fit model
+HW <- HoltWinters(train_ts)
+
+# Create results data frame
+observed_df <- target[,c("date",target_variable)]
+observed_df$type <- "Observed"
+colnames(observed_df)[2] <- "value"
+
+# Store results in data frame
+# If there is no validation results, no need to store
+if (validation) {
+  
+  val_period <- nrow(target) - split_val_start + 1
+  
+  validation_preds <- predict(HW,
+                              n.ahead = val_period)
+  
+  fit_df <- data.frame(
+    date = observed_df$date[13:(nrow(observed_df)-val_period)],
+    value = as.data.frame(HW$fitted)$xhat,
+    type = "Fitted"
+  )
+  
+  val_df <- data.frame(
+    date = observed_df$date[(nrow(observed_df)-val_period+1):nrow(observed_df)],
+    value = as.data.frame(validation_preds)$fit,
+    type = "Validation"
+  )
+  
+  results_df <- rbind.data.frame(observed_df, fit_df, val_df)  
+
+} else {
+  
+  val_period <- 0
+  
+  fit_df <- data.frame(
+    date = observed_df$date[13:(nrow(observed_df)-val_period)],
+    value = as.data.frame(HW$fitted)$xhat,
+    type = "Fitted"
+  )
+  
+  results_df <- rbind.data.frame(observed_df, fit_df)
+  
+}
+
+# Prepare tooltips
+results_df$tt <- c(paste0(
+  "Date: ", results_df$date, 
+  "\nValue: ", round(results_df$value,0),
+  "\nType: ", results_df$type
+))
+```
+
+Lastly, several plots and metrics will be generated from the default model
+
+Actual vs Predicted
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+# Plot observed and fitted line
+g <- ggplot(data = results_df, 
+            aes(x=date,
+                y=value,
+                colour=type)) + 
+  geom_line_interactive(
+    aes(data_id = date),
+    linewidth=0.5
+  ) + 
+  geom_point_interactive(
+    aes(data_id = date,
+        tooltip = tt),
+    size = 0
+  )
+
+# Edit scales
+g <- g + 
+  scale_color_manual(values=c('Observed' = 'black',
+                              "Fitted" = 'darkturquoise',
+                              "Validation" = 'coral'))
+  
+
+# Add plot layouts
+g <- g + 
+  ggtitle("Actual vs Predicted") +
+  xlab("Date") +
+  ylab(str_to_title(gsub("_", " ", target_variable)))
+
+
+girafe(                                  
+  ggobj = g,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(                        
+    opts_hover(css = "r: 2pt; stroke: white;"),  
+    opts_hover_inv(css = "opacity:0.2;") 
+  ))  
+```
+
+Decomposed
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+# Store decomposed elements in data frame
+components_dfts <- decompose(train_ts)
+decomp_df <- data.frame(Date = observed_df$date[1:(nrow(observed_df)-val_period)],
+                        Observed = components_dfts$x,
+                        Trend = components_dfts$trend,
+                        Seasonal = components_dfts$seasonal,
+                        Random = components_dfts$random)
+
+# Prepare interactive plots for patchwork
+d1 <- ggplot(data = decomp_df) +
+  geom_line(aes(x=Date, y=Observed)) +
+  geom_point_interactive(aes(x=Date, 
+                             y=Observed, 
+                             data_id=Date, 
+                             tooltip=paste0("Date: ", Date, 
+                                            "\nObserved: ", round(Observed,1),
+                                            "\nTrend: ", round(Trend,1),
+                                            "\nSeasonal: ", round(Seasonal,1),
+                                            "\nRandom: ", round(Random,1))), 
+                         size=0.2)
+  
+
+d2 <- ggplot(data = decomp_df) +
+  geom_line(aes(x=Date, y=Trend)) +
+  geom_point_interactive(aes(x=Date, 
+                             y=Trend, 
+                             data_id=Date, 
+                             tooltip=paste0("Date: ", Date, 
+                                            "\nObserved: ", round(Observed,1),
+                                            "\nTrend: ", round(Trend,1),
+                                            "\nSeasonal: ", round(Seasonal,1),
+                                            "\nRandom: ", round(Random,1))), 
+                         size=0.2) 
+  
+
+d3 <- ggplot(data = decomp_df) + 
+  geom_line(aes(x=Date, y=Seasonal)) +
+  geom_point_interactive(aes(x=Date, 
+                             y=Seasonal, 
+                             data_id=Date, 
+                             tooltip=paste0("Date: ", Date, 
+                                            "\nObserved: ", round(Observed,1),
+                                            "\nTrend: ", round(Trend,1),
+                                            "\nSeasonal: ", round(Seasonal,1),
+                                            "\nRandom: ", round(Random,1))),
+                         size=0.2)
+
+d4 <- ggplot(data = decomp_df) + 
+  geom_line(aes(x=Date, y=Random)) +
+  geom_point_interactive(aes(x=Date, 
+                             y=Random, 
+                             data_id=Date, 
+                             tooltip=paste0("Date: ", Date, 
+                                            "\nObserved: ", round(Observed,1),
+                                            "\nTrend: ", round(Trend,1),
+                                            "\nSeasonal: ", round(Seasonal,1),
+                                            "\nRandom: ", round(Random,1))), 
+                         size=0.2)
+
+d <- d1 / d2 / d3 / d4 + 
+  plot_layout(axes = "collect") + 
+  plot_annotation('Decomposition of Time Series')
+
+girafe(code = print(d), 
+       width_svg = 6, 
+       height_svg = 6 * 0.618,
+       options = list(                        
+         opts_hover(css = "fill: red; r: 2pt; stroke: white;"),  
+         opts_hover_inv(css = "opacity:0.2;") 
+       ) )
+```
+
+Metrics
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+# Calculate training MAPE and MAE
+train_MAPE <- round(MAPE(observed_df$value[13:(nrow(observed_df)-val_period)],
+                         fit_df$value) * 100, 
+                    2)
+train_MAE <- round(MAE(observed_df$value[13:(nrow(observed_df)-val_period)],
+                                         fit_df$value), 
+                   2)
+
+# Calculate validation MAPE and MAE
+val_MAPE <- round(MAPE(observed_df$value[(nrow(observed_df)-val_period+1):nrow(observed_df)], 
+                       val_df$value) * 100, 
+                  2)
+val_MAE <- round(MAE(observed_df$value[(nrow(observed_df)-val_period+1):nrow(observed_df)], 
+                     val_df$val), 
+                 2)
+
+print(paste0("Training MAPE: ", train_MAPE, "%"))
+print(paste0("Training MAE: ", train_MAE))
+print(paste0("Validation MAPE: ", val_MAPE, "%"))
+print(paste0("Validation MAE: ", val_MAE))
+```
+
+## 5.2 Model Tuning
+
+Now users can decide to change certain model parameters to tune the model. Tuning the model will re-generate all the plots and metrics with the new parameters.
 
 ```{r}
 # User Input
 target_date_start <- "2018-3"
 target_date_end <- "2023-12"
-train_test_split <- 0.8
+train_test_split <- 0.8 # floating value between 0.5 and 1
+alpha <- HW$alpha # floating value between 0 and 1 
+beta <- HW$beta # floating value between 0 and 1 
+gamma <- HW$gamma # floating value between 0 and 1 
+seasonal <- "additive" # or "multiplicative"
 ```
 
+The code here is mostly the same as the one above, but now with the addition of the parameters.
+
 ```{r}
+#| code-fold: true
+#| code-summary: Show code
+
 # Filter out defined time period
 target <- target[target$date >= target_date_start, ]
 target <- target[target$date <= target_date_end, ]
@@ -546,30 +827,30 @@ if (train_test_split == 1) {
   validation = TRUE
 }
 
-# Create time series object
+# Create time series object, but now with target start and end date
 train_ts <- ts(target[target_variable], 
                frequency = 12,
                start = c(
                  strsplit(target_date_start, "-")[[1]][1],
-                 strsplit(target_date_end, "-")[[1]][2]
+                 strsplit(target_date_start, "-")[[1]][2]
                ),
                end = c(
                  as.numeric(year(target$date[split_train_end])),
                  as.numeric(month(target$date[split_train_end]))
                ))
-```
 
-## 5.2 Model Fitting
+# Fit model
+HW <- HoltWinters(train_ts,
+                  alpha = alpha,
+                  beta = beta,
+                  gamma = gamma,
+                  seasonal = seasonal)
 
-In this section, we will use the inputs provided by the user to define the data that we will be using to fit the Holt Winters model.
-
-```{r}
-
-HW <- HoltWinters(train_ts)
-
+# Create results data frame
 result_df <- target[,c("date",target_variable)]
 
-
+# Store results in data frame
+# If there is no validation results, no need to store
 if (validation) {
   
   val_period <- nrow(target) - split_val_start
@@ -591,170 +872,200 @@ if (validation) {
 }
 ```
 
-```{r}
-g <- ggplot(data = result_df) + 
-  geom_line(aes(x=date, y=.data[[target_variable]]), linewidth=1) +
-  geom_line(aes(x=date, y=fit), color="darkturquoise", linewidth=1)
-
-if (validation) {
-  g <- g + geom_line(aes(x=date, y=val), color="coral", linewidth=1)
-}
-
-g <- g + 
-  ggtitle("Actual vs Predicted") +
-  xlab("Date") +
-  ylab(str_to_title(gsub("_", " ", target_variable)))
-```
-
-```{r}
-# data.frame(result_df[1], stack(result_df[2:ncol(result_df)]))
-```
-
-```{r}
-components_dfts <- decompose(train_ts)
-plot(components_dfts)
-```
-
-```{r}
-components_dfts$seasonal %>% data.frame()
-```
-
-```{r}
-mape <- MAPE(validation_preds, validation) * 100
-
-print(mape)
-```
-
-## 5.2 Model Tuning
-
-After fitting the model, users are allowed to view validation results and decide if they wish to further tune the model by adjusting certain variables.
-
-```{r}
-alpha = 0
-beta = 0
-gamma = 0
-
-```
+After which, the same plots and metrics will be generated from the tuned model which is shown above.
 
 ## 5.3 Model Forecast
 
 Lastly, once parameters are confirmed, we can proceed to make predictions and plot them.
 
 ```{r}
+# User Input
+n.ahead = 24
+CI = 0.95
+```
 
+The code chunk below prepares the data needed for the plot.
+
+```{r}
+#| code-fold: true
+#| code-summary: Show code
+
+
+# Referenced from
 # https://www.r-bloggers.com/2012/07/holt-winters-forecast-using-ggplot2/
 
-HWplot <- function(ts_object, 
-                   n.ahead = 4, 
-                   CI = .95, 
-                   error.ribbon = 'green', 
-                   line.size = 1) {
-    
-    hw_object <- HoltWinters(ts_object)
-    
-    forecast <- predict(hw_object,  
-                        n.ahead = n.ahead,  
-                        prediction.interval = T,  
-                        level = CI)
-    
-    df <- as.data.frame(forecast)
-    
-    for_values <- data.frame(time = round(time(forecast), 3),  
-                             value_forecast = df$fit,  
-                             dev = df$upr - df$fit)
-    
-    fitted_values <- data.frame(time = round(time(hw_object$fitted), 3),
-                                fitted = as.data.frame(hw_object$fitted)$xhat)
-    
-    actual_values <- data.frame(time = round(time(hw_object$x), 3),
-                                Actual = c(hw_object$x))
-    
-    
-    graphset <- merge(actual_values,  fitted_values,  by='time',  all=TRUE)
-    graphset <- merge(graphset,  for_values,  all=TRUE,  by='time')
-    graphset[is.na(graphset$dev),  ]$dev <- 0
-    
-    graphset$Fitted <- c(rep(NA,  NROW(graphset) - (NROW(for_values) + NROW(fitted_values))),  fitted_values$fitted,  for_values$value_forecast)
-    
-    graphset.melt <- melt(graphset[, c('time', 'Actual', 'Fitted')], id='time')
-    
-    p <- ggplot(graphset.melt,  
-                aes(x=time,  y=value)) + 
-      geom_ribbon(data=graphset, 
-                  aes(x=time, 
-                      y=Fitted, 
-                      ymin=Fitted-dev,  
-                      ymax=Fitted + dev),  
-                  alpha=.2,  
-                  fill=error.ribbon) + 
-      geom_line(aes(colour=variable), 
-                linewidth=line.size) + 
-      geom_vline(xintercept=max(actual_values$time),  
-                 lty=2) + 
-      xlab('Time') + 
-      ylab('Value') + 
-      theme(legend.position='bottom') + 
-      scale_colour_hue('')
-    
-    return(p)
+# Create target time series object without validation
+target_ts <- ts(target[target_variable], 
+                frequency = 12,
+                start = c(
+                  strsplit(target_date_start, "-")[[1]][1],
+                  strsplit(target_date_start, "-")[[1]][2]
+                ),
+                end = c(
+                  strsplit(target_date_end, "-")[[1]][1],
+                  strsplit(target_date_end, "-")[[1]][2]
+                ))
 
-}
+# Fit Holt Winters model
+HW_fc <- HoltWinters(target_ts,
+                     alpha = alpha,
+                     beta = beta,
+                     gamma = gamma,
+                     seasonal = seasonal)
+
+# Predict 
+forecast <- predict(HW_fc,  
+                    n.ahead = n.ahead,  
+                    prediction.interval = T,  
+                    level = CI)
+
+# Store results in data frame
+df <- as.data.frame(forecast)
+
+# Separate out forecasted values and confidence interval deviation
+# Convert date to Y-m format
+for_values <- data.frame(time = time(forecast),  
+                         value_forecast = df$fit,  
+                         dev = df$upr - df$fit)
+for_values$time <- as.yearmon(round_date(date_decimal(as.numeric(for_values$time)), unit = "month"))
+
+# Store fitted values in separate data frame
+# Convert date to Y-m format
+fitted_values <- data.frame(time = time(HW_fc$fitted),
+                            fitted = as.data.frame(HW_fc$fitted)$xhat)
+fitted_values$time <-as.yearmon(round_date(date_decimal(as.numeric(fitted_values$time)), unit = "month"))
+
+# Store actual values in separate data frame
+# Convert date to Y-m format
+actual_values <- data.frame(time = time(HW_fc$x),
+                            Actual = c(HW_fc$x))
+actual_values$time <- as.yearmon(round_date(date_decimal(as.numeric(actual_values$time)), unit = "month"))
+
+# Merge all 3 frames into one data frame 
+graphset <- merge(actual_values,  fitted_values,  by='time',  all=TRUE)
+graphset <- merge(graphset,  for_values,  all=TRUE,  by='time')
+graphset[is.na(graphset$dev),  ]$dev <- 0
+
+# Create new column combining fitted and forecast
+graphset$Fitted <- c(rep(NA,  NROW(graphset) - (NROW(for_values) + NROW(fitted_values))),  fitted_values$fitted,  for_values$value_forecast)
+
+# Stack data frame into long format
+graphset.melt <- melt(graphset[, c('time', 'Actual', 'Fitted')], id='time')
+
+# Preparing tooltips
+graphset.melt$tt <- c(paste0(
+  ifelse(graphset.melt$variable == "Actual", "Actual: ", "Fitted: "),
+  round(graphset.melt$value,2)
+))
 ```
 
-```{r}
-HWplot(train_ts, n.ahead=36, CI=.95, error.ribbon='green',line.size=1)
-```
+Now we can plot the forecast values with confidence interval.
 
 ```{r}
+#| code-fold: true
+#| code-summary: Show code
 
+# Plot interactive
+f <- ggplot(graphset.melt,  
+            aes(x=time,  y=value)) + 
+  geom_ribbon(data=graphset, 
+              aes(x=time, 
+                  y=Fitted, 
+                  ymin=Fitted-dev,  
+                  ymax=Fitted + dev),  
+              alpha=.2,  
+              fill='green') + 
+  geom_line_interactive(aes(colour=variable,
+                            data_id=variable), 
+            linewidth=1) + 
+  geom_point_interactive(aes(colour=variable,
+                             data_id=variable,
+                             tooltip=tt),
+                         size = 0.3) +
+  geom_vline(xintercept=max(actual_values$time),  
+             lty=2) + 
+  xlab('Date') + 
+  ylab(str_to_title(gsub("_", " ", target_variable))) + 
+  ggtitle(paste0("Holt Winter's Forecast for ", 
+                 str_to_title(gsub("_", " ", target_variable)))) +
+  theme(legend.position='bottom') + 
+  scale_colour_hue('')
+
+girafe(code = print(f), 
+       width_svg = 6, 
+       height_svg = 6 * 0.618,
+       options = list(                        
+         opts_hover(css = "color: none;"),  
+         opts_hover_inv(css = "opacity:0.2;") 
+       ))
 ```
 
 # 6. Storyboard UI
 
 This section describes the UI design and the intended work flow for users.
 
-## 6.1 User input
+## 6.1 Model initialization
 
 The user starts by selecting the weather station and climate variable of interest. These are selected from a pre-defined drop down list.
 
-## 6.2 Time frame and validation
+Once initialized, a Holt Winters model is fitted based on selected weather station, climate variable, and other default parameters.
 
-After the step in 6.1, the user will be prompted to select the time period as well as train test split.
+![](images/clipboard-1109953917.png)
 
-The time period is selected using a slider. The start and end date of the slider is specific to the weather station and climate variable chosen earlier.
+## 6.2 Model Tuning
 
-The train test split is a floating number between 0.5 and 1.
+After the step in 6.1, several panels will be populated.
 
-## 6.3 Model Fit
+-   Model tuning panel
 
-Next, the user will click the "Fit Model" button. This will trigger a couple of events.
+-   Model forecast panel
 
-Firstly, this fits a Holts Winter model over the filtered data set based on the selected variables in 6.1 and 6.2. In addition, predictions will be made for the validation period with the fitted model.
+-   Actual vs Predicted plot
 
-Secondly, left panel 3 and 4 will be revealed to the user. I will elaborate on these 2 panels in the following sections.
+-   Decomposed plot
 
-The main screen's first tab will now display a Actual vs Predicted plot. Predicted lines for training period and validation period will be in different colours.
+-   Model Metric boxes
 
-The second tab will show a plot of the decomposed elements of the model, namely:
+![](images/clipboard-2592483498.png)
 
--   Observed
+### 6.2.1 Model parameters
 
--   Trend
+The model parameters consists of time period, train test split percentage, as well as other Holt Winters parameters.
 
--   Season
+-   The time period is selected using a slider. The start and end date of the slider is specific to the weather station and climate variable chosen earlier.
 
--   Random
+-   The train test split is a floating number between 0.5 and 1.
+
+-   The Holt Winters parameters will be initially populated with the value that was calculated by the model.
+
+Users can change these values as they like, and click the Tune button to re-generate the results.
+
+### 6.2.2 Plots
+
+There are 2 plots that will be generated, namely Actual vs Predicted and Decomposed plots. Decomposed plot will be revealed when the user switches to the Decomposed tab above.
+
+![](images/clipboard-975364701.png)
+
+### 6.2.3 Metrics
 
 At the bottom of the screen, the training and validation MAPE and MAE will be shown in 4 separate boxes.
 
-## 6.4 Model Tuning
+## 6.3 Model Forecast
 
-Left panel 3 shows the default parameters used in the Holts Winter model. Users will be allowed to change these parameters within their respective allowable limits and re-fit the model using the "Fit Model" button to observe the new changes.
+Once the user is satisfied with the tuning, he or she can fill in the desired forecast periods and confidence interval in the Model Forecast panel and click the "Forecast" button to generate the forecast results.
 
-## 6.5 Model forecast
+![](images/clipboard-2469088038.png)
 
-Left panel 4 is used for forecasting. Once users are satisfied with the tuned parameters, they can input the number of periods to be forecasted and click the "Forecast" button to generate the forecast results.
+This will populate the Forecast panel on the right.
 
-This will populate the Right screen tab 1 with the forecast plot.
+![](images/clipboard-2491976298.png)
 
-Right screen tab 2 contains a cycle plot which shows the results from a month by month view.
+# 7. Conclusion
+
+This exercise is meant as a prototype for our Shiny Application. To summarize:
+
+Firstly, we have downloaded and explored our data sets to gain a better understanding of what we have. In the process, we found that there were many missing data that needs to be filled, and that using daily data was unsuitable for time series analysis due to the many 0s in rainfall. As such, the gaps were filled with non-zero averages of the same months, and the data was rolled up to monthly levels.
+
+Next, we test the plots that we intend to display in our shiny application and found suitable ways to manipulate the model results for these plots. We also test interactivity for the plots, and decided on the appropriate interactive elements and tool-tips that was needed.
+
+Finally, we draft the storyboard that highlights the users journey when using our shiny application. This helps us to picture the sequence of steps and actions that users have to take to generate the desired results.
