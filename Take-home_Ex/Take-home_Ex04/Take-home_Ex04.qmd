@@ -12,9 +12,11 @@ execute:
 editor: visual
 ---
 
+![](images/clipboard-1885342826.png){fig-align="center" width="2000"}
+
 # 1. Overview
 
-short intro here
+In this exercise, we will be creating a prototype with the purpose of testing the code behind our shiny application. The prototype should include all necessary steps to prepare the data and the codes to produce the plots in the app UI. Additionally, we should also include a detailed storyboard which highlights the users journey while using the shiny application, and a step-by-step description of how the user can use the application.
 
 # 2. Getting Started
 
